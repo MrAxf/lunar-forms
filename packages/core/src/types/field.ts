@@ -17,12 +17,10 @@ export interface FieldOptions {
   initialValue?: FieldValue;
   validate?: MaybeRef<FieldValidation[]>;
   validateOn?: MaybeValue<'input' | 'change' | 'blur'>;
-  fieldEvents?: {
-    oninput: (ev: InputEvent) => void;
-    onfocus: (ev: FocusEvent) => void;
-    onchange: (ev: Event) => void;
-    onblur: (ev: FocusEvent) => void;
-  };
+  oninput?: (ev: InputEvent) => void;
+  onfocus?: (ev: FocusEvent) => void;
+  onchange?: (ev: Event) => void;
+  onblur?: (ev: FocusEvent) => void;
 }
 
 export interface FieldData {

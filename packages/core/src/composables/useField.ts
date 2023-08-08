@@ -22,10 +22,21 @@ import {
   getValueByPath,
   setValueByPath,
   validateFieldValue,
+  noop,
 } from '../utils';
 
-export function useField(name: string, fieldOptions?: FieldOptions): FieldData {
-  // const value = ref<FieldValue>(fieldOptions?.initialValue);
+export function useField(
+  name: string,
+  {
+    initialValue = undefined,
+    validate: validations = [],
+    validateOn = 'input',
+    oninput: optionsOnInput = noop,
+    onfocus: optionsOnFocus = noop,
+    onchange: optionsOnChange = noop,
+    onblur: optionsOnBlur = noop,
+  }: FieldOptions
+): FieldData {
   let valueData: FieldValue = undefined;
   const dirty = ref(false);
   const touched = ref(false);
@@ -52,13 +63,10 @@ export function useField(name: string, fieldOptions?: FieldOptions): FieldData {
   const formContext: FormContext | undefined =
     vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
 
-  const validateOn =
-    fieldOptions?.validateOn !== undefined ? fieldOptions.validateOn : 'input';
-
   let validateAbortController = new AbortController();
 
   function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
-    return [toValue(fieldOptions?.validate), toValue(value)];
+    return [toValue(validations), toValue(value)];
   }
 
   function setError(err: string) {
@@ -84,13 +92,11 @@ export function useField(name: string, fieldOptions?: FieldOptions): FieldData {
         currValue,
         validateAbortController.signal
       );
-      valid.value = true;
-      error.value = undefined;
+      setValid();
       validating.value = false;
     } catch (err) {
       if (err instanceof ValidationError) {
-        valid.value = false;
-        error.value = err.message;
+        setError(err.message);
         validating.value = false;
       }
     }
@@ -98,29 +104,31 @@ export function useField(name: string, fieldOptions?: FieldOptions): FieldData {
 
   function oninput(ev: InputEvent) {
     dirty.value = true;
-    fieldOptions?.fieldEvents?.oninput(ev);
+    optionsOnInput(ev);
     if (validateOn === 'input') validate();
   }
 
   function onfocus(ev: FocusEvent) {
     touched.value = true;
-    fieldOptions?.fieldEvents?.onfocus(ev);
+    optionsOnFocus(ev);
   }
 
   function onchange(ev: InputEvent) {
     dirty.value = true;
-    fieldOptions?.fieldEvents?.onchange(ev);
+    optionsOnChange(ev);
     if (validateOn === 'change') validate();
   }
 
   function onblur(ev: FocusEvent) {
     touched.value = true;
-    fieldOptions?.fieldEvents?.onblur(ev);
+    optionsOnBlur(ev);
     if (validateOn === 'blur') validate();
   }
 
   function reset() {
-    value.value = fieldOptions?.initialValue;
+    if (initialValue !== undefined) value.value = initialValue;
+    else value.value = getValueByPath(formContext?.values.value, name);
+    error.value = undefined;
     dirty.value = false;
     touched.value = false;
   }
@@ -160,23 +168,23 @@ export function useField(name: string, fieldOptions?: FieldOptions): FieldData {
   if (formContext) {
     formContext.fields[name] = fieldData;
 
-    valueProxy.get = () => getValueByPath(formContext.values, name);
+    valueProxy.get = () => getValueByPath(formContext.values.value, name);
     valueProxy.set = (newValue) =>
-      setValueByPath(formContext.values, name, newValue);
+      setValueByPath(formContext.values.value, name, newValue);
 
     const unwatch = watch(error, (newErr) => {
-      if (newErr === undefined) delete formContext.errors[name];
-      else formContext.errors[name] = newErr;
+      if (newErr === undefined) delete formContext.errors.value[name];
+      else formContext.errors.value[name] = newErr;
     });
 
     onBeforeUnmount(() => {
       delete formContext.fields[name];
       unwatch();
-      delete formContext.errors[name];
+      delete formContext.errors.value[name];
     });
   }
 
-  if (fieldOptions?.initialValue) value.value = fieldOptions.initialValue;
+  if (initialValue) value.value = initialValue;
 
   return fieldData;
 }

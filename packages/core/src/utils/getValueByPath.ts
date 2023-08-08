@@ -1,11 +1,12 @@
-import { FieldValues } from '../types';
+import { FieldValues, Maybe } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function getValueByPath(
-  obj: FieldValues,
+  obj: Maybe<FieldValues>,
   path: string
 ): any | undefined {
-  const keys = path.split(/\.|\[(\d+)\]/);
+  if (!obj) return undefined;
+  const keys = path.split(/\.|\[(\d+)\]/).filter(Boolean);
   let currentObj = obj;
 
   for (const key of keys) {

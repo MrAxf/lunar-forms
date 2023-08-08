@@ -1,14 +1,17 @@
-import { computed, provide, reactive, readonly, ref } from 'vue';
-import type { FieldData, FieldValues, Maybe } from '../types';
+import { UnwrapRef, computed, provide, readonly, ref, toValue } from 'vue';
+import type { FieldData, FieldValues, FormOptions, Maybe } from '../types';
 import { FORM_CONTEXT_KEY, validateFieldValue } from '../utils';
-import { ValidationAbortedError } from '../errors';
+import { ValidationAbortedError, ValidationError } from '../errors';
 
-export function useForm<T extends FieldValues>() {
-  const values = reactive<Partial<T>>({});
-  const errors = reactive<Record<string, Maybe<string>>>({});
-  const valid = computed(() => Object.keys(errors).length === 0);
+export function useForm<T extends FieldValues>({
+  initialValues = {},
+  handleSubmit,
+}: FormOptions<T>) {
+  const values = ref<Partial<T>>(JSON.parse(JSON.stringify(initialValues)));
+  const errors = ref<Record<string, Maybe<string>>>({});
+  const valid = computed(() => Object.keys(errors.value).length === 0);
   const validating = ref(false);
-  const fields = reactive<Record<string, FieldData>>({});
+  const fields: Record<string, FieldData> = {};
 
   let validateAbortController = new AbortController();
 
@@ -50,7 +53,9 @@ export function useForm<T extends FieldValues>() {
         if (result.status === 'fulfilled') {
           field.setValid();
         } else if (result.status === 'rejected') {
-          field.setError(result.reason);
+          if (result.reason instanceof ValidationError) {
+            field.setError(result.reason.message);
+          }
         }
       });
       validating.value = false;
@@ -59,6 +64,9 @@ export function useForm<T extends FieldValues>() {
   }
 
   function reset() {
+    values.value = JSON.parse(JSON.stringify(initialValues)) as UnwrapRef<
+      Partial<T>
+    >;
     Object.entries(fields).forEach(([, field]) => {
       field.reset();
     });
@@ -67,7 +75,7 @@ export function useForm<T extends FieldValues>() {
   async function onsubmit(ev: SubmitEvent) {
     ev.preventDefault();
     await validate();
-    if (valid.value) return values;
+    if (valid.value) handleSubmit(toValue(values) as T);
   }
 
   provide(FORM_CONTEXT_KEY, {

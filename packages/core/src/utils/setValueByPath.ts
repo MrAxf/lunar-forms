@@ -6,7 +6,7 @@ export function setValueByPath(
   path: string,
   value: any
 ): void {
-  const keys = path.split(/\.|\[(\d+)\]/);
+  const keys = path.split(/\.|\[(\d+)\]/).filter(Boolean);
   let currentObj = obj;
 
   for (let i = 0; i < keys.length - 1; i++) {
@@ -28,13 +28,4 @@ export function setValueByPath(
   } else {
     currentObj[lastKey] = value;
   }
-}
-
-// export function tokenizePath(path: string): string[] {
-//   const res = [], reg = /\[\s*(\d+)(?=\s*])|\[\s*(["'])((?:\\.|(?!\2).)*)\2\s*]|[\w$]+/g;
-//   let a;
-//   while (a = reg.exec(path)) {
-//       res.push(a[1] || a[3] || a[0]);
-//   }
-//   return res;
 }
