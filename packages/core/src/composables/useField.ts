@@ -5,7 +5,7 @@ import {
   onBeforeUnmount,
   readonly,
   ref,
-  toValue,
+  unref,
   watch,
 } from 'vue';
 import type {
@@ -66,7 +66,7 @@ export function useField(
   let validateAbortController = new AbortController();
 
   function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
-    return [toValue(validations), toValue(value)];
+    return [unref(validations), unref(value)];
   }
 
   function setError(err: string) {

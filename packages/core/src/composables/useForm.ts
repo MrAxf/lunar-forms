@@ -1,4 +1,4 @@
-import { UnwrapRef, computed, provide, readonly, ref, toValue } from 'vue';
+import { UnwrapRef, computed, provide, readonly, ref, unref } from 'vue';
 import type { FieldData, FieldValues, FormOptions, Maybe } from '../types';
 import { FORM_CONTEXT_KEY, validateFieldValue } from '../utils';
 import { ValidationAbortedError, ValidationError } from '../errors';
@@ -75,7 +75,7 @@ export function useForm<T extends FieldValues>({
   async function onsubmit(ev: SubmitEvent) {
     ev.preventDefault();
     await validate();
-    if (valid.value) handleSubmit(toValue(values) as T);
+    if (valid.value) handleSubmit(unref(values) as T);
   }
 
   provide(FORM_CONTEXT_KEY, {
