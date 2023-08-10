@@ -2,10 +2,12 @@
 <script setup lang="ts" generic="T extends FieldValues">
 import type { DeepReadonly, UnwrapRef } from 'vue';
 import { useForm } from '../composables';
-import type { FieldValues, Maybe } from '../types';
+import type { FieldValidation, FieldValue, FieldValues, Maybe } from '../types';
 
 const props = defineProps<{
-  initialValues?: Partial<T>;
+  initialValue?: FieldValue;
+  validate?: FieldValidation[];
+  validateOn?: 'input' | 'change' | 'blur' | null;
 }>();
 
 const emit = defineEmits<{
