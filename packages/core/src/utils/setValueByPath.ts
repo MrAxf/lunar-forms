@@ -2,10 +2,11 @@ import { FieldValues } from '../types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function setValueByPath(
-  obj: FieldValues,
+  obj: FieldValues | undefined,
   path: string,
   value: any
 ): void {
+  if (!obj) return;
   const keys = path.split(/\.|\[(\d+)\]/).filter(Boolean);
   let currentObj = obj;
 

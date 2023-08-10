@@ -45,3 +45,10 @@ export interface FieldData {
     onblur: (ev: FocusEvent) => void;
   };
 }
+
+export interface FieldArrayValue {
+  key: string | number;
+  value: FieldValues;
+  isFirts: boolean;
+  isLast: boolean;
+}
