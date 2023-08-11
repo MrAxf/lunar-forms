@@ -1,5 +1,5 @@
 import type { ComputedRef, Ref } from 'vue';
-import type { FieldData, FieldValues } from './field';
+import type { FieldArrayContext, FieldData, FieldValues } from './field';
 import type { Maybe } from './utils';
 
 export interface FormContext {
@@ -8,6 +8,7 @@ export interface FormContext {
   valid: ComputedRef<boolean>;
   validating: Ref<boolean>;
   fields: Record<string, FieldData>;
+  fieldArrays: Record<string, FieldArrayContext>;
 }
 
 export interface FormOptions<T> {

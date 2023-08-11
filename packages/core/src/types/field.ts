@@ -52,3 +52,16 @@ export interface FieldArrayValue {
   isFirts: boolean;
   isLast: boolean;
 }
+
+export interface FieldArrayContext {
+  fields: Ref<FieldArrayValue[]>;
+  reset: () => void;
+  remove: (index: number) => void;
+  replace: (values: FieldValues[]) => void;
+  update: (index: number, value: FieldValues) => void;
+  push: (value: FieldValues) => void;
+  swap: (index1: number, index2: number) => void;
+  insert: (index: number, value: FieldValues) => void;
+  prepend: (value: FieldValues) => void;
+  move: (indexFrom: number, indexTo: number) => void;
+}

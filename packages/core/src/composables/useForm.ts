@@ -1,5 +1,11 @@
-import { UnwrapRef, computed, provide, readonly, ref, unref } from 'vue';
-import type { FieldData, FieldValues, FormOptions, Maybe } from '../types';
+import { type UnwrapRef, computed, provide, readonly, ref, unref } from 'vue';
+import type {
+  FieldArrayContext,
+  FieldData,
+  FieldValues,
+  FormOptions,
+  Maybe,
+} from '../types';
 import { FORM_CONTEXT_KEY, validateFieldValue } from '../utils';
 import { ValidationAbortedError, ValidationError } from '../errors';
 
@@ -12,6 +18,7 @@ export function useForm<T extends FieldValues>({
   const valid = computed(() => Object.keys(errors.value).length === 0);
   const validating = ref(false);
   const fields: Record<string, FieldData> = {};
+  const fieldArrays: Record<string, FieldArrayContext> = {};
 
   let validateAbortController = new AbortController();
 
@@ -70,6 +77,9 @@ export function useForm<T extends FieldValues>({
     Object.entries(fields).forEach(([, field]) => {
       field.reset();
     });
+    Object.entries(fieldArrays).forEach(([, field]) => {
+      field.reset();
+    });
   }
 
   async function onsubmit(ev: SubmitEvent) {
@@ -84,6 +94,7 @@ export function useForm<T extends FieldValues>({
     valid,
     validating,
     fields,
+    fieldArrays,
   });
 
   return {

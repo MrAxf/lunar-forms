@@ -9,8 +9,9 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
       name: 'LunarFormsCore',
-      fileName: 'lunar-forms-core',
+      fileName: 'index',
     },
+    sourcemap: true,
     rollupOptions: {
       external: ['vue'],
       output: {
