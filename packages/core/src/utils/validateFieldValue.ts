@@ -1,10 +1,11 @@
 import { ValidationAbortedError, ValidationError } from '../errors';
-import { FieldValidation, FieldValue, Maybe } from '../types';
+import { FieldValidation, FieldValue, FormContext, Maybe } from '../types';
 
 export function validateFieldValue(
   validations: FieldValidation[],
   currValue: FieldValue,
-  abortSignal: AbortSignal
+  abortSignal: AbortSignal,
+  formContext?: FormContext
 ) {
   return new Promise<Maybe<string>>((resolve, reject) => {
     const abortError = new ValidationAbortedError('Validation aborted');
@@ -19,7 +20,7 @@ export function validateFieldValue(
       let result: Maybe<string> = undefined;
 
       await validations.every(async (validation) => {
-        result = await validation(currValue);
+        result = await validation(currValue, formContext);
 
         if (result) {
           reject(new ValidationError(result));

@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue';
 import { resolve } from 'node:path';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [vue()],
   build: {
     lib: {
@@ -11,7 +11,7 @@ export default defineConfig({
       name: 'LunarFormsCore',
       fileName: 'index',
     },
-    sourcemap: true,
+    sourcemap: mode === 'development',
     rollupOptions: {
       external: ['vue'],
       output: {
@@ -21,4 +21,4 @@ export default defineConfig({
       },
     },
   },
-});
+}));

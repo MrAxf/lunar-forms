@@ -1,5 +1,6 @@
 import type { MaybeRef, Ref } from 'vue';
 import type { Maybe, MaybePromise, MaybeValue } from './utils';
+import { FormContext } from '.';
 
 export type FieldValue = MaybeValue<
   string | string[] | number | boolean | File | File[] | Date
@@ -10,7 +11,8 @@ export type FieldValues = {
 };
 
 export type FieldValidation = (
-  value: MaybeValue<FieldValue>
+  value: FieldValue | FieldValue[],
+  formCtx?: FormContext
 ) => MaybePromise<Maybe<string>>;
 
 export interface FieldOptions {
@@ -53,10 +55,21 @@ export interface FieldArrayValue {
   isLast: boolean;
 }
 
+export interface FieldArrayOptions {
+  validate?: MaybeRef<FieldValidation[]>;
+}
+
 export interface FieldArrayContext {
   fields: Ref<FieldArrayValue[]>;
+  valid: Readonly<Ref<Maybe<boolean>>>;
+  error: Readonly<Ref<Maybe<string>>>;
+  validating: Readonly<Ref<Maybe<boolean>>>;
+  getValidateParams: () => [FieldValidation[] | undefined, FieldValue];
+  validate: () => Promise<void>;
   reset: () => void;
   remove: (index: number) => void;
+  setError: (err: string) => void;
+  setValid: () => void;
   replace: (values: FieldValues[]) => void;
   update: (index: number, value: FieldValues) => void;
   push: (value: FieldValues) => void;

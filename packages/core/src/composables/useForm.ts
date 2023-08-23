@@ -3,6 +3,7 @@ import type {
   FieldArrayContext,
   FieldData,
   FieldValues,
+  FormContext,
   FormOptions,
   Maybe,
 } from '../types';
@@ -20,11 +21,21 @@ export function useForm<T extends FieldValues>({
   const fields: Record<string, FieldData> = {};
   const fieldArrays: Record<string, FieldArrayContext> = {};
 
+  const formContext = {
+    values,
+    errors,
+    valid,
+    validating,
+    fields,
+    fieldArrays,
+  };
+
   let validateAbortController = new AbortController();
 
   async function validate() {
     validating.value = true;
     const fieldEntries = Object.entries(fields);
+    const fieldArrayEntries = Object.entries(fieldArrays);
 
     validateAbortController.abort();
     validateAbortController = new AbortController();
@@ -35,9 +46,23 @@ export function useForm<T extends FieldValues>({
       return validateFieldValue(
         validations,
         currValue,
-        validateAbortController.signal
+        validateAbortController.signal,
+        formContext as FormContext
       );
     });
+
+    promises.concat(
+      fieldArrayEntries.map((field) => {
+        const [validations, currValue] = field[1].getValidateParams();
+        if (!validations || !validations.length) return undefined;
+        return validateFieldValue(
+          validations,
+          currValue,
+          validateAbortController.signal,
+          formContext as FormContext
+        );
+      })
+    );
     try {
       const results = await new Promise<PromiseSettledResult<Maybe<string>>[]>(
         (resolve, reject) => {
@@ -88,14 +113,7 @@ export function useForm<T extends FieldValues>({
     if (valid.value) handleSubmit(unref(values) as T);
   }
 
-  provide(FORM_CONTEXT_KEY, {
-    values,
-    errors,
-    valid,
-    validating,
-    fields,
-    fieldArrays,
-  });
+  provide(FORM_CONTEXT_KEY, formContext);
 
   return {
     values: readonly(values),

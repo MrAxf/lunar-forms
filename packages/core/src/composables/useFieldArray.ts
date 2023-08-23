@@ -3,17 +3,33 @@ import {
   getCurrentInstance,
   inject,
   onBeforeUnmount,
+  readonly,
   ref,
+  watch,
+  unref,
 } from 'vue';
-import {
+import type {
   FieldArrayContext,
+  FieldArrayOptions,
   FieldArrayValue,
+  FieldValidation,
+  FieldValue,
   FieldValues,
   FormContext,
+  Maybe,
 } from '../types';
-import { FORM_CONTEXT_KEY, getValueByPath, setValueByPath } from '../utils';
+import {
+  FORM_CONTEXT_KEY,
+  getValueByPath,
+  setValueByPath,
+  validateFieldValue,
+} from '../utils';
+import { ValidationError } from '../errors';
 
-export function useFieldArray(name: string) {
+export function useFieldArray(
+  name: string,
+  { validate: validations = [] }: FieldArrayOptions
+) {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vm: any = getCurrentInstance();
   const formContext: FormContext | undefined =
@@ -24,6 +40,9 @@ export function useFieldArray(name: string) {
   let keyIndex = 0;
 
   const fields = ref<FieldArrayValue[]>([]);
+  const valid = ref<Maybe<boolean>>();
+  const error = ref<Maybe<string>>();
+  const validating = ref(false);
 
   function init() {
     const currVals = getValueByPath(formContext?.values.value, name);
@@ -40,6 +59,49 @@ export function useFieldArray(name: string) {
   }
 
   init();
+
+  function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
+    return [
+      unref(validations),
+      getValueByPath(formContext?.values.value, name),
+    ];
+  }
+
+  function setError(err: string) {
+    error.value = err;
+    valid.value = false;
+  }
+
+  function setValid() {
+    error.value = undefined;
+    valid.value = true;
+  }
+
+  let validateAbortController = new AbortController();
+
+  async function validate() {
+    validating.value = true;
+    const [validations, currValue] = getValidateParams();
+    if (!validations || !validations.length) return;
+
+    validateAbortController.abort();
+    validateAbortController = new AbortController();
+    try {
+      await validateFieldValue(
+        validations,
+        currValue,
+        validateAbortController.signal,
+        formContext
+      );
+      setValid();
+      validating.value = false;
+    } catch (err) {
+      if (err instanceof ValidationError) {
+        setError(err.message);
+        validating.value = false;
+      }
+    }
+  }
 
   function newEntry(value: FieldValues, index?: number): FieldArrayValue {
     const currFields = fields.value;
@@ -86,6 +148,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value.splice(index, 1);
     updateMeta();
+    validate();
   }
 
   function replace(values: FieldValues[]) {
@@ -95,6 +158,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, values);
     init();
     updateMeta();
+    validate();
   }
 
   function update(index: number, value: FieldValues) {
@@ -114,6 +178,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value.push(newEntry(value));
     updateMeta();
+    validate();
   }
 
   function swap(index1: number, index2: number) {
@@ -139,6 +204,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value = newFields;
     updateMeta();
+    validate();
   }
 
   function insert(index: number, value: FieldValues) {
@@ -153,6 +219,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value = newFields;
     updateMeta();
+    validate();
   }
 
   function prepend(value: FieldValues) {
@@ -163,6 +230,7 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value.unshift(newEntry(value));
     updateMeta();
+    validate();
   }
 
   function move(indexFrom: number, indexTo: number) {
@@ -188,10 +256,18 @@ export function useFieldArray(name: string) {
     setValueByPath(formContext?.values.value, name, newValue);
     fields.value = newFields;
     updateMeta();
+    validate();
   }
 
   const fieldArrayCtx: FieldArrayContext = {
     fields,
+    valid: readonly(valid),
+    error: readonly(error),
+    validating: readonly(validating),
+    validate,
+    getValidateParams,
+    setError,
+    setValid,
     reset: init,
     remove,
     replace,
@@ -205,8 +281,19 @@ export function useFieldArray(name: string) {
 
   formContext.fieldArrays[name] = fieldArrayCtx;
 
+  const unwatch = watch(error, (newErr) => {
+    if (newErr === undefined) delete formContext.errors.value[name];
+    else formContext.errors.value[name] = newErr;
+  });
+
   onBeforeUnmount(() => {
     delete formContext.fieldArrays[name];
+  });
+
+  onBeforeUnmount(() => {
+    delete formContext.fields[name];
+    unwatch();
+    delete formContext.errors.value[name];
   });
 
   return fieldArrayCtx;

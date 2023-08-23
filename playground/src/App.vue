@@ -1,5 +1,11 @@
 <script setup lang="ts">
-import { useField, required, useForm, useFieldArray } from '@lunar-forms/core';
+import {
+  useField,
+  required,
+  minLength,
+  useForm,
+  useFieldArray,
+} from '@lunar-forms/core';
 import { useAutoAnimate } from '@formkit/auto-animate/vue';
 import { Icon } from '@iconify/vue';
 
@@ -11,8 +17,8 @@ const { values, errors, formProps } = useForm({
     console.log(values);
   },
 });
-const { fields, push, swap, remove, prepend, replace, update, insert } =
-  useFieldArray('hola');
+const { fields, error, push, swap, remove, prepend, replace, update, insert } =
+  useFieldArray('hola', { validate: [minLength('Max Len', 4)] });
 
 const [parent] = useAutoAnimate();
 </script>
@@ -89,7 +95,7 @@ const [parent] = useAutoAnimate();
         </form>
       </section>
       <section class="bg-base-300 rounded-box flex-1 flex-grow p-5">
-        <pre>{{ { values, errors, fields } }}</pre>
+        <pre>{{ { error, values, errors, fields } }}</pre>
       </section>
     </div>
   </main>

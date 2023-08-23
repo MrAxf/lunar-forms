@@ -90,7 +90,8 @@ export function useField(
       await validateFieldValue(
         validations,
         currValue,
-        validateAbortController.signal
+        validateAbortController.signal,
+        formContext
       );
       setValid();
       validating.value = false;
