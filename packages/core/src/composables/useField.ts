@@ -9,7 +9,6 @@ import {
   watch,
 } from 'vue';
 import type {
-  Maybe,
   FieldValue,
   FieldOptions,
   FieldData,
@@ -24,6 +23,7 @@ import {
   validateFieldValue,
   noop,
 } from '../utils';
+import { useFieldBase } from './useFieldBase';
 
 export function useField(
   name: string,
@@ -37,12 +37,11 @@ export function useField(
     onblur: optionsOnBlur = noop,
   }: FieldOptions
 ): FieldData {
+  const { error, valid, validating, setError, setValid } = useFieldBase();
+
   let valueData: FieldValue = undefined;
   const dirty = ref(false);
   const touched = ref(false);
-  const valid = ref<Maybe<boolean>>();
-  const error = ref<Maybe<string>>();
-  const validating = ref(false);
 
   const valueProxy = {
     get() {
@@ -62,46 +61,6 @@ export function useField(
   const vm: any = getCurrentInstance();
   const formContext: FormContext | undefined =
     vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
-
-  let validateAbortController = new AbortController();
-
-  function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
-    return [unref(validations), unref(value)];
-  }
-
-  function setError(err: string) {
-    error.value = err;
-    valid.value = false;
-  }
-
-  function setValid() {
-    error.value = undefined;
-    valid.value = true;
-  }
-
-  async function validate() {
-    validating.value = true;
-    const [validations, currValue] = getValidateParams();
-    if (!validations || !validations.length) return;
-
-    validateAbortController.abort();
-    validateAbortController = new AbortController();
-    try {
-      await validateFieldValue(
-        validations,
-        currValue,
-        validateAbortController.signal,
-        formContext
-      );
-      setValid();
-      validating.value = false;
-    } catch (err) {
-      if (err instanceof ValidationError) {
-        setError(err.message);
-        validating.value = false;
-      }
-    }
-  }
 
   function oninput(ev: InputEvent) {
     dirty.value = true;

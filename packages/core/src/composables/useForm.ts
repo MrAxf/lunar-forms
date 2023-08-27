@@ -34,8 +34,10 @@ export function useForm<T extends FieldValues>({
 
   async function validate() {
     validating.value = true;
-    const fieldEntries = Object.entries(fields);
-    const fieldArrayEntries = Object.entries(fieldArrays);
+    const fieldEntries = [
+      ...Object.entries(fields),
+      ...Object.entries(fieldArrays),
+    ];
 
     validateAbortController.abort();
     validateAbortController = new AbortController();
@@ -51,18 +53,6 @@ export function useForm<T extends FieldValues>({
       );
     });
 
-    promises.concat(
-      fieldArrayEntries.map((field) => {
-        const [validations, currValue] = field[1].getValidateParams();
-        if (!validations || !validations.length) return undefined;
-        return validateFieldValue(
-          validations,
-          currValue,
-          validateAbortController.signal,
-          formContext as FormContext
-        );
-      })
-    );
     try {
       const results = await new Promise<PromiseSettledResult<Maybe<string>>[]>(
         (resolve, reject) => {
@@ -80,8 +70,9 @@ export function useForm<T extends FieldValues>({
           })();
         }
       );
+
       results.forEach((result, index) => {
-        const field = fields[fieldEntries[index][0]];
+        const field = fieldEntries[index][1];
         if (result.status === 'fulfilled') {
           field.setValid();
         } else if (result.status === 'rejected') {

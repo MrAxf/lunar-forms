@@ -16,7 +16,6 @@ import type {
   FieldValue,
   FieldValues,
   FormContext,
-  Maybe,
 } from '../types';
 import {
   FORM_CONTEXT_KEY,
@@ -25,11 +24,14 @@ import {
   validateFieldValue,
 } from '../utils';
 import { ValidationError } from '../errors';
+import { useFieldBase } from './useFieldBase';
 
 export function useFieldArray(
   name: string,
   { validate: validations = [] }: FieldArrayOptions
 ) {
+  const { error, valid, validating, setError, setValid } = useFieldBase();
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vm: any = getCurrentInstance();
   const formContext: FormContext | undefined =
@@ -40,9 +42,6 @@ export function useFieldArray(
   let keyIndex = 0;
 
   const fields = ref<FieldArrayValue[]>([]);
-  const valid = ref<Maybe<boolean>>();
-  const error = ref<Maybe<string>>();
-  const validating = ref(false);
 
   function init() {
     const currVals = getValueByPath(formContext?.values.value, name);
@@ -55,6 +54,7 @@ export function useFieldArray(
       fields.value = [];
       setValueByPath(formContext?.values.value, name, []);
     }
+    error.value = undefined;
     updateMeta();
   }
 
@@ -63,18 +63,8 @@ export function useFieldArray(
   function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
     return [
       unref(validations),
-      getValueByPath(formContext?.values.value, name),
+      getValueByPath((formContext as FormContext).values.value, name),
     ];
-  }
-
-  function setError(err: string) {
-    error.value = err;
-    valid.value = false;
-  }
-
-  function setValid() {
-    error.value = undefined;
-    valid.value = true;
   }
 
   let validateAbortController = new AbortController();
@@ -288,10 +278,6 @@ export function useFieldArray(
 
   onBeforeUnmount(() => {
     delete formContext.fieldArrays[name];
-  });
-
-  onBeforeUnmount(() => {
-    delete formContext.fields[name];
     unwatch();
     delete formContext.errors.value[name];
   });
