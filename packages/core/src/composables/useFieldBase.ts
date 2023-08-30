@@ -1,9 +1,17 @@
-import { ref } from 'vue';
-import { Maybe } from '../types';
+import { type MaybeRef, ref, unref } from 'vue';
+import type { FieldValidation, FieldValue, FormContext, Maybe } from '../types';
 import { ValidationError } from '../errors';
-import { validateFieldValue } from '..';
+import { validateFieldValue } from '../utils';
 
-export function useFieldBase() {
+export function useFieldBase({
+  validations,
+  formContext,
+  getValue,
+}: {
+  validations: MaybeRef<FieldValidation[]>;
+  formContext?: FormContext;
+  getValue: () => FieldValue;
+}) {
   const valid = ref<Maybe<boolean>>();
   const error = ref<Maybe<string>>();
   const validating = ref(false);
@@ -20,7 +28,7 @@ export function useFieldBase() {
   }
 
   function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
-    return [unref(validations), unref(value)];
+    return [unref(validations), unref(getValue())];
   }
 
   async function validate() {
@@ -53,5 +61,7 @@ export function useFieldBase() {
     validating,
     setError,
     setValid,
+    validate,
+    getValidateParams,
   };
 }

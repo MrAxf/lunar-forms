@@ -6,38 +6,42 @@ import {
   readonly,
   ref,
   watch,
-  unref,
 } from 'vue';
 import type {
   FieldArrayContext,
   FieldArrayOptions,
   FieldArrayValue,
-  FieldValidation,
-  FieldValue,
   FieldValues,
   FormContext,
 } from '../types';
-import {
-  FORM_CONTEXT_KEY,
-  getValueByPath,
-  setValueByPath,
-  validateFieldValue,
-} from '../utils';
-import { ValidationError } from '../errors';
+import { FORM_CONTEXT_KEY, getValueByPath, setValueByPath } from '../utils';
 import { useFieldBase } from './useFieldBase';
 
 export function useFieldArray(
   name: string,
   { validate: validations = [] }: FieldArrayOptions
 ) {
-  const { error, valid, validating, setError, setValid } = useFieldBase();
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vm: any = getCurrentInstance();
   const formContext: FormContext | undefined =
     vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
 
   if (!formContext) throw new Error('Field Array needs a Form Context.');
+
+  const {
+    error,
+    valid,
+    validating,
+    setError,
+    setValid,
+    validate,
+    getValidateParams,
+  } = useFieldBase({
+    validations,
+    formContext,
+    getValue: () =>
+      getValueByPath((formContext as FormContext).values.value, name),
+  });
 
   let keyIndex = 0;
 
@@ -59,39 +63,6 @@ export function useFieldArray(
   }
 
   init();
-
-  function getValidateParams(): [FieldValidation[] | undefined, FieldValue] {
-    return [
-      unref(validations),
-      getValueByPath((formContext as FormContext).values.value, name),
-    ];
-  }
-
-  let validateAbortController = new AbortController();
-
-  async function validate() {
-    validating.value = true;
-    const [validations, currValue] = getValidateParams();
-    if (!validations || !validations.length) return;
-
-    validateAbortController.abort();
-    validateAbortController = new AbortController();
-    try {
-      await validateFieldValue(
-        validations,
-        currValue,
-        validateAbortController.signal,
-        formContext
-      );
-      setValid();
-      validating.value = false;
-    } catch (err) {
-      if (err instanceof ValidationError) {
-        setError(err.message);
-        validating.value = false;
-      }
-    }
-  }
 
   function newEntry(value: FieldValues, index?: number): FieldArrayValue {
     const currFields = fields.value;

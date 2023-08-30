@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import {
   customRef,
   getCurrentInstance,
@@ -5,7 +6,6 @@ import {
   onBeforeUnmount,
   readonly,
   ref,
-  unref,
   watch,
 } from 'vue';
 import type {
@@ -13,14 +13,11 @@ import type {
   FieldOptions,
   FieldData,
   FormContext,
-  FieldValidation,
 } from '../types';
-import { ValidationError } from '../errors';
 import {
   FORM_CONTEXT_KEY,
   getValueByPath,
   setValueByPath,
-  validateFieldValue,
   noop,
 } from '../utils';
 import { useFieldBase } from './useFieldBase';
@@ -37,7 +34,10 @@ export function useField(
     onblur: optionsOnBlur = noop,
   }: FieldOptions
 ): FieldData {
-  const { error, valid, validating, setError, setValid } = useFieldBase();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const vm: any = getCurrentInstance();
+  const formContext: FormContext | undefined =
+    vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
 
   let valueData: FieldValue = undefined;
   const dirty = ref(false);
@@ -57,12 +57,22 @@ export function useField(
     set: (newValue) => valueProxy.set(newValue),
   }));
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const vm: any = getCurrentInstance();
-  const formContext: FormContext | undefined =
-    vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
+  const {
+    error,
+    valid,
+    validating,
+    setError,
+    setValid,
+    validate,
+    getValidateParams,
+  } = useFieldBase({ validations, formContext, getValue: () => value.value });
 
   function oninput(ev: InputEvent) {
+    // @ts-ignore
+    if (ev.target?.value) {
+      // @ts-ignore
+      value.value = ev.target.value;
+    }
     dirty.value = true;
     optionsOnInput(ev);
     if (validateOn === 'input') validate();
