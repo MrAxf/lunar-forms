@@ -128,8 +128,15 @@ export function useField(
     }
   }
 
+  function setInitialValue() {
+    if (isCheckbox) {
+      if (initialValue === undefined) value.value = checkboxUncheckedValue;
+      else value.value = checkboxValue;
+    } else if (initialValue !== undefined) value.value = initialValue;
+  }
+
   function reset() {
-    if (initialValue !== undefined) value.value = initialValue;
+    if (initialValue !== undefined) setInitialValue();
     else value.value = getValueByPath(formContext?.values.value, name);
     error.value = undefined;
     dirty.value = false;
@@ -187,7 +194,7 @@ export function useField(
     });
   }
 
-  if (initialValue) value.value = initialValue;
+  setInitialValue();
 
   return fieldData;
 }

@@ -51,8 +51,13 @@ defineSlots<{
 
 const attrs = useAttrs();
 
+let initialValue: FieldValue = props.initialValue;
+if (props.isCheckbox || attrs['type'] === 'checkbox') {
+  initialValue = (attrs['checked'] as boolean) || undefined;
+}
+
 const fieldData = useField(props.name, {
-  initialValue: props.initialValue,
+  initialValue,
   validate: props.validate,
   validateOn: props.validateOn,
   transform: props.transform,
@@ -82,6 +87,7 @@ const fieldData = useField(props.name, {
       :is="props.as"
       :name="fieldData.name"
       v-bind="{ ...$attrs, ...fieldData.fieldProps }"
+      :value="fieldData.value.value"
     />
   </slot>
 </template>
