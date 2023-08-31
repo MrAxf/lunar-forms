@@ -30,6 +30,9 @@ export function useField(
     validate: validations = [],
     transform: transformers = [],
     validateOn = 'input',
+    isCheckbox = false,
+    checkboxValue = true,
+    checkboxUncheckedValue,
     oninput: optionsOnInput = noop,
     onfocus: optionsOnFocus = noop,
     onchange: optionsOnChange = noop,
@@ -84,8 +87,15 @@ export function useField(
   function oninput(ev: InputEvent) {
     // @ts-ignore
     if (ev.target) {
-      // @ts-ignore
-      value.value = ev.target.value;
+      if (isCheckbox) {
+        // @ts-ignore
+        value.value = ev.target.checked
+          ? checkboxValue
+          : checkboxUncheckedValue;
+      } else {
+        // @ts-ignore
+        value.value = ev.target.value;
+      }
     }
     dirty.value = true;
     optionsOnInput(ev);

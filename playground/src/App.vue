@@ -131,6 +131,7 @@ import lunarFormLogo from './assets/logo.svg';
               minLength('El nombre debe tener 3 o más caracteres', 3),
               maxLength('El nombre debe tener 10 o menos caracteres', 10),
             ]"
+            :initial-value="'heyyyy'"
           />
           <span class="text-xs text-red-500">{{
             errors.value?.['nombre']
@@ -210,7 +211,9 @@ import lunarFormLogo from './assets/logo.svg';
           <LunarField
             name="checked"
             type="checkbox"
-            class="input bg-base-300"
+            class="checkbox bg-base-300"
+            :value="'holiwi'"
+            :unchecked-value="'uwu'"
           />
           <span class="text-xs text-red-500">{{
             errors.value?.['checked']

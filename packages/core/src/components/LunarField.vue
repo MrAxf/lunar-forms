@@ -2,7 +2,7 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <script setup lang="ts">
-import { Component } from 'vue';
+import { Component, useAttrs } from 'vue';
 import { useField } from '../composables';
 import type {
   FieldData,
@@ -24,9 +24,14 @@ const props = withDefaults(
     transform?: Maybe<FieldTransformer[]>;
     validate?: Maybe<FieldValidation[]>;
     validateOn?: 'input' | 'change' | 'blur' | null;
+    isCheckbox?: boolean;
+    value?: FieldValue;
+    uncheckedValue?: FieldValue;
     as?: Component | 'input' | 'textarea' | 'select';
   }>(),
   {
+    validateOn: 'input',
+    isCheckbox: false,
     as: 'input',
   }
 );
@@ -44,10 +49,16 @@ defineSlots<{
   default(props: FieldData): any;
 }>();
 
+const attrs = useAttrs();
+
 const fieldData = useField(props.name, {
   initialValue: props.initialValue,
   validate: props.validate,
+  validateOn: props.validateOn,
   transform: props.transform,
+  isCheckbox: attrs['type'] === 'checkbox' || props.isCheckbox,
+  checkboxValue: props.value,
+  checkboxUncheckedValue: props.uncheckedValue,
   onblur(ev) {
     emit('blur', ev);
   },

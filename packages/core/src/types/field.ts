@@ -25,6 +25,9 @@ export interface FieldOptions {
   validate?: MaybeRef<FieldValidation[]>;
   transform?: MaybeRef<FieldTransformer[]>;
   validateOn?: MaybeValue<'input' | 'change' | 'blur'>;
+  isCheckbox?: MaybeValue<boolean>;
+  checkboxValue?: MaybeValue<FieldValue>;
+  checkboxUncheckedValue?: MaybeValue<FieldValue>;
   oninput?: (ev: InputEvent) => void;
   onfocus?: (ev: FocusEvent) => void;
   onchange?: (ev: Event) => void;
