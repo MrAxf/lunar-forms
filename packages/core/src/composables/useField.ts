@@ -6,6 +6,7 @@ import {
   onBeforeUnmount,
   readonly,
   ref,
+  unref,
   watch,
 } from 'vue';
 import type {
@@ -27,6 +28,7 @@ export function useField(
   {
     initialValue = undefined,
     validate: validations = [],
+    transform: transformers = [],
     validateOn = 'input',
     oninput: optionsOnInput = noop,
     onfocus: optionsOnFocus = noop,
@@ -65,17 +67,32 @@ export function useField(
     setValid,
     validate,
     getValidateParams,
-  } = useFieldBase({ validations, formContext, getValue: () => value.value });
+  } = useFieldBase({
+    validations,
+    formContext,
+    getValue: () => value.value,
+  });
+
+  function transform() {
+    if (transformers && unref(transformers).length) {
+      unref(transformers).forEach((transformer) => {
+        value.value = transformer(value.value, formContext);
+      });
+    }
+  }
 
   function oninput(ev: InputEvent) {
     // @ts-ignore
-    if (ev.target?.value) {
+    if (ev.target) {
       // @ts-ignore
       value.value = ev.target.value;
     }
     dirty.value = true;
     optionsOnInput(ev);
-    if (validateOn === 'input') validate();
+    if (validateOn === 'input') {
+      transform();
+      validate();
+    }
   }
 
   function onfocus(ev: FocusEvent) {
@@ -86,13 +103,19 @@ export function useField(
   function onchange(ev: InputEvent) {
     dirty.value = true;
     optionsOnChange(ev);
-    if (validateOn === 'change') validate();
+    if (validateOn === 'change') {
+      transform();
+      validate();
+    }
   }
 
   function onblur(ev: FocusEvent) {
     touched.value = true;
     optionsOnBlur(ev);
-    if (validateOn === 'blur') validate();
+    if (validateOn === 'blur') {
+      transform();
+      validate();
+    }
   }
 
   function reset() {

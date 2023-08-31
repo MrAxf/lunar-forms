@@ -1,4 +1,4 @@
-import { FieldValidation } from '../types/field';
+import type { FieldValidation } from '../types/field';
 
 export function required(error: string): FieldValidation {
   return (value) =>

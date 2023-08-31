@@ -4,7 +4,13 @@
 <script setup lang="ts">
 import { Component } from 'vue';
 import { useField } from '../composables';
-import type { FieldData, FieldValidation, FieldValue, Maybe } from '../types';
+import type {
+  FieldData,
+  FieldTransformer,
+  FieldValidation,
+  FieldValue,
+  Maybe,
+} from '../types';
 
 defineOptions({
   inheritAttrs: false,
@@ -15,6 +21,7 @@ const props = withDefaults(
     name: string;
     modelValue?: FieldValue;
     initialValue?: FieldValue;
+    transform?: Maybe<FieldTransformer[]>;
     validate?: Maybe<FieldValidation[]>;
     validateOn?: 'input' | 'change' | 'blur' | null;
     as?: Component | 'input' | 'textarea' | 'select';
@@ -40,6 +47,7 @@ defineSlots<{
 const fieldData = useField(props.name, {
   initialValue: props.initialValue,
   validate: props.validate,
+  transform: props.transform,
   onblur(ev) {
     emit('blur', ev);
   },

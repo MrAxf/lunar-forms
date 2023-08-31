@@ -34,6 +34,7 @@ export function useFieldBase({
   async function validate() {
     validating.value = true;
     const [validations, currValue] = getValidateParams();
+
     if (!validations || !validations.length) return;
 
     validateAbortController.abort();

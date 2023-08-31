@@ -15,9 +15,15 @@ export type FieldValidation = (
   formCtx?: FormContext
 ) => MaybePromise<Maybe<string>>;
 
+export type FieldTransformer = (
+  value: FieldValue,
+  formCtx?: FormContext
+) => FieldValue;
+
 export interface FieldOptions {
   initialValue?: FieldValue;
   validate?: MaybeRef<FieldValidation[]>;
+  transform?: MaybeRef<FieldTransformer[]>;
   validateOn?: MaybeValue<'input' | 'change' | 'blur'>;
   oninput?: (ev: InputEvent) => void;
   onfocus?: (ev: FocusEvent) => void;

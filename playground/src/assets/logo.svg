@@ -1,6 +1,6 @@
 <svg
   xmlns="http://www.w3.org/2000/svg"
-  width="100"
+  width="150"
   height="100"
   xml:space="preserve"
 >
@@ -10,7 +10,7 @@
       <stop offset="100%" stop-color="#F0ABFC" />
     </linearGradient>
   </defs>
-  <circle
+  <path
     style="
       stroke-width: 0;
       stroke-dasharray: none;
@@ -22,9 +22,7 @@
       fill-rule: nonzero;
       opacity: 1;
     "
-    cx="50"
-    cy="50"
-    r="50"
+    d="M100 0c27.6 0 50 22.4 50 50s-22.4 50-50 50H50C22.4 100 0 77.6 0 50S22.4 0 50 0h50z"
   />
   <path
     style="
@@ -38,7 +36,7 @@
       fill-rule: nonzero;
       opacity: 1;
     "
-    transform="translate(14.003 14.463)"
+    transform="translate(64.003 14.463)"
     d="M73.497 35.537c0 20.7-16.8 37.5-37.5 37.5C18.955 73.037 4.557 61.65 0 46.075a37.422 37.422 0 0 0 11.997 1.962c20.7 0 37.5-16.8 37.5-37.5 0-3.658-.524-7.194-1.502-10.537 14.822 5.007 25.502 19.032 25.502 35.537z"
   />
 </svg>
