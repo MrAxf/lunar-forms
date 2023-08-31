@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <script setup lang="ts" generic="T extends FieldValues">
 import { useForm } from '../composables';
-import type { FieldValues, FormOptions } from '../types';
+import type { FieldValues } from '../types';
 
 const props = defineProps<{
   initialValues?: Partial<T>;
@@ -13,7 +13,7 @@ const emit = defineEmits<{
 
 defineSlots<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  default(props: FormOptions<T>): any;
+  default(props: ReturnType<typeof useForm<T>>): any;
 }>();
 
 const formData = useForm<T>({

@@ -2,6 +2,8 @@
 import {
   useField,
   required,
+  LunarForm,
+  LunarField,
   minLength,
   useForm,
   useFieldArray,
@@ -24,7 +26,7 @@ const [parent] = useAutoAnimate();
 </script>
 
 <template>
-  <main class="container mx-auto py-10">
+  <main class="container mx-auto flex flex-col gap-20 py-10">
     <h1
       class="mb-5 bg-gradient-to-br from-purple-600 to-fuchsia-300 bg-clip-text text-8xl font-bold text-transparent"
     >
@@ -98,5 +100,16 @@ const [parent] = useAutoAnimate();
         <pre>{{ { error, values, errors, fields } }}</pre>
       </section>
     </div>
+
+    <LunarForm class="flex gap-5" v-slot="{ error, values, errors, fields }">
+      <section class="flex-1 flex-grow flex-col">
+        <label for="nombre">Nombre:</label>
+        <LunarField name="nombre" class="input bg-base-300" />
+        <span class="text-xs text-red-500">{{ error?.['nombre'] }}</span>
+      </section>
+      <section class="bg-base-300 rounded-box flex-1 flex-grow p-5">
+        <pre>{{ { error, values, errors, fields } }}</pre>
+      </section>
+    </LunarForm>
   </main>
 </template>
