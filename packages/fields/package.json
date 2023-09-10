@@ -1,7 +1,8 @@
 {
-  "name": "@lunar-forms/core",
-  "version": "0.0.0",
+  "name": "@lunar-forms/fields",
+  "version": "1.0.0",
   "type": "module",
+  "description": "",
   "files": [
     "dist"
   ],
@@ -20,9 +21,11 @@
     "types": "vue-tsc"
   },
   "peerDependencies": {
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "@lunar-forms/core": "workspace:*"
   },
   "devDependencies": {
+    "@lunar-forms/core": "workspace:*",
     "@types/node": "^20.4.7",
     "@typescript-eslint/eslint-plugin": "^6.2.1",
     "@typescript-eslint/parser": "^6.2.1",
