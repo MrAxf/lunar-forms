@@ -13,6 +13,10 @@ import type {
 import { useField } from '@lunar-forms/core';
 import { PLUGING_CONTEXT_KEY } from '../consts';
 
+defineOptions({
+  inheritAttrs: false,
+});
+
 const props = withDefaults(
   defineProps<{
     name: string;
@@ -23,6 +27,13 @@ const props = withDefaults(
     transform?: Maybe<FieldTransformer[]>;
     validate?: Maybe<FieldValidation[]>;
     validateOn?: 'input' | 'change' | 'blur' | null;
+    required?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    placeholder?: string;
+    minLenght?: number;
+    maxLenght?: number;
+    pattern?: RegExp;
   }>(),
   {
     validateOn: 'input',
@@ -36,6 +47,14 @@ const emit = defineEmits<{
   (e: 'focus', ev: FocusEvent): void;
   (e: 'input', ev: InputEvent): void;
 }>();
+
+if (
+  props.initialValue &&
+  props.modelValue !== null &&
+  props.modelValue !== undefined
+) {
+  emit('update:modelValue', props.initialValue);
+}
 
 const fieldData = useField(props.name, {
   initialValue: props.initialValue,
@@ -68,14 +87,35 @@ const id = `${props.name}-${crypto.randomUUID()}`;
 </script>
 
 <template>
-  <div :class="theme.classes.outer">
+  <div
+    :class="theme.classes.outer"
+    :data-required="props.required"
+    :data-disabled="props.disabled"
+    :data-readonly="props.readonly"
+    :data-valid="fieldData.valid.value"
+    :data-error="fieldData.error.value"
+    :data-touched="fieldData.touched.value"
+  >
     <div :class="theme.classes.wrapper">
       <label v-if="props.label" :class="theme.classes.label" :for="id">{{
         props.label
       }}</label>
       <div :class="theme.classes.inner">
         <div :class="theme.classes.prefix"></div>
-        <input type="text" :name="name" :id="id" />
+        <input
+          type="text"
+          :name="name"
+          :id="id"
+          :disabled="props.disabled"
+          :readonly="props.readonly"
+          :required="props.required"
+          :placeholder="props.placeholder"
+          :minlength="props.minLenght"
+          :maxlength="props.maxLenght"
+          :pattern="props.pattern?.toString()"
+          :class="options.theme.classes.input"
+          v-bind="{ ...$attrs, ...fieldData.fieldProps }"
+        />
         <div :class="theme.classes.suffix"></div>
       </div>
     </div>

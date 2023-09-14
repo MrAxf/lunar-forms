@@ -8,15 +8,16 @@ export default defineConfig(({ mode }) => ({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'LunarFormsCore',
+      name: 'LunarFormsFields',
       fileName: 'index',
     },
     sourcemap: mode === 'development',
     rollupOptions: {
-      external: ['vue'],
+      external: ['vue', '@lunar-forms/core'],
       output: {
         globals: {
           vue: 'Vue',
+          '@lunar-forms/core': 'LunarFormsCore',
         },
       },
     },

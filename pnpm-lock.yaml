@@ -143,6 +143,9 @@ importers:
       '@lunar-forms/core':
         specifier: workspace:*
         version: link:../packages/core
+      '@lunar-forms/fields':
+        specifier: workspace:*
+        version: link:../packages/fields
       vue:
         specifier: ^3.3.4
         version: 3.3.4

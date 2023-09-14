@@ -18,6 +18,7 @@ import {
   maxLength,
 } from '@lunar-forms/core';
 import lunarFormLogo from './assets/logo.svg';
+import { TextField } from '../../packages/fields/dist';
 // import { useAutoAnimate } from '@formkit/auto-animate/vue';
 // import { Icon } from '@iconify/vue';
 
@@ -120,6 +121,12 @@ import lunarFormLogo from './assets/logo.svg';
 
     <LunarForm class="flex gap-5" v-slot="{ values, errors }">
       <section class="flex-1 flex-grow flex-col">
+        <TextField
+          name="nombrereshu"
+          label="NombreReshu"
+          help="Texto de prueba"
+          required
+        />
         <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
           <LunarField
