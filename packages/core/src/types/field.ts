@@ -36,7 +36,7 @@ export interface FieldOptions {
 
 export interface FieldData {
   name: string;
-  value: Readonly<Ref<FieldValue>>;
+  value: Ref<FieldValue>;
   dirty: Readonly<Ref<boolean>>;
   touched: Readonly<Ref<boolean>>;
   valid: Readonly<Ref<Maybe<boolean>>>;

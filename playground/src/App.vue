@@ -1,24 +1,34 @@
 <script setup lang="ts">
 import {
   // useField,
-  required,
+  // required,
   LunarForm,
-  LunarField,
-  minLength,
-  email,
-  url,
-  pattern,
-  toNumber,
-  toCase,
-  UPPER_CASE,
-  max,
-  min,
+  // LunarField,
+  // minLength,
+  // email,
+  // url,
+  // pattern,
+  // toNumber,
+  // toCase,
+  // UPPER_CASE,
+  // max,
+  // min,
   // useForm,
   // useFieldArray,
-  maxLength,
+  // maxLength,
 } from '@lunar-forms/core';
 import lunarFormLogo from './assets/logo.svg';
-import { TextField } from '../../packages/fields/dist';
+import {
+  PasswordField,
+  TextField,
+  TextareaField,
+  EmailField,
+  UrlField,
+  NumberField,
+  RangeField,
+} from '../../packages/fields/dist';
+// import { ref } from 'vue';
+import { Icon } from '@iconify/vue';
 // import { useAutoAnimate } from '@formkit/auto-animate/vue';
 // import { Icon } from '@iconify/vue';
 
@@ -34,6 +44,7 @@ import { TextField } from '../../packages/fields/dist';
 //   useFieldArray('hola', { validate: [minLength('Max Len', 4)] });
 
 // const [parent] = useAutoAnimate();
+// const req = ref(false);
 </script>
 
 <template>
@@ -122,12 +133,92 @@ import { TextField } from '../../packages/fields/dist';
     <LunarForm class="flex gap-5" v-slot="{ values, errors }">
       <section class="flex-1 flex-grow flex-col">
         <TextField
-          name="nombrereshu"
-          label="NombreReshu"
+          v-auto-animate
+          name="text"
+          label="Text"
           help="Texto de prueba"
+          placeholder="Texto ..."
+          :max-lenght="10"
+          :pattern="/^[A-Za-z]{3}$/"
+          required
+        >
+          <template #suffix>
+            <Icon class="join-item" icon="material-symbols:10k-outline"></Icon>
+          </template>
+        </TextField>
+        <TextareaField
+          v-auto-animate
+          name="textarea"
+          label="Textarea"
+          help="Texto de prueba"
+          placeholder="Texto ..."
+          :max-lenght="10"
+          :pattern="/^[A-Za-z]{3}$/"
+          required
+          clear-button
+        />
+        <PasswordField
+          v-auto-animate
+          name="password"
+          label="Password"
+          help="Texto de prueba"
+          placeholder="Contraseña ..."
+          :min-lenght="8"
+          show-button
           required
         />
-        <div class="flex flex-col gap-2">
+        <PasswordField
+          v-auto-animate
+          name="password-repeat"
+          label="Password repeat"
+          help="Texto de prueba"
+          placeholder="Contraseña ..."
+          :min-lenght="8"
+          confirm="password"
+          show-button
+          required
+        />
+        <EmailField
+          v-auto-animate
+          name="email"
+          label="Email"
+          help="Texto de prueba"
+          placeholder="Email ..."
+          clear-button
+          required
+        />
+        <UrlField
+          v-auto-animate
+          name="url"
+          label="Url"
+          help="Texto de prueba"
+          placeholder="Url ..."
+          clear-button
+          required
+        />
+        <NumberField
+          v-auto-animate
+          name="number"
+          label="Number"
+          help="Texto de prueba"
+          placeholder="Number ..."
+          clear-button
+          :min="5"
+          :max="10"
+          required
+        />
+        <RangeField
+          v-auto-animate
+          name="range"
+          label="Range"
+          help="Texto de prueba"
+          placeholder="Range ..."
+          clear-button
+          :min="5"
+          :max="10"
+          required
+        />
+        <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
           <LunarField
             name="nombre"
@@ -225,7 +316,7 @@ import { TextField } from '../../packages/fields/dist';
           <span class="text-xs text-red-500">{{
             errors.value?.['checked']
           }}</span>
-        </div>
+        </div> -->
         <div class="flex gap-5">
           <button class="btn btn-primary" type="submit">Submit</button>
           <button class="btn btn-accent" type="reset">Reset</button>

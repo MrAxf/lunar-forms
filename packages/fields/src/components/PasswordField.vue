@@ -3,7 +3,7 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
+import { computed, inject, ref, unref } from 'vue';
 import type { PluginOptions } from '../types/plugin';
 import type {
   FieldValue,
@@ -17,6 +17,7 @@ import {
   pattern as patterValidate,
   required as requiredValidator,
   useField,
+  confirm as confirmValidator,
 } from '@lunar-forms/core';
 import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
@@ -38,10 +39,11 @@ const props = withDefaults(
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
-    clearButton?: boolean;
+    showButton?: boolean;
     placeholder?: string;
     minLenght?: number;
     maxLenght?: number;
+    confirm?: string;
     pattern?: RegExp;
   }>(),
   {
@@ -83,6 +85,15 @@ const validations = computed(() => {
   if (props.required)
     validation.push(
       requiredValidator(formatMessage(options.messages.required))
+    );
+  if (props.confirm)
+    validation.push(
+      confirmValidator(
+        formatMessage(options.messages.password.confirm, {
+          value: props.confirm,
+        }),
+        props.confirm
+      )
     );
   if (props.minLenght)
     validation.push(
@@ -136,9 +147,10 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
   },
 });
 
-function onClear() {
-  value.value = undefined;
-  emit('update:modelValue', value.value);
+const inputType = ref('password');
+
+function onShow() {
+  inputType.value = inputType.value === 'password' ? 'text' : 'password';
 }
 </script>
 
@@ -151,7 +163,7 @@ function onClear() {
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
-    :data-input-btn="props.clearButton ? true : null"
+    :data-input-btn="props.showButton ? true : null"
     :data-field="$options.name"
   >
     <div :class="theme.classes.wrapper">
@@ -163,7 +175,7 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="text"
+          :type="inputType"
           :name="name"
           :id="id"
           :disabled="props.disabled"
@@ -178,12 +190,20 @@ function onClear() {
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <button
-          v-if="props.clearButton"
+          v-if="props.showButton"
           type="button"
-          v-html="options.theme.icons.clear"
+          v-html="
+            inputType === 'password'
+              ? options.theme.icons.visibilityOn
+              : options.theme.icons.visibilityOff
+          "
           :class="options.theme.classes['input-btn']"
-          :title="options.messages.actions.clear"
-          @click="onClear"
+          :title="
+            inputType === 'password'
+              ? options.messages.actions.setVisible
+              : options.messages.actions.setNotVisible
+          "
+          @click="onShow"
         ></button>
         <div v-if="$slots.suffix" :class="theme.classes.suffix">
           <slot name="suffix"></slot>

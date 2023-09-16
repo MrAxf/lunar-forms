@@ -1,3 +1,4 @@
+export * from './confirm';
 export * from './custom';
 export * from './email';
 export * from './required';

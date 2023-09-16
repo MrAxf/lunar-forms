@@ -12,10 +12,10 @@ import type {
   FieldValidation,
 } from '@lunar-forms/core';
 import {
-  maxLength,
-  minLength,
-  pattern as patterValidate,
+  max as maxValidator,
+  min as minValidator,
   required as requiredValidator,
+  toNumber,
   useField,
 } from '@lunar-forms/core';
 import { PLUGING_CONTEXT_KEY } from '../consts';
@@ -38,11 +38,8 @@ const props = withDefaults(
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
-    clearButton?: boolean;
-    placeholder?: string;
-    minLenght?: number;
-    maxLenght?: number;
-    pattern?: RegExp;
+    min?: number;
+    max?: number;
   }>(),
   {
     validateOn: 'input',
@@ -84,42 +81,40 @@ const validations = computed(() => {
     validation.push(
       requiredValidator(formatMessage(options.messages.required))
     );
-  if (props.minLenght)
+  if (props.min)
     validation.push(
-      minLength(
-        formatMessage(options.messages.text.maxLenght, {
-          value: props.minLenght.toString(),
+      minValidator(
+        formatMessage(options.messages.number.max, {
+          value: props.min.toString(),
         }),
-        props.minLenght
+        props.min
       )
     );
-  if (props.maxLenght)
+  if (props.max)
     validation.push(
-      maxLength(
-        formatMessage(options.messages.text.maxLenght, {
-          value: props.maxLenght.toString(),
+      maxValidator(
+        formatMessage(options.messages.number.max, {
+          value: props.max.toString(),
         }),
-        props.maxLenght
-      )
-    );
-  if (props.pattern)
-    validation.push(
-      patterValidate(
-        formatMessage(options.messages.text.pattern, {
-          value: props.pattern.toString(),
-        }),
-        props.pattern
+        props.max
       )
     );
   if (props.validate) validation = validation.concat(unref(props.validate));
   return validation;
 });
 
+const transformers = computed(() => {
+  let transformers = [toNumber()];
+  if (props.transform)
+    transformers = transformers.concat(unref(props.transform));
+  return transformers;
+});
+
 const { valid, error, touched, fieldProps, value } = useField(props.name, {
   initialValue: props.initialValue,
   validate: validations,
   validateOn: props.validateOn,
-  transform: props.transform,
+  transform: transformers,
   onblur(ev) {
     emit('blur', ev);
   },
@@ -135,11 +130,6 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
     emit('input', ev);
   },
 });
-
-function onClear() {
-  value.value = undefined;
-  emit('update:modelValue', value.value);
-}
 </script>
 
 <template>
@@ -151,7 +141,6 @@ function onClear() {
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
-    :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
     <div :class="theme.classes.wrapper">
@@ -163,28 +152,18 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="text"
+          type="range"
           :name="name"
           :id="id"
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :placeholder="props.placeholder"
-          :minlength="props.minLenght"
-          :maxlength="props.maxLenght"
-          :pattern="props.pattern?.toString()"
+          :min="props.min"
+          :max="props.max"
           :class="options.theme.classes.input"
           :value="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
-        <button
-          v-if="props.clearButton"
-          type="button"
-          v-html="options.theme.icons.clear"
-          :class="options.theme.classes['input-btn']"
-          :title="options.messages.actions.clear"
-          @click="onClear"
-        ></button>
         <div v-if="$slots.suffix" :class="theme.classes.suffix">
           <slot name="suffix"></slot>
         </div>

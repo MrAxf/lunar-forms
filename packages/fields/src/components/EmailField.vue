@@ -12,9 +12,9 @@ import type {
   FieldValidation,
 } from '@lunar-forms/core';
 import {
+  email,
   maxLength,
   minLength,
-  pattern as patterValidate,
   required as requiredValidator,
   useField,
 } from '@lunar-forms/core';
@@ -42,7 +42,6 @@ const props = withDefaults(
     placeholder?: string;
     minLenght?: number;
     maxLenght?: number;
-    pattern?: RegExp;
   }>(),
   {
     validateOn: 'input',
@@ -79,7 +78,9 @@ const { theme } = options;
 const id = `${props.name}-${crypto.randomUUID()}`;
 
 const validations = computed(() => {
-  let validation: FieldValidation[] = [];
+  let validation: FieldValidation[] = [
+    email(formatMessage(options.messages.email.valid)),
+  ];
   if (props.required)
     validation.push(
       requiredValidator(formatMessage(options.messages.required))
@@ -100,15 +101,6 @@ const validations = computed(() => {
           value: props.maxLenght.toString(),
         }),
         props.maxLenght
-      )
-    );
-  if (props.pattern)
-    validation.push(
-      patterValidate(
-        formatMessage(options.messages.text.pattern, {
-          value: props.pattern.toString(),
-        }),
-        props.pattern
       )
     );
   if (props.validate) validation = validation.concat(unref(props.validate));
@@ -163,7 +155,7 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="text"
+          type="email"
           :name="name"
           :id="id"
           :disabled="props.disabled"
@@ -172,7 +164,6 @@ function onClear() {
           :placeholder="props.placeholder"
           :minlength="props.minLenght"
           :maxlength="props.maxLenght"
-          :pattern="props.pattern?.toString()"
           :class="options.theme.classes.input"
           :value="value"
           v-bind="{ ...$attrs, ...fieldProps }"

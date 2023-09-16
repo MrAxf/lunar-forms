@@ -115,33 +115,39 @@ const validations = computed(() => {
   return validation;
 });
 
-const { valid, error, touched, fieldProps, value } = useField(props.name, {
-  initialValue: props.initialValue,
-  validate: validations,
-  validateOn: props.validateOn,
-  transform: props.transform,
-  onblur(ev) {
-    emit('blur', ev);
-  },
-  onchange(ev) {
-    emit('change', ev);
-  },
-  onfocus(ev) {
-    emit('focus', ev);
-  },
-  oninput(ev) {
-    // @ts-ignore
-    emit('update:modelValue', ev.target?.value);
-    emit('input', ev);
-  },
-});
+const { valid, error, touched, fieldProps, value, validate } = useField(
+  props.name,
+  {
+    initialValue: props.initialValue,
+    validate: validations,
+    validateOn: props.validateOn,
+    transform: props.transform,
+    onblur(ev) {
+      emit('blur', ev);
+    },
+    onchange(ev) {
+      emit('change', ev);
+    },
+    onfocus(ev) {
+      emit('focus', ev);
+    },
+    oninput(ev) {
+      // @ts-ignore
+      emit('update:modelValue', ev.target?.value);
+      emit('input', ev);
+    },
+  }
+);
 
 function onClear() {
   value.value = undefined;
   emit('update:modelValue', value.value);
+  validate();
 }
 </script>
 
+<!-- eslint-disable vue/no-textarea-mustache -->
+<!-- eslint-disable vue/valid-v-model -->
 <template>
   <div
     :class="theme.classes.outer"
@@ -162,8 +168,8 @@ function onClear() {
         <div v-if="$slots.prefix" :class="theme.classes.prefix">
           <slot name="prefix"></slot>
         </div>
-        <input
-          type="text"
+        <!-- @vue-ignore -->
+        <textarea
           :name="name"
           :id="id"
           :disabled="props.disabled"
@@ -176,7 +182,7 @@ function onClear() {
           :class="options.theme.classes.input"
           :value="value"
           v-bind="{ ...$attrs, ...fieldProps }"
-        />
+        ></textarea>
         <button
           v-if="props.clearButton"
           type="button"
