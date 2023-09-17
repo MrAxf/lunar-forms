@@ -26,10 +26,10 @@ import {
   UrlField,
   NumberField,
   RangeField,
-} from '../../packages/fields/dist';
+  SelectField,
+  FileField,
+} from '@lunar-forms/fields';
 // import { ref } from 'vue';
-import { Icon } from '@iconify/vue';
-// import { useAutoAnimate } from '@formkit/auto-animate/vue';
 // import { Icon } from '@iconify/vue';
 
 // const { values, errors, formProps } = useForm({
@@ -141,11 +141,7 @@ import { Icon } from '@iconify/vue';
           :max-lenght="10"
           :pattern="/^[A-Za-z]{3}$/"
           required
-        >
-          <template #suffix>
-            <Icon class="join-item" icon="material-symbols:10k-outline"></Icon>
-          </template>
-        </TextField>
+        />
         <TextareaField
           v-auto-animate
           name="textarea"
@@ -216,6 +212,25 @@ import { Icon } from '@iconify/vue';
           clear-button
           :min="5"
           :max="10"
+          required
+        />
+        <SelectField
+          v-auto-animate
+          name="select"
+          label="Select"
+          help="Texto de prueba"
+          placeholder="Select ..."
+          required
+          :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+        />
+        <FileField
+          v-auto-animate
+          name="file"
+          label="File"
+          help="Texto de prueba"
+          placeholder="File ..."
+          clear-button
+          multiple
           required
         />
         <!-- <div class="flex flex-col gap-2">

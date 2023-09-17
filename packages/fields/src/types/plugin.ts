@@ -9,6 +9,7 @@ export interface PluginOptions {
       suffix: string;
       input: string;
       'input-btn': string;
+      'input-icon': string;
       help: string;
       message: string;
     };
@@ -16,6 +17,7 @@ export interface PluginOptions {
       clear: string;
       visibilityOn: string;
       visibilityOff: string;
+      select: string;
     };
   };
   messages: {
