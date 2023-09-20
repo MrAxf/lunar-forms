@@ -62,6 +62,10 @@ createApp(App)
         min: 'El campo debe tener un valor igual o superior a {value}.',
         max: 'El campo debe tener un valor igual o inferior a {value}.',
       },
+      file: {
+        accept: 'El formato del archivo no es valido',
+        maxSize: 'El formato del archivo no puede pasar de los {value} bytes.',
+      },
       actions: {
         clear: 'Limpiar',
         setVisible: 'Mostrar',

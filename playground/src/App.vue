@@ -221,6 +221,7 @@ import {
           help="Texto de prueba"
           placeholder="Select ..."
           required
+          multiple
           :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
         />
         <FileField
@@ -232,6 +233,8 @@ import {
           clear-button
           multiple
           required
+          :accept="['image/*', '.png']"
+          :max-size="40000"
         />
         <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>

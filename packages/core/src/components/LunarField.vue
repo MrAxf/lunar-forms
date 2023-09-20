@@ -88,6 +88,7 @@ const fieldData = useField(props.name, {
       :name="fieldData.name"
       v-bind="{ ...$attrs, ...fieldData.fieldProps }"
       :value="fieldData.value.value"
+      v-model="fieldData.value"
     />
   </slot>
 </template>

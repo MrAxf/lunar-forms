@@ -129,7 +129,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
           :required="props.required"
           :placeholder="props.placeholder"
           :class="pluginOpts.theme.classes.input"
-          :value="value"
+          v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         >
           <option

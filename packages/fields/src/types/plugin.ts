@@ -40,6 +40,10 @@ export interface PluginOptions {
       min: string;
       max: string;
     };
+    file: {
+      accept: string;
+      maxSize: string;
+    };
     actions: {
       clear: string;
       setVisible: string;

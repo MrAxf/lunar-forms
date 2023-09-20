@@ -186,7 +186,7 @@ function onShow() {
           :maxlength="props.maxLenght"
           :pattern="props.pattern?.toString()"
           :class="options.theme.classes.input"
-          :value="value"
+          v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <button

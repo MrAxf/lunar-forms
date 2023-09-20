@@ -161,7 +161,7 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
           :min="props.min"
           :max="props.max"
           :class="options.theme.classes.input"
-          :value="value"
+          v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <div v-if="$slots.suffix" :class="theme.classes.suffix">

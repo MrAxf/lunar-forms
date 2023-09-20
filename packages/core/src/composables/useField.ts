@@ -85,18 +85,6 @@ export function useField(
   }
 
   function oninput(ev: InputEvent) {
-    // @ts-ignore
-    if (ev.target) {
-      if (isCheckbox) {
-        // @ts-ignore
-        value.value = ev.target.checked
-          ? checkboxValue
-          : checkboxUncheckedValue;
-      } else {
-        // @ts-ignore
-        value.value = ev.target.value;
-      }
-    }
     dirty.value = true;
     optionsOnInput(ev);
     if (validateOn === 'input') {

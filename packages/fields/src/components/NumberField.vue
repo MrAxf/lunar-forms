@@ -170,7 +170,7 @@ function onClear() {
           :min="props.min"
           :max="props.max"
           :class="options.theme.classes.input"
-          :value="value"
+          v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <button

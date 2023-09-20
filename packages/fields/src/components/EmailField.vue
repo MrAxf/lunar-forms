@@ -165,7 +165,7 @@ function onClear() {
           :minlength="props.minLenght"
           :maxlength="props.maxLenght"
           :class="options.theme.classes.input"
-          :value="value"
+          v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <button

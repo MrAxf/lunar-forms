@@ -3,7 +3,7 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
+import { computed, inject, unref, ref } from 'vue';
 import type { PluginOptions } from '../types/plugin';
 import type {
   FieldValue,
@@ -11,7 +11,12 @@ import type {
   FieldTransformer,
   FieldValidation,
 } from '@lunar-forms/core';
-import { required as requiredValidator, useField } from '@lunar-forms/core';
+import {
+  required as requiredValidator,
+  useField,
+  accept as acceptValidator,
+  maxSize as maxSizeValidator,
+} from '@lunar-forms/core';
 import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
 
@@ -31,10 +36,12 @@ const props = withDefaults(
     validateOn?: 'input' | 'change' | 'blur' | null;
     required?: boolean;
     disabled?: boolean;
+    accept?: string | string[];
+    maxSize?: number;
     clearButton?: boolean;
   }>(),
   {
-    validateOn: 'input',
+    validateOn: 'change',
   }
 );
 
@@ -73,33 +80,71 @@ const validations = computed(() => {
     validation.push(
       requiredValidator(formatMessage(options.messages.required))
     );
+
+  if (props.accept)
+    validation.push(
+      acceptValidator(formatMessage(options.messages.file.accept), props.accept)
+    );
+
+  if (props.maxSize)
+    validation.push(
+      maxSizeValidator(
+        formatMessage(options.messages.file.maxSize, {
+          value: props.maxSize.toString(),
+        }),
+        props.maxSize
+      )
+    );
+
   if (props.validate) validation = validation.concat(unref(props.validate));
   return validation;
 });
 
-const { valid, error, touched, fieldProps, value } = useField(props.name, {
-  initialValue: props.initialValue,
-  validate: validations,
-  validateOn: props.validateOn,
-  transform: props.transform,
-  onblur(ev) {
-    emit('blur', ev);
-  },
-  onchange(ev) {
-    emit('change', ev);
-  },
-  onfocus(ev) {
-    emit('focus', ev);
-  },
-  oninput(ev) {
-    // @ts-ignore
-    emit('update:modelValue', ev.target?.value);
-    emit('input', ev);
-  },
+const { valid, error, touched, fieldProps, value, validate } = useField(
+  props.name,
+  {
+    initialValue: props.initialValue,
+    validate: validations,
+    validateOn: props.validateOn,
+    transform: props.transform,
+    onblur(ev) {
+      emit('blur', ev);
+    },
+    onchange(ev) {
+      const files = (ev.target as HTMLInputElement).files;
+      if (!files || files.length === 0) value.value = undefined;
+
+      const fileArray = Array.from(files as FileList);
+      if (fileArray.length === 1) value.value = fileArray[0];
+      else value.value = fileArray;
+      emit('change', ev);
+    },
+    onfocus(ev) {
+      emit('focus', ev);
+    },
+    oninput(ev) {
+      // @ts-ignore
+      emit('update:modelValue', ev.target?.value);
+      emit('input', ev);
+    },
+  }
+);
+
+const input = ref<HTMLInputElement | null>(null);
+
+const acceptString = computed<Maybe<string>>(() => {
+  if (!props.accept) return undefined;
+  if (Array.isArray(props.accept)) {
+    if (props.accept.length === 0) return undefined;
+    return props.accept.join(',');
+  }
+  return props.accept;
 });
 
 function onClear() {
   value.value = undefined;
+  if (input.value) input.value.value = '';
+  validate();
   emit('update:modelValue', value.value);
 }
 </script>
@@ -124,13 +169,14 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
+          ref="input"
           type="file"
           :name="name"
           :id="id"
           :disabled="props.disabled"
           :required="props.required"
           :class="options.theme.classes.input"
-          :value="value"
+          :accept="acceptString"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
         <button

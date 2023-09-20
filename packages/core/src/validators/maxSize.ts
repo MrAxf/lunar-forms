@@ -1,0 +1,19 @@
+import type { FieldValidation } from '../types/field';
+
+export function maxSize(error: string, requirement: number): FieldValidation {
+  return (value) => {
+    if (
+      !value ||
+      (!Array.isArray(value) && !(value instanceof File)) ||
+      (Array.isArray(value) && !value.every((item) => item instanceof File))
+    )
+      return undefined;
+
+    if (Array.isArray(value)) {
+      return (value as File[]).every((file) => file.size < requirement)
+        ? undefined
+        : error;
+    }
+    return value.size < requirement ? undefined : error;
+  };
+}
