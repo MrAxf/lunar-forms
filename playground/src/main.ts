@@ -28,7 +28,7 @@ createApp(App)
           tw`group-[[data-error]]/input:[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input-error`,
           tw`group-[[data-error]]/input:[&:is(textarea)]:textarea-error`,
           tw`group-[[data-error]]/input:[&:is(select)]:select-error`,
-          tw`join-item w-full !pr-[--input-pr] ![isolation:unset]`,
+          tw`join-item w-full appearance-none !pr-[--input-pr] ![isolation:unset]`,
         ].join(' '),
         'input-btn': tw`btn btn-circle btn-ghost min-h-8 z-1 m-2 -ml-10 h-8 w-8 [&>svg]:w-[1.5em]`,
         'input-icon': tw`min-h-8 z-1 pointer-events-none m-2 -ml-10 grid h-8 w-8 place-content-center [&>svg]:w-[1.5em]`,

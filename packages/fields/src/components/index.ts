@@ -3,6 +3,7 @@ import FileField from './FileField.vue';
 import NumberField from './NumberField.vue';
 import PasswordField from './PasswordField.vue';
 import RangeField from './RangeField.vue';
+import SearchField from './SearchField.vue';
 import SelectField from './SelectField.vue';
 import TextareaField from './TextareaField.vue';
 import TextField from './TextField.vue';
@@ -14,6 +15,7 @@ export {
   NumberField,
   PasswordField,
   RangeField,
+  SearchField,
   SelectField,
   TextareaField,
   TextField,

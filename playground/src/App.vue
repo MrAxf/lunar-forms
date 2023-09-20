@@ -28,6 +28,7 @@ import {
   RangeField,
   SelectField,
   FileField,
+  SearchField,
 } from '@lunar-forms/fields';
 // import { ref } from 'vue';
 // import { Icon } from '@iconify/vue';
@@ -131,7 +132,7 @@ import {
     </div> -->
 
     <LunarForm class="flex gap-5" v-slot="{ values, errors }">
-      <section class="flex-1 flex-grow flex-col">
+      <section class="grid flex-1 flex-grow grid-cols-2">
         <TextField
           v-auto-animate
           name="text"
@@ -221,7 +222,6 @@ import {
           help="Texto de prueba"
           placeholder="Select ..."
           required
-          multiple
           :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
         />
         <FileField
@@ -235,6 +235,13 @@ import {
           required
           :accept="['image/*', '.png']"
           :max-size="40000"
+        />
+        <SearchField
+          v-auto-animate
+          name="search"
+          label="Search"
+          help="Texto de prueba"
+          placeholder="Texto ..."
         />
         <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
@@ -335,7 +342,7 @@ import {
             errors.value?.['checked']
           }}</span>
         </div> -->
-        <div class="flex gap-5">
+        <div class="m-3 flex place-items-center gap-5">
           <button class="btn btn-primary" type="submit">Submit</button>
           <button class="btn btn-accent" type="reset">Reset</button>
         </div>
