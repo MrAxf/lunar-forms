@@ -12,6 +12,10 @@ export interface PluginOptions {
       'input-icon': string;
       help: string;
       message: string;
+      fieldset: string;
+      legend: string;
+      options: string;
+      option: string;
     };
     icons: {
       clear: string;

@@ -30,6 +30,8 @@ import {
   FileField,
   SearchField,
   CheckboxField,
+  CheckboxesField,
+  RadioField,
 } from '@lunar-forms/fields';
 // import { ref } from 'vue';
 // import { Icon } from '@iconify/vue';
@@ -251,6 +253,23 @@ import {
           help="Texto de prueba"
           :true-value="{ lel: 'yes' }"
           required
+        />
+        <CheckboxesField
+          v-auto-animate
+          name="checkboxes"
+          label="Checkboxes"
+          help="Texto de prueba"
+          placeholder="Checkboxes ..."
+          required
+          :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+        />
+        <RadioField
+          v-auto-animate
+          name="radio"
+          label="Radio"
+          help="Texto de prueba"
+          required
+          :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
         />
         <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
