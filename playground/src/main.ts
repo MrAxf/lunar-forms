@@ -11,7 +11,7 @@ createApp(App)
     theme: {
       classes: {
         outer: tw`group/input m-3 flex flex-col gap-2 [--input-pr:1rem] [&[data-input-btn]]:[--input-pr:3rem] [&[data-input-icon]]:[--input-pr:3rem]`,
-        wrapper: tw`flex flex-col gap-2`,
+        wrapper: tw`flex flex-col gap-2 group-[[data-field=CheckboxField]]/input:flex-row`,
         label: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-*`,
         inner: tw`join flex`,
         prefix: tw`bg-primary flex items-center p-3 `,
@@ -21,8 +21,10 @@ createApp(App)
           tw`[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:bg-base-300`,
           tw`[&:is(textarea)]:textarea [&:is(textarea)]:bg-base-300`,
           tw`[&:is(select)]:select [&:is(select)]:bg-base-300 [&:is(select)]:bg-none`,
+          tw`[&:is(input)[type=checkbox]]:checkbox`,
           tw`[&:is(input)[type=range]]:range`,
           tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
+          tw`group-[[data-error]]/input:[&:is(input)[type=checkbox]]:checkbox-error`,
           tw`group-[[data-error]]/input:[&:is(input)[type=range]]:range-error`,
           tw`group-[[data-error]]/input:[&:is(input)[type=file]]:file-input-error`,
           tw`group-[[data-error]]/input:[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input-error`,

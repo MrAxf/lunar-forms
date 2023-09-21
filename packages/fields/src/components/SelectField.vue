@@ -17,6 +17,7 @@ import { formatMessage, toSelectLabelValues } from '../utils';
 import type { SelectOptions } from '../types';
 
 defineOptions({
+  name: 'SelectField',
   inheritAttrs: false,
 });
 
@@ -36,7 +37,7 @@ const props = withDefaults(
     options?: SelectOptions;
   }>(),
   {
-    validateOn: 'input',
+    validateOn: 'change',
   }
 );
 

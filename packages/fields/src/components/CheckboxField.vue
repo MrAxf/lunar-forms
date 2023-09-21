@@ -16,6 +16,7 @@ import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
 
 defineOptions({
+  name: 'CheckboxField',
   inheritAttrs: false,
 });
 
@@ -32,9 +33,11 @@ const props = withDefaults(
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
+    trueValue?: FieldValue;
+    falseValue?: FieldValue;
   }>(),
   {
-    validateOn: 'input',
+    validateOn: 'change',
   }
 );
 
@@ -82,6 +85,8 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
   validate: validations,
   validateOn: props.validateOn,
   transform: props.transform,
+  checkboxValue: props.trueValue,
+  checkboxUncheckedValue: props.falseValue,
   onblur(ev) {
     emit('blur', ev);
   },
@@ -116,7 +121,22 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="text"
+          v-if="props.trueValue !== undefined"
+          type="checkbox"
+          :name="name"
+          :id="id"
+          :disabled="props.disabled"
+          :readonly="props.readonly"
+          :required="props.required"
+          :class="options.theme.classes.input"
+          :true-value="props.trueValue"
+          :false-value="props.falseValue"
+          v-model="value"
+          v-bind="{ ...$attrs, ...fieldProps }"
+        />
+        <input
+          v-else
+          type="checkbox"
           :name="name"
           :id="id"
           :disabled="props.disabled"

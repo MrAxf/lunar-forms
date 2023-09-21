@@ -21,6 +21,7 @@ import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
 
 defineOptions({
+  name: 'FileField',
   inheritAttrs: false,
 });
 

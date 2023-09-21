@@ -1,3 +1,4 @@
+import CheckboxField from './CheckboxField.vue';
 import EmailField from './EmailField.vue';
 import FileField from './FileField.vue';
 import NumberField from './NumberField.vue';
@@ -10,6 +11,7 @@ import TextField from './TextField.vue';
 import UrlField from './UrlField.vue';
 
 export {
+  CheckboxField,
   EmailField,
   FileField,
   NumberField,

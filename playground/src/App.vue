@@ -29,6 +29,7 @@ import {
   SelectField,
   FileField,
   SearchField,
+  CheckboxField,
 } from '@lunar-forms/fields';
 // import { ref } from 'vue';
 // import { Icon } from '@iconify/vue';
@@ -242,6 +243,14 @@ import {
           label="Search"
           help="Texto de prueba"
           placeholder="Texto ..."
+        />
+        <CheckboxField
+          v-auto-animate
+          name="checkbox"
+          label="Checkbox"
+          help="Texto de prueba"
+          :true-value="{ lel: 'yes' }"
+          required
         />
         <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
