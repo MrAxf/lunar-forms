@@ -22,7 +22,7 @@ import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
 
 defineOptions({
-  name: 'SearchField',
+  name: 'TelField',
   inheritAttrs: false,
 });
 
@@ -164,7 +164,7 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="search"
+          type="tel"
           :name="name"
           :id="id"
           :disabled="props.disabled"

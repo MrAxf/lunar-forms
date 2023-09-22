@@ -48,6 +48,11 @@ export interface PluginOptions {
       accept: string;
       maxSize: string;
     };
+    date: {
+      valid: string;
+      min: string;
+      max: string;
+    };
     actions: {
       clear: string;
       setVisible: string;

@@ -11,18 +11,12 @@ import type {
   FieldTransformer,
   FieldValidation,
 } from '@lunar-forms/core';
-import {
-  maxLength,
-  minLength,
-  pattern as patterValidate,
-  required as requiredValidator,
-  useField,
-} from '@lunar-forms/core';
+import { required as requiredValidator, useField } from '@lunar-forms/core';
 import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
 
 defineOptions({
-  name: 'SearchField',
+  name: 'ColorField',
   inheritAttrs: false,
 });
 
@@ -39,14 +33,10 @@ const props = withDefaults(
     required?: boolean;
     disabled?: boolean;
     readonly?: boolean;
-    clearButton?: boolean;
-    placeholder?: string;
-    minLenght?: number;
-    maxLenght?: number;
-    pattern?: RegExp;
   }>(),
   {
-    validateOn: 'input',
+    validateOn: 'change',
+    initialValue: '#ffffff',
   }
 );
 
@@ -85,33 +75,6 @@ const validations = computed(() => {
     validation.push(
       requiredValidator(formatMessage(options.messages.required))
     );
-  if (props.minLenght)
-    validation.push(
-      minLength(
-        formatMessage(options.messages.text.maxLenght, {
-          value: props.minLenght.toString(),
-        }),
-        props.minLenght
-      )
-    );
-  if (props.maxLenght)
-    validation.push(
-      maxLength(
-        formatMessage(options.messages.text.maxLenght, {
-          value: props.maxLenght.toString(),
-        }),
-        props.maxLenght
-      )
-    );
-  if (props.pattern)
-    validation.push(
-      patterValidate(
-        formatMessage(options.messages.text.pattern, {
-          value: props.pattern.toString(),
-        }),
-        props.pattern
-      )
-    );
   if (props.validate) validation = validation.concat(unref(props.validate));
   return validation;
 });
@@ -136,11 +99,6 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
     emit('input', ev);
   },
 });
-
-function onClear() {
-  value.value = undefined;
-  emit('update:modelValue', value.value);
-}
 </script>
 
 <template>
@@ -152,7 +110,6 @@ function onClear() {
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
-    :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
     <div :class="theme.classes.wrapper">
@@ -164,28 +121,16 @@ function onClear() {
           <slot name="prefix"></slot>
         </div>
         <input
-          type="search"
+          type="color"
           :name="name"
           :id="id"
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :placeholder="props.placeholder"
-          :minlength="props.minLenght"
-          :maxlength="props.maxLenght"
-          :pattern="props.pattern?.toString()"
           :class="options.theme.classes.input"
           v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
-        <button
-          v-if="props.clearButton"
-          type="button"
-          v-html="options.theme.icons.clear"
-          :class="options.theme.classes['input-btn']"
-          :title="options.messages.actions.clear"
-          @click="onClear"
-        ></button>
         <div v-if="$slots.suffix" :class="theme.classes.suffix">
           <slot name="suffix"></slot>
         </div>

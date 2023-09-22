@@ -32,23 +32,10 @@ import {
   CheckboxField,
   CheckboxesField,
   RadioField,
+  HiddenField,
+  ColorField,
+  TelField,
 } from '@lunar-forms/fields';
-// import { ref } from 'vue';
-// import { Icon } from '@iconify/vue';
-
-// const { values, errors, formProps } = useForm({
-//   initialValues: {
-//     hola: ['1', '2', '3'],
-//   },
-//   handleSubmit(values) {
-//     console.log(values);
-//   },
-// });
-// const { fields, error, push, swap, remove, prepend, replace, update, insert } =
-//   useFieldArray('hola', { validate: [minLength('Max Len', 4)] });
-
-// const [parent] = useAutoAnimate();
-// const req = ref(false);
 </script>
 
 <template>
@@ -135,7 +122,7 @@ import {
     </div> -->
 
     <LunarForm class="flex gap-5" v-slot="{ values, errors }">
-      <section class="grid flex-1 flex-grow grid-cols-2">
+      <section class="grid w-[60%] flex-grow grid-cols-2">
         <TextField
           v-auto-animate
           name="text"
@@ -251,7 +238,6 @@ import {
           name="checkbox"
           label="Checkbox"
           help="Texto de prueba"
-          :true-value="{ lel: 'yes' }"
           required
         />
         <CheckboxesField
@@ -261,7 +247,28 @@ import {
           help="Texto de prueba"
           placeholder="Checkboxes ..."
           required
-          :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+          :options="[
+            {
+              label: 'Opción Label 1',
+              value: 'Opción 1',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 2',
+              value: 'Opción 2',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 3',
+              value: 'Opción 3',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 4',
+              value: 'Opción 4',
+              help: 'Texto de ayuda de ejemplo',
+            },
+          ]"
         />
         <RadioField
           v-auto-animate
@@ -269,7 +276,45 @@ import {
           label="Radio"
           help="Texto de prueba"
           required
-          :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+          :options="[
+            {
+              label: 'Opción Label 1',
+              value: 'Opción 1',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 2',
+              value: 'Opción 2',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 3',
+              value: 'Opción 3',
+              help: 'Texto de ayuda de ejemplo',
+            },
+            {
+              label: 'Opción Label 4',
+              value: 'Opción 4',
+              help: 'Texto de ayuda de ejemplo',
+            },
+          ]"
+        />
+        <HiddenField name="hidden" :value="'hide'" />
+        <ColorField
+          v-auto-animate
+          name="color"
+          label="Color"
+          help="Texto de prueba"
+          required
+        />
+        <TelField
+          v-auto-animate
+          name="tel"
+          label="Tel"
+          help="Texto de prueba"
+          placeholder="Tel ..."
+          :max-lenght="10"
+          required
         />
         <!-- <div class="flex flex-col gap-2">
           <label for="nombre">Nombre:</label>
@@ -375,7 +420,9 @@ import {
           <button class="btn btn-accent" type="reset">Reset</button>
         </div>
       </section>
-      <section class="bg-base-300 rounded-box flex-1 flex-grow p-5">
+      <section
+        class="bg-base-300 rounded-box sticky top-[5vh] h-[90vh] w-[40%] flex-grow-0 p-5"
+      >
         <pre>{{ { values, errors } }}</pre>
       </section>
     </LunarForm>

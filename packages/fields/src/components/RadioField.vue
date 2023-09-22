@@ -134,7 +134,9 @@ const checkboxesOptions = computed(() =>
               opt.label
             }}</label>
           </div>
-          <span v-if="opt.help">{{ opt.help }}</span>
+          <span :class="theme.classes.help" v-if="opt.help">{{
+            opt.help
+          }}</span>
         </li>
       </ul>
     </fieldset>
