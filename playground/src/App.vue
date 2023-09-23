@@ -35,23 +35,26 @@ import {
   HiddenField,
   ColorField,
   TelField,
+  DateField,
+  DatetimeLocalField,
+  TimeField,
 } from '@lunar-forms/fields';
+import { ref } from 'vue';
+
+const myRef = ref('xcvxcvxcv');
 </script>
 
 <template>
+  <header class="bg-base-300 flex items-center justify-center gap-5 p-5">
+    <img :src="lunarFormLogo" alt="Lunar Forms logotype" class="h-16 w-auto" />
+    <h1
+      class="bg-gradient-to-br from-purple-600 to-fuchsia-300 bg-clip-text text-5xl font-bold text-transparent"
+    >
+      Lunar Forms
+    </h1>
+    <input type="text" v-model="myRef" />
+  </header>
   <main class="container mx-auto flex flex-col gap-20 py-10">
-    <header class="flex gap-5">
-      <img
-        :src="lunarFormLogo"
-        alt="Lunar Forms logotype"
-        class="h-full w-auto"
-      />
-      <h1
-        class="mb-5 bg-gradient-to-br from-purple-600 to-fuchsia-300 bg-clip-text text-8xl font-bold text-transparent"
-      >
-        Lunar Forms
-      </h1>
-    </header>
     <!-- <div class="flex gap-5">
       <section class="flex-1 flex-grow">
         <form v-bind="formProps" class="m-5 flex flex-col items-start gap-5">
@@ -125,6 +128,7 @@ import {
       <section class="grid w-[60%] flex-grow grid-cols-2">
         <TextField
           v-auto-animate
+          v-model="myRef"
           name="text"
           label="Text"
           help="Texto de prueba"
@@ -314,6 +318,36 @@ import {
           help="Texto de prueba"
           placeholder="Tel ..."
           :max-lenght="10"
+          required
+        />
+        <DateField
+          v-auto-animate
+          name="date"
+          label="Date"
+          help="Texto de prueba"
+          placeholder="Date ..."
+          :min="new Date('2023-09-20')"
+          :max="'2023-09-29'"
+          required
+        />
+        <DatetimeLocalField
+          v-auto-animate
+          name="datetimeLocal"
+          label="Date Time"
+          help="Texto de prueba"
+          placeholder="Date time..."
+          :min="new Date('2023-09-20T13:30')"
+          :max="'2023-09-29T15:00'"
+          required
+        />
+        <TimeField
+          v-auto-animate
+          name="time"
+          label="Time"
+          help="Texto de prueba"
+          placeholder="time..."
+          min="13:30"
+          max="20:00"
           required
         />
         <!-- <div class="flex flex-col gap-2">

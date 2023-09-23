@@ -3,19 +3,18 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
-import type { PluginOptions } from '../types/plugin';
+import { computed, unref } from 'vue';
 import type {
   FieldValue,
   Maybe,
   FieldTransformer,
   FieldValidation,
 } from '@lunar-forms/core';
-import { required as requiredValidator, useField } from '@lunar-forms/core';
-import { PLUGING_CONTEXT_KEY } from '../consts';
+import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
 import { toCheckboxesRadioLabelValues } from '../utils/checkboxesRadio';
 import type { CheckboxesRadioOptions } from '../types';
+import { useCommonField, usePluginOptions } from '../composables';
 
 defineOptions({
   name: 'RadioField',
@@ -41,45 +40,28 @@ const emit = defineEmits<{
   (e: 'change', ev: Event): void;
 }>();
 
-if (
-  props.initialValue &&
-  props.modelValue !== null &&
-  props.modelValue !== undefined
-) {
-  emit('update:modelValue', props.initialValue);
-}
-
 defineSlots<{
   prefix(): any;
   suffix(): any;
 }>();
 
-const pluginOpts = inject<PluginOptions>(PLUGING_CONTEXT_KEY);
+const { theme, messages } = usePluginOptions();
 
-if (!pluginOpts) throw new Error('Lunar Forms Fields plugin is not setted.');
-
-const { theme } = pluginOpts;
-
-const id = `${props.name}-${crypto.randomUUID()}`;
-
-const validations = computed(() => {
-  let validation: FieldValidation[] = [];
-  if (props.required)
-    validation.push(
-      requiredValidator(formatMessage(pluginOpts.messages.required))
-    );
-  if (props.validate) validation = validation.concat(unref(props.validate));
-  return validation;
-});
-
-const { valid, error, touched, fieldProps, value } = useField(props.name, {
-  initialValue: props.initialValue,
-  validate: validations,
-  validateOn: 'change',
-  transform: props.transform,
-  onchange(ev) {
-    emit('change', ev);
-  },
+const {
+  id,
+  fieldData: { value, valid, touched, error, fieldProps },
+  // @ts-ignore
+} = useCommonField(props, emit, {
+  validate: computed(() => {
+    let validation: FieldValidation[] = [];
+    if (props.required)
+      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.validate) validation = validation.concat(unref(props.validate));
+    return validation;
+  }),
+  onblur: undefined,
+  onfocus: undefined,
+  oninput: undefined,
 });
 
 const checkboxesOptions = computed(() =>
@@ -143,4 +125,3 @@ const checkboxesOptions = computed(() =>
     <span v-if="error" :class="theme.classes.message">{{ error }}</span>
   </div>
 </template>
-../utils/checkboxesRadio

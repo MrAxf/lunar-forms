@@ -14,14 +14,14 @@ defineOptions({
 const props = defineProps<{
   name: string;
   modelValue?: FieldValue;
-  value: FieldValue;
+  value?: FieldValue;
   transform?: Maybe<FieldTransformer[]>;
 }>();
 
 const id = `${props.name}-${crypto.randomUUID()}`;
 
 const { value } = useField(props.name, {
-  initialValue: props.value,
+  initialValue: props.value || props.modelValue,
   transform: props.transform,
 });
 </script>

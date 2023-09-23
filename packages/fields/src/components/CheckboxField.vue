@@ -3,17 +3,16 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, inject, unref } from 'vue';
-import type { PluginOptions } from '../types/plugin';
+import { computed, unref } from 'vue';
 import type {
   FieldValue,
   Maybe,
   FieldTransformer,
   FieldValidation,
 } from '@lunar-forms/core';
-import { required as requiredValidator, useField } from '@lunar-forms/core';
-import { PLUGING_CONTEXT_KEY } from '../consts';
+import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
+import { useCommonField, usePluginOptions } from '../composables';
 
 defineOptions({
   name: 'CheckboxField',
@@ -62,45 +61,21 @@ defineSlots<{
   suffix(): any;
 }>();
 
-const options = inject<PluginOptions>(PLUGING_CONTEXT_KEY);
+const { theme, messages } = usePluginOptions();
 
-if (!options) throw new Error('Lunar Forms Fields plugin is not setted.');
-
-const { theme } = options;
-
-const id = `${props.name}-${crypto.randomUUID()}`;
-
-const validations = computed(() => {
-  let validation: FieldValidation[] = [];
-  if (props.required)
-    validation.push(
-      requiredValidator(formatMessage(options.messages.required))
-    );
-  if (props.validate) validation = validation.concat(unref(props.validate));
-  return validation;
-});
-
-const { valid, error, touched, fieldProps, value } = useField(props.name, {
-  initialValue: props.initialValue,
-  validate: validations,
-  validateOn: props.validateOn,
-  transform: props.transform,
+const {
+  id,
+  fieldData: { value, valid, touched, error, fieldProps },
+} = useCommonField(props, emit, {
+  validate: computed(() => {
+    let validation: FieldValidation[] = [];
+    if (props.required)
+      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.validate) validation = validation.concat(unref(props.validate));
+    return validation;
+  }),
   checkboxValue: props.trueValue,
   checkboxUncheckedValue: props.falseValue,
-  onblur(ev) {
-    emit('blur', ev);
-  },
-  onchange(ev) {
-    emit('change', ev);
-  },
-  onfocus(ev) {
-    emit('focus', ev);
-  },
-  oninput(ev) {
-    // @ts-ignore
-    emit('update:modelValue', ev.target?.value);
-    emit('input', ev);
-  },
 });
 </script>
 
@@ -128,7 +103,7 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :class="options.theme.classes.input"
+          :class="theme.classes.input"
           :true-value="props.trueValue"
           :false-value="props.falseValue"
           v-model="value"
@@ -142,7 +117,7 @@ const { valid, error, touched, fieldProps, value } = useField(props.name, {
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :class="options.theme.classes.input"
+          :class="theme.classes.input"
           v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />

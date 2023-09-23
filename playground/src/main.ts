@@ -34,7 +34,7 @@ createApp(App)
           tw`[&:is(input)[type=search]::-webkit-search-cancel-button]:appearance-none`,
           tw`[&:is(input)[type=search]::-webkit-search-results-button]:appearance-none`,
           tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
-          tw`[&:is(input)[type=color]]:h-12 [&:is(input)[type=color]]:appearance-none [&:is(input)[type=color]]:overflow-hidden [&:is(input)[type=color]]:rounded-md [&:is(input)[type=color]]:!p-0`,
+          tw`[&:is(input)[type=color]]:h-12 [&:is(input)[type=color]]:cursor-pointer [&:is(input)[type=color]]:appearance-none [&:is(input)[type=color]]:overflow-hidden [&:is(input)[type=color]]:rounded-md [&:is(input)[type=color]]:!p-0`,
           tw`[&:is(input)[type=color]]:focus:border-primary [&:is(input)[type=color]]:border-base-300 [&:is(input)[type=color]]:border-2`,
           tw`[&:is(input)[type=color]::-moz-color-swatch]:[border:none] [&:is(input)[type=color]::-webkit-color-swatch]:border-none`,
           tw`[&:is(input)[type=color]::-moz-color-swatch]:w-full [&:is(input)[type=color]::-webkit-color-swatch]:w-full`,
@@ -88,6 +88,21 @@ createApp(App)
       file: {
         accept: 'El formato del archivo no es valido',
         maxSize: 'El formato del archivo no puede pasar de los {value} bytes.',
+      },
+      date: {
+        valid: 'La fecha no tiene un formato válido',
+        min: 'La fecha debe ser superior a la estipulada.',
+        max: 'La fecha debe ser inferior a la estipulada.',
+      },
+      datetime: {
+        valid: 'La fecha y la hora no tiene un formato válido',
+        min: 'La fecha y la hora debe ser superior a la estipulada.',
+        max: 'La fecha y la hora debe ser inferior a la estipulada.',
+      },
+      time: {
+        valid: 'La hora no tiene un formato válido',
+        min: 'La hora debe ser superior a la estipulada.',
+        max: 'La hora debe ser inferior a la estipulada.',
       },
       actions: {
         clear: 'Limpiar',

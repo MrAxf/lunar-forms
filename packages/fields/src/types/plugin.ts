@@ -53,6 +53,16 @@ export interface PluginOptions {
       min: string;
       max: string;
     };
+    datetime: {
+      valid: string;
+      min: string;
+      max: string;
+    };
+    time: {
+      valid: string;
+      min: string;
+      max: string;
+    };
     actions: {
       clear: string;
       setVisible: string;

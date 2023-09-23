@@ -11,9 +11,9 @@ import type {
   FieldValidation,
 } from '@lunar-forms/core';
 import {
-  maxLength,
-  minLength,
-  pattern as patterValidate,
+  date,
+  maxDate as maxDateValidator,
+  minDate as minDateValidator,
   required as requiredValidator,
 } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
@@ -21,7 +21,7 @@ import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 
 defineOptions({
-  name: 'TelField',
+  name: 'DateField',
   inheritAttrs: false,
 });
 
@@ -40,9 +40,8 @@ const props = withDefaults(
     readonly?: boolean;
     clearButton?: boolean;
     placeholder?: string;
-    minLenght?: number;
-    maxLenght?: number;
-    pattern?: RegExp;
+    min?: string | Date;
+    max?: string | Date;
   }>(),
   {
     validateOn: 'input',
@@ -73,36 +72,39 @@ const {
     let validation: FieldValidation[] = [];
     if (props.required)
       validation.push(requiredValidator(formatMessage(messages.required)));
-    if (props.minLenght)
+
+    validation.push(date(formatMessage(messages.date.valid)));
+    if (props.min)
       validation.push(
-        minLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.minLenght.toString(),
+        minDateValidator(
+          formatMessage(messages.date.min, {
+            value: props.min.toString(),
           }),
-          props.minLenght
+          props.min
         )
       );
-    if (props.maxLenght)
+    if (props.max)
       validation.push(
-        maxLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.maxLenght.toString(),
+        maxDateValidator(
+          formatMessage(messages.date.max, {
+            value: props.max.toString(),
           }),
-          props.maxLenght
-        )
-      );
-    if (props.pattern)
-      validation.push(
-        patterValidate(
-          formatMessage(messages.text.pattern, {
-            value: props.pattern.toString(),
-          }),
-          props.pattern
+          props.max
         )
       );
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+});
+
+const minMaxDateAttrs = computed(() => {
+  const min = new Date(props.min as any);
+  const max = new Date(props.max as any);
+
+  return {
+    min: isNaN(min as any) ? null : min.toISOString().slice(0, 10),
+    max: isNaN(max as any) ? null : max.toISOString().slice(0, 10),
+  };
 });
 </script>
 
@@ -125,17 +127,17 @@ const {
     <div v-if="$slots.prefix" :class="theme.classes.prefix">
       <slot name="prefix"></slot>
     </div>
+    <!-- @vue-ignore -->
     <input
-      type="tel"
+      type="date"
       :name="name"
       :id="id"
       :disabled="props.disabled"
       :readonly="props.readonly"
       :required="props.required"
       :placeholder="props.placeholder"
-      :minlength="props.minLenght"
-      :maxlength="props.maxLenght"
-      :pattern="props.pattern?.toString()"
+      :min="minMaxDateAttrs.min"
+      :max="minMaxDateAttrs.max"
       :class="theme.classes.input"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"

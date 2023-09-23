@@ -3,8 +3,7 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, inject, unref, ref } from 'vue';
-import type { PluginOptions } from '../types/plugin';
+import { computed, unref, ref } from 'vue';
 import type {
   FieldValue,
   Maybe,
@@ -13,12 +12,12 @@ import type {
 } from '@lunar-forms/core';
 import {
   required as requiredValidator,
-  useField,
   accept as acceptValidator,
   maxSize as maxSizeValidator,
 } from '@lunar-forms/core';
-import { PLUGING_CONTEXT_KEY } from '../consts';
 import { formatMessage } from '../utils';
+import { useCommonField, usePluginOptions } from '../composables';
+import FieldWrapper from './FieldWrapper.vue';
 
 defineOptions({
   name: 'FileField',
@@ -54,82 +53,51 @@ const emit = defineEmits<{
   (e: 'input', ev: InputEvent): void;
 }>();
 
-if (
-  props.initialValue &&
-  props.modelValue !== null &&
-  props.modelValue !== undefined
-) {
-  emit('update:modelValue', props.initialValue);
-}
-
 defineSlots<{
   prefix(): any;
   suffix(): any;
 }>();
 
-const options = inject<PluginOptions>(PLUGING_CONTEXT_KEY);
+const { theme, messages } = usePluginOptions();
 
-if (!options) throw new Error('Lunar Forms Fields plugin is not setted.');
+const {
+  id,
+  fieldData: { value, valid, touched, error, fieldProps },
+  onClear,
+} = useCommonField(props, emit, {
+  validate: computed(() => {
+    let validation: FieldValidation[] = [];
+    if (props.required)
+      validation.push(requiredValidator(formatMessage(messages.required)));
 
-const { theme } = options;
+    if (props.accept)
+      validation.push(
+        acceptValidator(formatMessage(messages.file.accept), props.accept)
+      );
 
-const id = `${props.name}-${crypto.randomUUID()}`;
+    if (props.maxSize)
+      validation.push(
+        maxSizeValidator(
+          formatMessage(messages.file.maxSize, {
+            value: props.maxSize.toString(),
+          }),
+          props.maxSize
+        )
+      );
 
-const validations = computed(() => {
-  let validation: FieldValidation[] = [];
-  if (props.required)
-    validation.push(
-      requiredValidator(formatMessage(options.messages.required))
-    );
+    if (props.validate) validation = validation.concat(unref(props.validate));
+    return validation;
+  }),
+  onchange(ev) {
+    const files = (ev.target as HTMLInputElement).files;
+    if (!files || files.length === 0) value.value = undefined;
 
-  if (props.accept)
-    validation.push(
-      acceptValidator(formatMessage(options.messages.file.accept), props.accept)
-    );
-
-  if (props.maxSize)
-    validation.push(
-      maxSizeValidator(
-        formatMessage(options.messages.file.maxSize, {
-          value: props.maxSize.toString(),
-        }),
-        props.maxSize
-      )
-    );
-
-  if (props.validate) validation = validation.concat(unref(props.validate));
-  return validation;
+    const fileArray = Array.from(files as FileList);
+    if (fileArray.length === 1) value.value = fileArray[0];
+    else value.value = fileArray;
+    emit('change', ev);
+  },
 });
-
-const { valid, error, touched, fieldProps, value, validate } = useField(
-  props.name,
-  {
-    initialValue: props.initialValue,
-    validate: validations,
-    validateOn: props.validateOn,
-    transform: props.transform,
-    onblur(ev) {
-      emit('blur', ev);
-    },
-    onchange(ev) {
-      const files = (ev.target as HTMLInputElement).files;
-      if (!files || files.length === 0) value.value = undefined;
-
-      const fileArray = Array.from(files as FileList);
-      if (fileArray.length === 1) value.value = fileArray[0];
-      else value.value = fileArray;
-      emit('change', ev);
-    },
-    onfocus(ev) {
-      emit('focus', ev);
-    },
-    oninput(ev) {
-      // @ts-ignore
-      emit('update:modelValue', ev.target?.value);
-      emit('input', ev);
-    },
-  }
-);
 
 const input = ref<HTMLInputElement | null>(null);
 
@@ -141,18 +109,15 @@ const acceptString = computed<Maybe<string>>(() => {
   }
   return props.accept;
 });
-
-function onClear() {
-  value.value = undefined;
-  if (input.value) input.value.value = '';
-  validate();
-  emit('update:modelValue', value.value);
-}
 </script>
 
 <template>
-  <div
-    :class="theme.classes.outer"
+  <FieldWrapper
+    :theme="theme"
+    :id="id"
+    :label="props.label"
+    :help="props.help"
+    :error="error"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-valid="valid ? true : null"
@@ -161,39 +126,30 @@ function onClear() {
     :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
-    <div :class="theme.classes.wrapper">
-      <label v-if="props.label" :class="theme.classes.label" :for="id">{{
-        props.label
-      }}</label>
-      <div :class="theme.classes.inner">
-        <div v-if="$slots.prefix" :class="theme.classes.prefix">
-          <slot name="prefix"></slot>
-        </div>
-        <input
-          ref="input"
-          type="file"
-          :name="name"
-          :id="id"
-          :disabled="props.disabled"
-          :required="props.required"
-          :class="options.theme.classes.input"
-          :accept="acceptString"
-          v-bind="{ ...$attrs, ...fieldProps }"
-        />
-        <button
-          v-if="props.clearButton"
-          type="button"
-          v-html="options.theme.icons.clear"
-          :class="options.theme.classes['input-btn']"
-          :title="options.messages.actions.clear"
-          @click="onClear"
-        ></button>
-        <div v-if="$slots.suffix" :class="theme.classes.suffix">
-          <slot name="suffix"></slot>
-        </div>
-      </div>
+    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+      <slot name="prefix"></slot>
     </div>
-    <span v-if="props.help" :class="theme.classes.help">{{ props.help }}</span>
-    <span v-if="error" :class="theme.classes.message">{{ error }}</span>
-  </div>
+    <input
+      ref="input"
+      type="file"
+      :name="name"
+      :id="id"
+      :disabled="props.disabled"
+      :required="props.required"
+      :class="theme.classes.input"
+      :accept="acceptString"
+      v-bind="{ ...$attrs, ...fieldProps }"
+    />
+    <button
+      v-if="props.clearButton"
+      type="button"
+      v-html="theme.icons.clear"
+      :class="theme.classes['input-btn']"
+      :title="messages.actions.clear"
+      @click="onClear"
+    ></button>
+    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+      <slot name="suffix"></slot>
+    </div>
+  </FieldWrapper>
 </template>
