@@ -2,7 +2,7 @@
   "name": "@lunar-forms/fields",
   "version": "0.1.0",
   "type": "module",
-  "description": "",
+  "description": "A set of native fields components for Lunar Forms.",
   "files": [
     "dist"
   ],
@@ -21,7 +21,7 @@
     "types": "vue-tsc"
   },
   "peerDependencies": {
-    "@lunar-forms/core": "workspace:*",
+    "@lunar-forms/core": "0.1.0",
     "vue": "^3.3.4"
   },
   "devDependencies": {
