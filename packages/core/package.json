@@ -1,5 +1,6 @@
 {
   "name": "@lunar-forms/core",
+  "description": "Your lunar library to validate forms in vue.",
   "version": "0.1.0",
   "type": "module",
   "files": [
