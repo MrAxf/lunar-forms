@@ -2,7 +2,14 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <script setup lang="ts">
-import { Component, useAttrs } from 'vue';
+import {
+  type Component,
+  h,
+  useAttrs,
+  withDirectives,
+  vModelDynamic,
+  Fragment,
+} from 'vue';
 import { useField } from '../composables';
 import type {
   FieldData,
@@ -24,9 +31,8 @@ const props = withDefaults(
     transform?: Maybe<FieldTransformer[]>;
     validate?: Maybe<FieldValidation[]>;
     validateOn?: 'input' | 'change' | 'blur' | null;
-    isCheckbox?: boolean;
-    value?: FieldValue;
-    uncheckedValue?: FieldValue;
+    trueValue: FieldValue;
+    falseValue?: FieldValue;
     as?: Component | 'input' | 'textarea' | 'select';
   }>(),
   {
@@ -44,26 +50,21 @@ const emit = defineEmits<{
   (e: 'input', ev: InputEvent): void;
 }>();
 
-defineSlots<{
+const slots = defineSlots<{
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   default(props: FieldData): any;
 }>();
 
 const attrs = useAttrs();
 
-let initialValue: FieldValue = props.initialValue;
-if (props.isCheckbox || attrs['type'] === 'checkbox') {
-  initialValue = (attrs['checked'] as boolean) || undefined;
-}
-
 const fieldData = useField(props.name, {
-  initialValue,
+  initialValue: props.initialValue,
   validate: props.validate,
   validateOn: props.validateOn,
   transform: props.transform,
-  isCheckbox: attrs['type'] === 'checkbox' || props.isCheckbox,
-  checkboxValue: props.value,
-  checkboxUncheckedValue: props.uncheckedValue,
+  type: attrs['type'] as string,
+  trueValue: props.trueValue,
+  falseValue: props.falseValue,
   onblur(ev) {
     emit('blur', ev);
   },
@@ -75,20 +76,49 @@ const fieldData = useField(props.name, {
   },
   oninput(ev) {
     // @ts-ignore
-    emit('update:modelValue', ev.target?.value);
     emit('input', ev);
   },
 });
+
+const { name: fieldName, fieldProps, value: fieldValue } = fieldData;
+
+function InputElement() {
+  const slot = {
+    default: () => slots.default(fieldData),
+  };
+  const renderAttrs: Record<string, unknown> = {
+    ...attrs,
+    ...fieldProps,
+    name: fieldName,
+    'onUpdate:modelValue': (newValue: FieldValue) => {
+      fieldValue.value = newValue;
+    },
+  };
+  // @ts-ignore
+  const isComponent: boolean = props.as._isvue;
+  const hasSlot = props.as === 'select' || isComponent;
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  if (!!slots.default && ['input', 'textarea'].includes(props.as as any)) {
+    return h(Fragment, slot);
+  }
+
+  if (isComponent) renderAttrs.modelValue = fieldValue.value;
+  if (attrs['type'] === 'checkbox') {
+    renderAttrs['true-value'] = props.trueValue ?? null;
+    renderAttrs['false-value'] = props.falseValue ?? null;
+  }
+
+  // @ts-ignore
+  const view = h(props.as, renderAttrs, hasSlot ? slot : []);
+
+  if (!isComponent)
+    return withDirectives(view, [[vModelDynamic, fieldValue.value]]);
+
+  return view;
+}
 </script>
 
 <template>
-  <slot v-bind="fieldData">
-    <component
-      :is="props.as"
-      :name="fieldData.name"
-      v-bind="{ ...$attrs, ...fieldData.fieldProps }"
-      :value="fieldData.value.value"
-      v-model="fieldData.value"
-    />
-  </slot>
+  <InputElement />
 </template>

@@ -30,9 +30,9 @@ export function useField(
     validate: validations = [],
     transform: transformers = [],
     validateOn = 'input',
-    isCheckbox = false,
-    checkboxValue = true,
-    checkboxUncheckedValue,
+    type,
+    trueValue = true,
+    falseValue,
     oninput: optionsOnInput = noop,
     onfocus: optionsOnFocus = noop,
     onchange: optionsOnChange = noop,
@@ -117,9 +117,10 @@ export function useField(
   }
 
   function setInitialValue() {
-    if (isCheckbox) {
-      if (initialValue === undefined) value.value = checkboxUncheckedValue;
-      else value.value = checkboxValue;
+    if (type === 'checkbox') {
+      if (initialValue === undefined) value.value = falseValue;
+      else if (Array.isArray(initialValue)) value.value = initialValue;
+      else value.value = trueValue;
     } else if (initialValue !== undefined) value.value = initialValue;
   }
 
