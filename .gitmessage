@@ -1,0 +1,11 @@
+# Write the commit message in the first line, following the format:
+#
+# [status]:[type]: [description]
+
+# Status: can be "DONE" (task completed) or "WIP" (work in progress)
+# Type: can be "feat" (new feature), "fix" (bug fix), "refactor" (code improvement), "docs" (documentation), "test" (testing), etc.
+# Description: should be brief and explain the purpose of the commit
+# Examples of commit messages:
+# DONE feat: add function to sum two numbers
+# WIP:refactor: improve code readability
+# DONE:docs: update README.md with usage instructions
