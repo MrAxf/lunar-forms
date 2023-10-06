@@ -9,6 +9,10 @@ export interface FormContext {
   validating: Ref<boolean>;
   fields: Record<string, FieldData>;
   fieldArrays: Record<string, FieldArrayContext>;
+  subscribeField: (name: string, fieldData: FieldData) => void;
+  unsubscribeField: (name: string) => void;
+  subscribeFieldArray: (name: string, fieldData: FieldArrayContext) => void;
+  unsubscribeFieldArray: (name: string) => void;
 }
 
 export interface FormOptions<T> {

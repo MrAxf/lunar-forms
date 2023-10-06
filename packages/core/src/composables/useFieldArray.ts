@@ -240,7 +240,7 @@ export function useFieldArray(
     move,
   };
 
-  formContext.fieldArrays[name] = fieldArrayCtx;
+  formContext.subscribeFieldArray(name, fieldArrayCtx);
 
   const unwatch = watch(error, (newErr) => {
     if (newErr === undefined) delete formContext.errors.value[name];
@@ -248,9 +248,8 @@ export function useFieldArray(
   });
 
   onBeforeUnmount(() => {
-    delete formContext.fieldArrays[name];
     unwatch();
-    delete formContext.errors.value[name];
+    formContext.unsubscribeFieldArray(name);
   });
 
   return fieldArrayCtx;

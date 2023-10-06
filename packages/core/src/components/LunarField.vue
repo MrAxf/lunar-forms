@@ -16,7 +16,7 @@ import type {
   FieldTransformer,
   FieldValidation,
   FieldValue,
-  Maybe,
+  MaybeArray,
 } from '../types';
 
 defineOptions({
@@ -28,8 +28,9 @@ const props = withDefaults(
     name: string;
     modelValue?: FieldValue;
     initialValue?: FieldValue;
-    transform?: Maybe<FieldTransformer[]>;
-    validate?: Maybe<FieldValidation[]>;
+    transform?: MaybeArray<FieldTransformer>;
+    refine?: MaybeArray<FieldTransformer>;
+    validate?: MaybeArray<FieldValidation>;
     validateOn?: 'input' | 'change' | 'blur' | null;
     trueValue: FieldValue;
     falseValue?: FieldValue;
@@ -62,6 +63,7 @@ const fieldData = useField(props.name, {
   validate: props.validate,
   validateOn: props.validateOn,
   transform: props.transform,
+  refine: props.refine,
   type: attrs['type'] as string,
   trueValue: props.trueValue,
   falseValue: props.falseValue,

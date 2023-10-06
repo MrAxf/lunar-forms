@@ -24,7 +24,11 @@ import {
 </script>
 
 <template>
-  <LunarForm class="flex gap-5" v-slot="{ values, errors }">
+  <LunarForm
+    class="flex gap-5"
+    v-slot="{ values, errors }"
+    @submit="(value) => console.log(value)"
+  >
     <section class="grid w-[60%] flex-grow grid-cols-2">
       <TextField
         v-auto-animate
@@ -34,7 +38,6 @@ import {
         placeholder="Texto ..."
         :max-lenght="10"
         :pattern="/^[A-Za-z]{3}$/"
-        required
       />
       <TextareaField
         v-auto-animate
@@ -44,29 +47,26 @@ import {
         placeholder="Texto ..."
         :max-lenght="10"
         :pattern="/^[A-Za-z]{3}$/"
-        required
         clear-button
       />
       <PasswordField
         v-auto-animate
-        name="password"
+        name="password.password"
         label="Password"
         help="Texto de prueba"
         placeholder="Contraseña ..."
         :min-lenght="8"
         show-button
-        required
       />
       <PasswordField
         v-auto-animate
-        name="password-repeat"
+        name="password.repeat"
         label="Password repeat"
         help="Texto de prueba"
         placeholder="Contraseña ..."
         :min-lenght="8"
-        confirm="password"
+        confirm="password.password"
         show-button
-        required
       />
       <EmailField
         v-auto-animate
@@ -75,7 +75,6 @@ import {
         help="Texto de prueba"
         placeholder="Email ..."
         clear-button
-        required
       />
       <UrlField
         v-auto-animate
@@ -84,7 +83,6 @@ import {
         help="Texto de prueba"
         placeholder="Url ..."
         clear-button
-        required
       />
       <NumberField
         v-auto-animate
@@ -95,7 +93,6 @@ import {
         clear-button
         :min="5"
         :max="10"
-        required
       />
       <RangeField
         v-auto-animate
@@ -106,7 +103,6 @@ import {
         clear-button
         :min="5"
         :max="10"
-        required
       />
       <SelectField
         v-auto-animate
@@ -114,7 +110,6 @@ import {
         label="Select"
         help="Texto de prueba"
         placeholder="Select ..."
-        required
         :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
       />
       <FileField
@@ -125,7 +120,6 @@ import {
         placeholder="File ..."
         clear-button
         multiple
-        required
         :accept="['image/*', '.png']"
         :max-size="40000"
       />
@@ -141,7 +135,6 @@ import {
         name="checkbox"
         label="Checkbox"
         help="Texto de prueba"
-        required
       />
       <CheckboxesField
         v-auto-animate
@@ -149,7 +142,6 @@ import {
         label="Checkboxes"
         help="Texto de prueba"
         placeholder="Checkboxes ..."
-        required
         :options="[
           {
             label: 'Opción Label 1',
@@ -178,7 +170,6 @@ import {
         name="radio"
         label="Radio"
         help="Texto de prueba"
-        required
         :options="[
           {
             label: 'Opción Label 1',
@@ -208,7 +199,6 @@ import {
         name="color"
         label="Color"
         help="Texto de prueba"
-        required
       />
       <TelField
         v-auto-animate
@@ -217,7 +207,6 @@ import {
         help="Texto de prueba"
         placeholder="Tel ..."
         :max-lenght="10"
-        required
       />
       <DateField
         v-auto-animate
@@ -227,7 +216,6 @@ import {
         placeholder="Date ..."
         :min="new Date('2023-09-20')"
         :max="'2023-09-29'"
-        required
       />
       <DatetimeLocalField
         v-auto-animate
@@ -237,7 +225,6 @@ import {
         placeholder="Date time..."
         :min="new Date('2023-09-20T13:30')"
         :max="'2023-09-29T15:00'"
-        required
       />
       <TimeField
         v-auto-animate
@@ -247,7 +234,6 @@ import {
         placeholder="time..."
         min="13:30"
         max="20:00"
-        required
       />
 
       <div class="m-3 flex place-items-center gap-5">

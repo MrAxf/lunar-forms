@@ -3,12 +3,12 @@
 <script setup lang="ts">
 import { type Component } from 'vue';
 import { useFieldArray } from '../composables';
-import type { FieldArrayContext, FieldValidation, Maybe } from '../types';
+import type { FieldArrayContext, FieldValidation, MaybeArray } from '../types';
 
 const props = withDefaults(
   defineProps<{
     name: string;
-    validate?: Maybe<FieldValidation[]>;
+    validate?: MaybeArray<FieldValidation>;
     as?: Component | string;
   }>(),
   {

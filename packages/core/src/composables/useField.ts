@@ -6,6 +6,7 @@ import {
   onBeforeUnmount,
   readonly,
   ref,
+  toRaw,
   unref,
   watch,
 } from 'vue';
@@ -20,6 +21,8 @@ import {
   getValueByPath,
   setValueByPath,
   noop,
+  toArray,
+  transformValue,
 } from '../utils';
 import { useFieldBase } from './useFieldBase';
 
@@ -29,6 +32,7 @@ export function useField(
     initialValue = undefined,
     validate: validations = [],
     transform: transformers = [],
+    refine: refiners = [],
     validateOn = 'input',
     type,
     trueValue = true,
@@ -78,10 +82,19 @@ export function useField(
 
   function transform() {
     if (transformers && unref(transformers).length) {
-      unref(transformers).forEach((transformer) => {
-        value.value = transformer(value.value, formContext);
-      });
+      value.value = transformValue(
+        value.value,
+        toArray(unref(transformers)),
+        formContext
+      );
     }
+  }
+
+  function refine() {
+    if (refiners && unref(refiners).length) {
+      return transformValue(value.value, toArray(unref(refiners)), formContext);
+    }
+    return toRaw(value.value);
   }
 
   function oninput(ev: InputEvent) {
@@ -153,6 +166,7 @@ export function useField(
     setValid,
     reset,
     validate,
+    refine,
     setDirty,
     setTouched,
     fieldProps: {
@@ -165,8 +179,7 @@ export function useField(
   };
 
   if (formContext) {
-    formContext.fields[name] = fieldData;
-
+    formContext.subscribeField(name, fieldData);
     valueProxy.get = () => getValueByPath(formContext.values.value, name);
     valueProxy.set = (newValue) =>
       setValueByPath(formContext.values.value, name, newValue);
@@ -177,9 +190,8 @@ export function useField(
     });
 
     onBeforeUnmount(() => {
-      delete formContext.fields[name];
       unwatch();
-      delete formContext.errors.value[name];
+      formContext.unsubscribeField(name);
     });
   }
 

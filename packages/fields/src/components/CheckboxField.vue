@@ -74,8 +74,8 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
-  checkboxValue: props.trueValue,
-  checkboxUncheckedValue: props.falseValue,
+  trueValue: props.trueValue,
+  falseValue: props.falseValue,
 });
 </script>
 

@@ -1,4 +1,4 @@
-import { type UnwrapRef, computed, provide, readonly, ref, unref } from 'vue';
+import { type UnwrapRef, computed, provide, readonly, ref } from 'vue';
 import type {
   FieldArrayContext,
   FieldData,
@@ -7,7 +7,7 @@ import type {
   FormOptions,
   Maybe,
 } from '../types';
-import { FORM_CONTEXT_KEY, validateFieldValue } from '../utils';
+import { FORM_CONTEXT_KEY, setValueByPath, validateFieldValue } from '../utils';
 import { ValidationAbortedError, ValidationError } from '../errors';
 
 export function useForm<T extends FieldValues>({
@@ -21,6 +21,50 @@ export function useForm<T extends FieldValues>({
   const fields: Record<string, FieldData> = {};
   const fieldArrays: Record<string, FieldArrayContext> = {};
 
+  const fieldsSubCount: Record<string, number> = {};
+  const fieldArraysSubCount: Record<string, number> = {};
+
+  function subscribeField(name: string, fieldData: FieldData) {
+    if (fieldsSubCount[name]) {
+      fieldsSubCount[name]++;
+    } else {
+      fields[name] = fieldData;
+      fieldsSubCount[name] = 1;
+    }
+  }
+
+  function unsubscribeField(name: string) {
+    if (fieldsSubCount[name] === 1) {
+      delete fieldsSubCount[name];
+      delete fields[name];
+      delete errors.value[name];
+    } else {
+      fieldsSubCount[name]--;
+    }
+  }
+
+  function subscribeFieldArray(
+    name: string,
+    fieldArrayData: FieldArrayContext
+  ) {
+    if (fieldArraysSubCount[name]) {
+      fieldArraysSubCount[name]++;
+    } else {
+      fieldArrays[name] = fieldArrayData;
+      fieldArraysSubCount[name] = 1;
+    }
+  }
+
+  function unsubscribeFieldArray(name: string) {
+    if (fieldArraysSubCount[name] === 1) {
+      delete fieldArraysSubCount[name];
+      delete fieldArrays[name];
+      delete errors.value[name];
+    } else {
+      fieldArraysSubCount[name]--;
+    }
+  }
+
   const formContext = {
     values,
     errors,
@@ -28,6 +72,10 @@ export function useForm<T extends FieldValues>({
     validating,
     fields,
     fieldArrays,
+    subscribeField,
+    unsubscribeField,
+    subscribeFieldArray,
+    unsubscribeFieldArray,
   };
 
   let validateAbortController = new AbortController();
@@ -101,7 +149,14 @@ export function useForm<T extends FieldValues>({
   async function onsubmit(ev: SubmitEvent) {
     ev.preventDefault();
     await validate();
-    if (valid.value) handleSubmit(unref(values) as T);
+    const submitValues: FieldValues = {};
+
+    if (valid.value) {
+      Object.entries(fields).forEach(([name, { refine }]) => {
+        setValueByPath(submitValues, name, refine());
+      });
+      handleSubmit(submitValues as T);
+    }
   }
 
   provide(FORM_CONTEXT_KEY, formContext);

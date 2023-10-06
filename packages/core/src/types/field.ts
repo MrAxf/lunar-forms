@@ -1,5 +1,5 @@
 import type { MaybeRef, Ref } from 'vue';
-import type { Maybe, MaybePromise, MaybeValue } from './utils';
+import type { Maybe, MaybeArray, MaybePromise, MaybeValue } from './utils';
 import { FormContext } from '.';
 
 export type FieldValue = MaybeValue<
@@ -22,8 +22,9 @@ export type FieldTransformer = (
 
 export interface FieldOptions {
   initialValue?: FieldValue;
-  validate?: MaybeRef<FieldValidation[]>;
-  transform?: MaybeRef<FieldTransformer[]>;
+  validate?: MaybeRef<MaybeArray<FieldValidation>>;
+  transform?: MaybeRef<MaybeArray<FieldTransformer>>;
+  refine?: MaybeRef<MaybeArray<FieldTransformer>>;
   validateOn?: MaybeValue<'input' | 'change' | 'blur'>;
   type?: MaybeValue<string>;
   trueValue?: MaybeValue<FieldValue>;
@@ -47,6 +48,7 @@ export interface FieldData {
   setValid: () => void;
   reset: () => void;
   validate: () => Promise<void>;
+  refine: () => FieldValue;
   setDirty: (newValue: boolean) => void;
   setTouched: (newValue: boolean) => void;
   fieldProps: {
@@ -65,7 +67,7 @@ export interface FieldArrayValue {
 }
 
 export interface FieldArrayOptions {
-  validate?: MaybeRef<FieldValidation[]>;
+  validate?: MaybeRef<MaybeArray<FieldValidation>>;
 }
 
 export interface FieldArrayContext {

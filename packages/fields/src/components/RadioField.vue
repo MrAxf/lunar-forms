@@ -59,6 +59,7 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+  validateOn: 'change',
   onblur: undefined,
   onfocus: undefined,
   oninput: undefined,
