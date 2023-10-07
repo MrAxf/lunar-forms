@@ -5,8 +5,8 @@ import {
   type FieldValue,
   type Maybe,
   type FieldValidation,
+  useVModel,
 } from '@lunar-forms/core';
-import { watch } from 'vue';
 
 interface CommonFieldProps {
   name: string;
@@ -31,7 +31,7 @@ export function useCommonField(
   const id = `${props.name}-${crypto.randomUUID()}`;
 
   const fieldData = useField(props.name, {
-    initialValue: props.initialValue || props.modelValue,
+    initialValue: props.initialValue,
     validateOn: props.validateOn,
     transform: props.transform,
     onblur(ev) {
@@ -55,16 +55,7 @@ export function useCommonField(
     fieldData.validate();
   }
 
-  watch(
-    () => props.modelValue,
-    (newVal) => {
-      fieldData.value.value = newVal;
-    }
-  );
-
-  watch(fieldData.value, (newVal) => {
-    emit('update:modelValue', newVal);
-  });
+  useVModel(fieldData.value);
 
   return { id, fieldData, onClear };
 }
