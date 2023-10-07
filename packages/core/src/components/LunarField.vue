@@ -18,6 +18,7 @@ import type {
   FieldValue,
   MaybeArray,
 } from '../types';
+import { useVModel } from '../composables/useVModel';
 
 defineOptions({
   inheritAttrs: false,
@@ -32,7 +33,7 @@ const props = withDefaults(
     refine?: MaybeArray<FieldTransformer>;
     validate?: MaybeArray<FieldValidation>;
     validateOn?: 'input' | 'change' | 'blur' | null;
-    trueValue: FieldValue;
+    trueValue?: FieldValue;
     falseValue?: FieldValue;
     as?: Component | 'input' | 'textarea' | 'select';
   }>(),
@@ -83,6 +84,8 @@ const fieldData = useField(props.name, {
 });
 
 const { name: fieldName, fieldProps, value: fieldValue } = fieldData;
+
+useVModel(fieldValue);
 
 function InputElement() {
   const slot = {
