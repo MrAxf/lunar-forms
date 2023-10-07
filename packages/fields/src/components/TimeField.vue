@@ -6,9 +6,9 @@
 import { computed, unref } from 'vue';
 import type {
   FieldValue,
-  Maybe,
   FieldTransformer,
   FieldValidation,
+  MaybeArray,
 } from '@lunar-forms/core';
 import {
   time,
@@ -33,8 +33,9 @@ const props = withDefaults(
     help?: string;
     modelValue?: FieldValue;
     initialValue?: FieldValue;
-    transform?: Maybe<FieldTransformer[]>;
-    validate?: Maybe<FieldValidation[]>;
+    transform?: MaybeArray<FieldTransformer>;
+    refine?: MaybeArray<FieldTransformer>;
+    validate?: MaybeArray<FieldValidation>;
     validateOn?: 'input' | 'change' | 'blur' | null;
     required?: boolean;
     disabled?: boolean;
@@ -96,6 +97,7 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+  refine: props.refine,
 });
 
 const minMaxDateAttrs = computed(() => ({

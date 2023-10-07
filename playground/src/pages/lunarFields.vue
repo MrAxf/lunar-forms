@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { LunarForm } from '@lunar-forms/core';
+import { LunarForm, UPPER_CASE, toCase } from '@lunar-forms/core';
 import {
   CheckboxField,
   CheckboxesField,

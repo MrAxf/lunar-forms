@@ -6,9 +6,9 @@
 import { computed, unref } from 'vue';
 import type {
   FieldValue,
-  Maybe,
   FieldTransformer,
   FieldValidation,
+  MaybeArray,
 } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
@@ -27,8 +27,9 @@ const props = defineProps<{
   help?: string;
   modelValue?: FieldValue;
   initialValue?: FieldValue;
-  transform?: Maybe<FieldTransformer[]>;
-  validate?: Maybe<FieldValidation[]>;
+  transform?: MaybeArray<FieldTransformer>;
+  validate?: MaybeArray<FieldValidation>;
+  refine?: MaybeArray<FieldTransformer>;
   required?: boolean;
   disabled?: boolean;
   readonly?: boolean;
@@ -59,6 +60,7 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+  refine: props.refine,
   validateOn: 'change',
   onblur: undefined,
   onfocus: undefined,

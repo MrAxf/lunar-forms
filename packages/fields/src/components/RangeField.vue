@@ -6,9 +6,9 @@
 import { computed, unref } from 'vue';
 import type {
   FieldValue,
-  Maybe,
   FieldTransformer,
   FieldValidation,
+  MaybeArray,
 } from '@lunar-forms/core';
 import {
   max as maxValidator,
@@ -32,8 +32,9 @@ const props = withDefaults(
     help?: string;
     modelValue?: FieldValue;
     initialValue?: FieldValue;
-    transform?: Maybe<FieldTransformer[]>;
-    validate?: Maybe<FieldValidation[]>;
+    transform?: MaybeArray<FieldTransformer>;
+    refine?: MaybeArray<FieldTransformer>;
+    validate?: MaybeArray<FieldValidation>;
     validateOn?: 'input' | 'change' | 'blur' | null;
     required?: boolean;
     disabled?: boolean;
@@ -96,6 +97,7 @@ const {
       transformers = transformers.concat(unref(props.transform));
     return transformers;
   }),
+  refine: props.refine,
 });
 </script>
 

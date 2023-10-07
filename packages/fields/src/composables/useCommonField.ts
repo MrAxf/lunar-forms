@@ -1,19 +1,20 @@
-import {
-  useField,
-  type FieldOptions,
-  type FieldTransformer,
-  type FieldValue,
-  type Maybe,
-  type FieldValidation,
-  useVModel,
+import type {
+  FieldOptions,
+  FieldTransformer,
+  FieldValue,
+  FieldValidation,
+  MaybeArray,
 } from '@lunar-forms/core';
+
+import { useField, useVModel } from '@lunar-forms/core';
 
 interface CommonFieldProps {
   name: string;
   modelValue?: FieldValue;
   initialValue?: FieldValue;
-  transform?: Maybe<FieldTransformer[]>;
-  validate?: Maybe<FieldValidation[]>;
+  transform?: MaybeArray<FieldTransformer>;
+  refine?: MaybeArray<FieldTransformer>;
+  validate?: MaybeArray<FieldValidation>;
   validateOn?: 'input' | 'change' | 'blur' | null;
 }
 
@@ -34,6 +35,7 @@ export function useCommonField(
     initialValue: props.initialValue,
     validateOn: props.validateOn,
     transform: props.transform,
+    refine: props.refine,
     onblur(ev) {
       emit('blur', ev);
     },
