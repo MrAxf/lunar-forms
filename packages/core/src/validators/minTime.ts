@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 import { timeRegexp } from './time';
 
@@ -17,6 +18,11 @@ export function minTime(error: string, requirement: string): FieldValidation {
     const valueDate = new Date(`${dateTemplate}${value}`);
     const requirementDate = new Date(`${dateTemplate}${requirement}`);
 
-    return valueDate.getTime() < requirementDate.getTime() ? error : undefined;
+    return valueDate.getTime() < requirementDate.getTime()
+      ? formatMessage(error, {
+          requirement: String(requirement),
+          value: String(value),
+        })
+      : undefined;
   };
 }

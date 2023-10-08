@@ -1,3 +1,4 @@
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 
 export function min(error: string, requirement: number): FieldValidation {
@@ -6,6 +7,11 @@ export function min(error: string, requirement: number): FieldValidation {
       return undefined;
     const valueToNumber = Number(value);
 
-    return valueToNumber < requirement ? error : undefined;
+    return valueToNumber < requirement
+      ? formatMessage(error, {
+          requirement: String(requirement),
+          value: String(value),
+        })
+      : undefined;
   };
 }

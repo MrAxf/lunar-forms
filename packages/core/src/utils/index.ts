@@ -1,3 +1,4 @@
+export * from './formatMessage';
 export * from './formContext';
 export * from './getValueByPath';
 export * from './setValueByPath';

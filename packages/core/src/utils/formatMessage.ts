@@ -1,9 +1,6 @@
 export function formatMessage(
   message: string,
-  options?: {
-    value?: string;
-    requirement?: string;
-  }
+  options?: Record<string, string>
 ) {
   let finalMessage = message;
   if (!options) return finalMessage;

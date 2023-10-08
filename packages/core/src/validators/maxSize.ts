@@ -1,3 +1,4 @@
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 
 export function maxSize(error: string, requirement: number): FieldValidation {
@@ -12,8 +13,16 @@ export function maxSize(error: string, requirement: number): FieldValidation {
     if (Array.isArray(value)) {
       return (value as File[]).every((file) => file.size < requirement)
         ? undefined
-        : error;
+        : formatMessage(error, {
+            requirement: String(requirement),
+            value: String(value),
+          });
     }
-    return value.size < requirement ? undefined : error;
+    return value.size < requirement
+      ? undefined
+      : formatMessage(error, {
+          requirement: String(requirement),
+          value: String(value),
+        });
   };
 }

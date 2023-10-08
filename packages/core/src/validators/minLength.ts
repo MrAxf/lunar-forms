@@ -1,3 +1,4 @@
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 
 export function minLength(error: string, requirement: number): FieldValidation {
@@ -5,6 +6,9 @@ export function minLength(error: string, requirement: number): FieldValidation {
     (typeof value === 'string' || Array.isArray(value)) &&
     value?.length &&
     value.length < requirement
-      ? error
+      ? formatMessage(error, {
+          requirement: String(requirement),
+          value: String(value),
+        })
       : undefined;
 }

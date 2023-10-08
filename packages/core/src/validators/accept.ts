@@ -1,3 +1,4 @@
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 
 export function accept(
@@ -17,9 +18,17 @@ export function accept(
     if (Array.isArray(value)) {
       return (value as File[]).every((file) => checkFile(file, requirementArr))
         ? undefined
-        : error;
+        : formatMessage(error, {
+            requirement: String(requirement),
+            value: String(value),
+          });
     }
-    return checkFile(value, requirementArr) ? undefined : error;
+    return checkFile(value, requirementArr)
+      ? undefined
+      : formatMessage(error, {
+          requirement: String(requirement),
+          value: String(value),
+        });
   };
 }
 

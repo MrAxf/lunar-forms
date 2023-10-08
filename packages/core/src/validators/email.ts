@@ -1,3 +1,4 @@
+import { formatMessage } from '..';
 import type { FieldValidation } from '../types/field';
 
 const emailRegexp =
@@ -7,5 +8,7 @@ export function email(error: string): FieldValidation {
   return (value) =>
     !value || typeof value !== 'string' || emailRegexp.test(value)
       ? undefined
-      : error;
+      : formatMessage(error, {
+          value: String(value),
+        });
 }
