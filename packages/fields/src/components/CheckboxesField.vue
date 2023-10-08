@@ -4,16 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
 import { toCheckboxesRadioLabelValues } from '../utils/checkboxesRadio';
-import type { CheckboxesRadioOptions } from '../types';
+import type { CheckboxesRadioOptions, FieldCommonProps } from '../types';
 import { useCommonField, usePluginOptions } from '../composables';
 
 defineOptions({
@@ -22,27 +17,22 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    options?: CheckboxesRadioOptions;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      readonly?: boolean;
+      options?: CheckboxesRadioOptions;
+    }
+  >(),
   {
     // @ts-ignore
     initialValue: [],
+    validateOn: 'change',
   }
 );
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'update:modelValue', value: FieldValue): void;
   (e: 'change', ev: Event): void;
 }>();
@@ -58,7 +48,7 @@ const {
   id,
   fieldData: { value, valid, touched, error, fieldProps },
   // @ts-ignore
-} = useCommonField(props, emit, {
+} = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required)
@@ -66,8 +56,6 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
-  refine: props.refine,
-  validateOn: 'change',
   onblur: undefined,
   onfocus: undefined,
   oninput: undefined,

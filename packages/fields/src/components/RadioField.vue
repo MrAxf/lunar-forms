@@ -21,22 +21,28 @@ defineOptions({
   inheritAttrs: false,
 });
 
-const props = defineProps<{
-  name: string;
-  label?: string;
-  help?: string;
-  modelValue?: FieldValue;
-  initialValue?: FieldValue;
-  transform?: MaybeArray<FieldTransformer>;
-  validate?: MaybeArray<FieldValidation>;
-  refine?: MaybeArray<FieldTransformer>;
-  required?: boolean;
-  disabled?: boolean;
-  readonly?: boolean;
-  options?: CheckboxesRadioOptions;
-}>();
+const props = withDefaults(
+  defineProps<{
+    name: string;
+    label?: string;
+    help?: string;
+    modelValue?: FieldValue;
+    initialValue?: FieldValue;
+    transform?: MaybeArray<FieldTransformer>;
+    validate?: MaybeArray<FieldValidation>;
+    refine?: MaybeArray<FieldTransformer>;
+    validateOn?: 'input' | 'change' | 'blur' | null;
+    required?: boolean;
+    disabled?: boolean;
+    readonly?: boolean;
+    options?: CheckboxesRadioOptions;
+  }>(),
+  {
+    validateOn: 'change',
+  }
+);
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'update:modelValue', value: FieldValue): void;
   (e: 'change', ev: Event): void;
 }>();
@@ -52,7 +58,7 @@ const {
   id,
   fieldData: { value, valid, touched, error, fieldProps },
   // @ts-ignore
-} = useCommonField(props, emit, {
+} = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required)
@@ -60,8 +66,6 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
-  refine: props.refine,
-  validateOn: 'change',
   onblur: undefined,
   onfocus: undefined,
   oninput: undefined,

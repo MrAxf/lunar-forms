@@ -49,7 +49,7 @@ const props = withDefaults(
   }
 );
 
-const emit = defineEmits<{
+defineEmits<{
   (e: 'update:modelValue', value: FieldValue): void;
   (e: 'blur', ev: FocusEvent): void;
   (e: 'change', ev: Event): void;
@@ -68,7 +68,7 @@ const {
   id,
   fieldData: { value, valid, touched, error, fieldProps },
   onClear,
-} = useCommonField(props, emit, {
+} = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required)
@@ -100,7 +100,6 @@ const {
       transformers = transformers.concat(unref(props.transform));
     return transformers;
   }),
-  refine: props.refine,
 });
 </script>
 

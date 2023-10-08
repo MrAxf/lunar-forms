@@ -66,7 +66,7 @@ const {
   id,
   fieldData: { value, valid, touched, error, fieldProps },
   onClear,
-} = useCommonField(props, emit, {
+} = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required)
@@ -90,7 +90,6 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
-  refine: props.refine,
   onchange(ev) {
     const files = (ev.target as HTMLInputElement).files;
     if (!files || files.length === 0) value.value = undefined;

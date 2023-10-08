@@ -29,7 +29,7 @@ import { useFieldBase } from './useFieldBase';
 export function useField(
   name: string,
   {
-    initialValue = undefined,
+    initialValue,
     validate: validations = [],
     transform: transformers = [],
     refine: refiners = [],

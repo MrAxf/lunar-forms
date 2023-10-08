@@ -4,15 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
+import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'CheckboxField',
@@ -20,22 +16,15 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    trueValue?: FieldValue;
-    falseValue?: FieldValue;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      readonly?: boolean;
+      trueValue?: FieldValue;
+      falseValue?: FieldValue;
+    }
+  >(),
   {
     validateOn: 'change',
   }
@@ -67,7 +56,7 @@ const { theme, messages } = usePluginOptions();
 const {
   id,
   fieldData: { value, valid, touched, error, fieldProps },
-} = useCommonField(props, emit, {
+} = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required)
@@ -75,9 +64,6 @@ const {
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
-  refine: props.refine,
-  trueValue: props.trueValue,
-  falseValue: props.falseValue,
 });
 </script>
 
