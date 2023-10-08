@@ -4,13 +4,7 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref, ref } from 'vue';
-import type {
-  FieldValue,
-  Maybe,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, Maybe, FieldValidation } from '@lunar-forms/core';
 import {
   required as requiredValidator,
   accept as acceptValidator,
@@ -19,6 +13,7 @@ import {
 import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
+import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'FileField',
@@ -26,22 +21,15 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    accept?: string | string[];
-    maxSize?: number;
-    clearButton?: boolean;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      accept?: string | string[];
+      maxSize?: number;
+      clearButton?: boolean;
+    }
+  >(),
   {
     validateOn: 'change',
   }

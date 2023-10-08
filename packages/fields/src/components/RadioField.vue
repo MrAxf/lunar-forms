@@ -4,16 +4,11 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage } from '../utils';
 import { toCheckboxesRadioLabelValues } from '../utils/checkboxesRadio';
-import type { CheckboxesRadioOptions } from '../types';
+import type { CheckboxesRadioOptions, FieldCommonProps } from '../types';
 import { useCommonField, usePluginOptions } from '../composables';
 
 defineOptions({
@@ -22,21 +17,14 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    refine?: MaybeArray<FieldTransformer>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    options?: CheckboxesRadioOptions;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      readonly?: boolean;
+      options?: CheckboxesRadioOptions;
+    }
+  >(),
   {
     validateOn: 'change',
   }

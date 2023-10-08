@@ -4,12 +4,7 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import {
   time,
   maxTime as maxTimeValidator,
@@ -20,6 +15,7 @@ import {
 import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
+import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'TimeField',
@@ -27,24 +23,17 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    clearButton?: boolean;
-    placeholder?: string;
-    min?: string;
-    max?: string;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      readonly?: boolean;
+      clearButton?: boolean;
+      placeholder?: string;
+      min?: string;
+      max?: string;
+    }
+  >(),
   {
     validateOn: 'input',
   }

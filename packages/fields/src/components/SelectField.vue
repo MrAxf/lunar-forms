@@ -4,15 +4,10 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { formatMessage, toSelectLabelValues } from '../utils';
-import type { SelectOptions } from '../types';
+import type { FieldCommonProps, SelectOptions } from '../types';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -22,21 +17,14 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    placeholder?: string;
-    options?: SelectOptions;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      placeholder?: string;
+      options?: SelectOptions;
+    }
+  >(),
   {
     validateOn: 'change',
   }

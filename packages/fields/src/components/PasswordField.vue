@@ -4,12 +4,7 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import { computed, ref, unref } from 'vue';
-import type {
-  FieldValue,
-  FieldTransformer,
-  FieldValidation,
-  MaybeArray,
-} from '@lunar-forms/core';
+import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import {
   maxLength,
   minLength,
@@ -20,6 +15,7 @@ import {
 import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
+import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'PasswordField',
@@ -27,26 +23,19 @@ defineOptions({
 });
 
 const props = withDefaults(
-  defineProps<{
-    name: string;
-    label?: string;
-    help?: string;
-    modelValue?: FieldValue;
-    initialValue?: FieldValue;
-    transform?: MaybeArray<FieldTransformer>;
-    refine?: MaybeArray<FieldTransformer>;
-    validate?: MaybeArray<FieldValidation>;
-    validateOn?: 'input' | 'change' | 'blur' | null;
-    required?: boolean;
-    disabled?: boolean;
-    readonly?: boolean;
-    showButton?: boolean;
-    placeholder?: string;
-    minLenght?: number;
-    maxLenght?: number;
-    confirm?: string;
-    pattern?: RegExp;
-  }>(),
+  defineProps<
+    FieldCommonProps & {
+      required?: boolean;
+      disabled?: boolean;
+      readonly?: boolean;
+      showButton?: boolean;
+      placeholder?: string;
+      minLenght?: number;
+      maxLenght?: number;
+      confirm?: string;
+      pattern?: RegExp;
+    }
+  >(),
   {
     validateOn: 'input',
   }
