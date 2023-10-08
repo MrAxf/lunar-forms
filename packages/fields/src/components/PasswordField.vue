@@ -12,7 +12,6 @@ import {
   required as requiredValidator,
   confirm as confirmValidator,
 } from '@lunar-forms/core';
-import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 import { FieldCommonProps } from '..';
@@ -62,44 +61,17 @@ const {
 } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
-    if (props.required)
-      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.required) validation.push(requiredValidator(messages.required));
     if (props.confirm)
       validation.push(
-        confirmValidator(
-          formatMessage(messages.password.confirm, {
-            value: props.confirm,
-          }),
-          props.confirm
-        )
+        confirmValidator(messages.password.confirm, props.confirm)
       );
     if (props.minLenght)
-      validation.push(
-        minLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.minLenght.toString(),
-          }),
-          props.minLenght
-        )
-      );
+      validation.push(minLength(messages.text.minLenght, props.minLenght));
     if (props.maxLenght)
-      validation.push(
-        maxLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.maxLenght.toString(),
-          }),
-          props.maxLenght
-        )
-      );
+      validation.push(maxLength(messages.text.maxLenght, props.maxLenght));
     if (props.pattern)
-      validation.push(
-        patterValidate(
-          formatMessage(messages.text.pattern, {
-            value: props.pattern.toString(),
-          }),
-          props.pattern
-        )
-      );
+      validation.push(patterValidate(messages.text.pattern, props.pattern));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),

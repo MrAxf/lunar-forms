@@ -11,7 +11,6 @@ import {
   required as requiredValidator,
   url,
 } from '@lunar-forms/core';
-import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 import { FieldCommonProps } from '..';
@@ -59,29 +58,12 @@ const {
   onClear,
 } = useCommonField({
   validate: computed(() => {
-    let validation: FieldValidation[] = [
-      url(formatMessage(messages.url.valid)),
-    ];
-    if (props.required)
-      validation.push(requiredValidator(formatMessage(messages.required)));
+    let validation: FieldValidation[] = [url(messages.url.valid)];
+    if (props.required) validation.push(requiredValidator(messages.required));
     if (props.minLenght)
-      validation.push(
-        minLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.minLenght.toString(),
-          }),
-          props.minLenght
-        )
-      );
+      validation.push(minLength(messages.text.minLenght, props.minLenght));
     if (props.maxLenght)
-      validation.push(
-        maxLength(
-          formatMessage(messages.text.maxLenght, {
-            value: props.maxLenght.toString(),
-          }),
-          props.maxLenght
-        )
-      );
+      validation.push(maxLength(messages.text.maxLenght, props.maxLenght));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),

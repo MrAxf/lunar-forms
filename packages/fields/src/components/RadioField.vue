@@ -6,7 +6,6 @@
 import { computed, unref } from 'vue';
 import type { FieldValue, FieldValidation } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
-import { formatMessage } from '../utils';
 import { toCheckboxesRadioLabelValues } from '../utils/checkboxesRadio';
 import type { CheckboxesRadioOptions, FieldCommonProps } from '../types';
 import { useCommonField, usePluginOptions } from '../composables';
@@ -49,8 +48,7 @@ const {
 } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
-    if (props.required)
-      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.required) validation.push(requiredValidator(messages.required));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),

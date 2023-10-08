@@ -11,7 +11,6 @@ import {
   minDate as minDateValidator,
   required as requiredValidator,
 } from '@lunar-forms/core';
-import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 import { FieldCommonProps } from '..';
@@ -60,28 +59,13 @@ const {
 } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
-    if (props.required)
-      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.required) validation.push(requiredValidator(messages.required));
 
-    validation.push(date(formatMessage(messages.date.valid)));
+    validation.push(date(messages.date.valid));
     if (props.min)
-      validation.push(
-        minDateValidator(
-          formatMessage(messages.date.min, {
-            value: props.min.toString(),
-          }),
-          props.min
-        )
-      );
+      validation.push(minDateValidator(messages.date.min, props.min));
     if (props.max)
-      validation.push(
-        maxDateValidator(
-          formatMessage(messages.date.max, {
-            value: props.max.toString(),
-          }),
-          props.max
-        )
-      );
+      validation.push(maxDateValidator(messages.date.max, props.max));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),

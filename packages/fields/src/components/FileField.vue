@@ -10,7 +10,6 @@ import {
   accept as acceptValidator,
   maxSize as maxSizeValidator,
 } from '@lunar-forms/core';
-import { formatMessage } from '../utils';
 import { useCommonField, usePluginOptions } from '../composables';
 import FieldWrapper from './FieldWrapper.vue';
 import { FieldCommonProps } from '..';
@@ -57,23 +56,13 @@ const {
 } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
-    if (props.required)
-      validation.push(requiredValidator(formatMessage(messages.required)));
+    if (props.required) validation.push(requiredValidator(messages.required));
 
     if (props.accept)
-      validation.push(
-        acceptValidator(formatMessage(messages.file.accept), props.accept)
-      );
+      validation.push(acceptValidator(messages.file.accept, props.accept));
 
     if (props.maxSize)
-      validation.push(
-        maxSizeValidator(
-          formatMessage(messages.file.maxSize, {
-            value: props.maxSize.toString(),
-          }),
-          props.maxSize
-        )
-      );
+      validation.push(maxSizeValidator(messages.file.maxSize, props.maxSize));
 
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
