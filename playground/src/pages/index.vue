@@ -1,20 +1,15 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
 import { LunarField, LunarForm } from '@lunar-forms/core';
-import { ref } from 'vue';
-
-const a = ref('aaa');
 </script>
 
 <template>
   <LunarForm class="flex gap-5" v-slot="{ values, errors }">
     <section class="grid h-auto w-[60%] flex-grow grid-cols-2 gap-5">
-      <input type="text" v-model="a" />
       <LunarField
-        name="xdddddweon"
+        name="Prueba texto"
         class="input bg-base-300"
-        placeholder="super mamada galaxial"
-        v-model="a"
+        placeholder="Prueba texto..."
       />
       <LunarField
         name="select"

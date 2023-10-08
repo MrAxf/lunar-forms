@@ -84,8 +84,8 @@ createApp(App)
     messages: {
       required: 'El campo es obligatorio.',
       text: {
-        minLenght: 'El campo debe tener como míximo {value} caracteres.',
-        maxLenght: 'El campo debe tener como máximo {value} caracteres.',
+        minLenght: 'El campo debe tener como míximo {requirement} caracteres.',
+        maxLenght: 'El campo debe tener como máximo {requirement} caracteres.',
         pattern: 'El campo no tiene el formato solicitado.',
       },
       password: {
@@ -98,27 +98,28 @@ createApp(App)
         valid: 'El campo no es una dirección URL válida.',
       },
       number: {
-        min: 'El campo debe tener un valor igual o superior a {value}.',
-        max: 'El campo debe tener un valor igual o inferior a {value}.',
+        min: 'El campo debe tener un valor igual o superior a {requirement}.',
+        max: 'El campo debe tener un valor igual o inferior a {requirement}.',
       },
       file: {
         accept: 'El formato del archivo no es valido',
-        maxSize: 'El formato del archivo no puede pasar de los {value} bytes.',
+        maxSize:
+          'El formato del archivo no puede pasar de los {requirement} bytes.',
       },
       date: {
         valid: 'La fecha no tiene un formato válido',
-        min: 'La fecha debe ser superior a la estipulada.',
-        max: 'La fecha debe ser inferior a la estipulada.',
+        min: 'La fecha debe ser superior a {requirement}.',
+        max: 'La fecha debe ser inferior a {requirement}.',
       },
       datetime: {
         valid: 'La fecha y la hora no tiene un formato válido',
-        min: 'La fecha y la hora debe ser superior a la estipulada.',
-        max: 'La fecha y la hora debe ser inferior a la estipulada.',
+        min: 'La fecha y la hora debe ser superior a {requirement}.',
+        max: 'La fecha y la hora debe ser inferior a {requirement}.',
       },
       time: {
         valid: 'La hora no tiene un formato válido',
-        min: 'La hora debe ser superior a la estipulada.',
-        max: 'La hora debe ser inferior a la estipulada.',
+        min: 'La hora debe ser superior a {requirement}.',
+        max: 'La hora debe ser inferior a {requirement}.',
       },
       actions: {
         clear: 'Limpiar',
