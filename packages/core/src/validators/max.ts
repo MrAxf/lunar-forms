@@ -1,10 +1,9 @@
-import { formatMessage } from '..';
+import { formatMessage, isNullOrUndefined } from '..';
 import type { FieldValidation } from '../types/field';
 
 export function max(error: string, requirement: number): FieldValidation {
   return (value) => {
-    if (value === undefined || value === null || !isNaN(Number(value)))
-      return undefined;
+    if (isNullOrUndefined(value) || isNaN(Number(value))) return undefined;
     const valueToNumber = Number(value);
 
     return valueToNumber > requirement

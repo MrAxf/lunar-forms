@@ -84,8 +84,8 @@ createApp(App)
     messages: {
       required: 'El campo es obligatorio.',
       text: {
-        minLenght: 'El campo debe tener como míximo {requirement} caracteres.',
-        maxLenght: 'El campo debe tener como máximo {requirement} caracteres.',
+        minLength: 'El campo debe tener como míximo {requirement} caracteres.',
+        maxLength: 'El campo debe tener como máximo {requirement} caracteres.',
         pattern: 'El campo no tiene el formato solicitado.',
       },
       password: {

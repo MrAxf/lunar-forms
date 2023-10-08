@@ -29,8 +29,8 @@ const props = withDefaults(
       readonly?: boolean;
       showButton?: boolean;
       placeholder?: string;
-      minLenght?: number;
-      maxLenght?: number;
+      minLength?: number;
+      maxLength?: number;
       confirm?: string;
       pattern?: RegExp;
     }
@@ -66,10 +66,10 @@ const {
       validation.push(
         confirmValidator(messages.password.confirm, props.confirm)
       );
-    if (props.minLenght)
-      validation.push(minLength(messages.text.minLenght, props.minLenght));
-    if (props.maxLenght)
-      validation.push(maxLength(messages.text.maxLenght, props.maxLenght));
+    if (props.minLength)
+      validation.push(minLength(messages.text.minLength, props.minLength));
+    if (props.maxLength)
+      validation.push(maxLength(messages.text.maxLength, props.maxLength));
     if (props.pattern)
       validation.push(patterValidate(messages.text.pattern, props.pattern));
     if (props.validate) validation = validation.concat(unref(props.validate));
@@ -111,8 +111,8 @@ function onShow() {
       :readonly="props.readonly"
       :required="props.required"
       :placeholder="props.placeholder"
-      :minlength="props.minLenght"
-      :maxlength="props.maxLenght"
+      :minlength="props.minLength"
+      :maxlength="props.maxLength"
       :pattern="props.pattern?.toString()"
       :class="theme.classes.input"
       v-model="value"

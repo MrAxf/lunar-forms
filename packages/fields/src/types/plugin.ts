@@ -27,8 +27,8 @@ export interface PluginOptions {
   messages: {
     required: string;
     text: {
-      minLenght: string;
-      maxLenght: string;
+      minLength: string;
+      maxLength: string;
       pattern: string;
     };
     password: {

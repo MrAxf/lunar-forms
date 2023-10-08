@@ -28,8 +28,8 @@ const props = withDefaults(
       readonly?: boolean;
       clearButton?: boolean;
       placeholder?: string;
-      minLenght?: number;
-      maxLenght?: number;
+      minLength?: number;
+      maxLength?: number;
       pattern?: RegExp;
     }
   >(),
@@ -61,10 +61,10 @@ const {
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
-    if (props.minLenght)
-      validation.push(minLength(messages.text.minLenght, props.minLenght));
-    if (props.maxLenght)
-      validation.push(maxLength(messages.text.maxLenght, props.maxLenght));
+    if (props.minLength)
+      validation.push(minLength(messages.text.minLength, props.minLength));
+    if (props.maxLength)
+      validation.push(maxLength(messages.text.maxLength, props.maxLength));
     if (props.pattern)
       validation.push(patterValidate(messages.text.pattern, props.pattern));
     if (props.validate) validation = validation.concat(unref(props.validate));
@@ -102,8 +102,8 @@ const {
       :readonly="props.readonly"
       :required="props.required"
       :placeholder="props.placeholder"
-      :minlength="props.minLenght"
-      :maxlength="props.maxLenght"
+      :minlength="props.minLength"
+      :maxlength="props.maxLength"
       :pattern="props.pattern?.toString()"
       :class="theme.classes.input"
       v-model="value"

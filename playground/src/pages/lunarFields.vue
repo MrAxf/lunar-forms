@@ -36,7 +36,7 @@ import {
         label="Text"
         help="Texto de prueba"
         placeholder="Texto ..."
-        :max-lenght="10"
+        :max-length="10"
         :pattern="/^[A-Za-z]{3}$/"
       />
       <TextareaField
@@ -45,7 +45,7 @@ import {
         label="Textarea"
         help="Texto de prueba"
         placeholder="Texto ..."
-        :max-lenght="10"
+        :max-length="10"
         :pattern="/^[A-Za-z]{3}$/"
         clear-button
       />
@@ -55,7 +55,7 @@ import {
         label="Password"
         help="Texto de prueba"
         placeholder="Contraseña ..."
-        :min-lenght="8"
+        :min-length="8"
         show-button
       />
       <PasswordField
@@ -64,7 +64,7 @@ import {
         label="Password repeat"
         help="Texto de prueba"
         placeholder="Contraseña ..."
-        :min-lenght="8"
+        :min-length="8"
         confirm="password.password"
         show-button
       />
@@ -206,7 +206,7 @@ import {
         label="Tel"
         help="Texto de prueba"
         placeholder="Tel ..."
-        :max-lenght="10"
+        :max-length="10"
       />
       <DateField
         v-auto-animate

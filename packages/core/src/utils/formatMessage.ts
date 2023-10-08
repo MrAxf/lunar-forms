@@ -5,7 +5,7 @@ export function formatMessage(
   let finalMessage = message;
   if (!options) return finalMessage;
   Object.entries(options).forEach(([key, value]) => {
-    finalMessage = finalMessage.replace(new RegExp(`/\\{${key}\\}/gi`), value);
+    finalMessage = finalMessage.replace(new RegExp(`{${key}}`, 'gi'), value);
   });
   return finalMessage;
 }
