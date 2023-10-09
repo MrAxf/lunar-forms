@@ -1,5 +1,5 @@
-import { formatMessage } from '..';
-import type { FieldValidation } from '../types/field';
+import type { FieldValidation } from '@/types';
+import { formatMessage } from '@/utils';
 
 export function accept(
   error: string,

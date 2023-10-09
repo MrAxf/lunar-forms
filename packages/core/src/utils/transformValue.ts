@@ -1,4 +1,4 @@
-import type { FieldTransformer, FieldValue, FormContext } from '../types';
+import type { FieldTransformer, FieldValue, FormContext } from '@/types';
 
 export function transformValue(
   value: FieldValue,

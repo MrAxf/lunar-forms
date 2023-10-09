@@ -2,8 +2,9 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <script setup lang="ts">
 import { type Component } from 'vue';
-import { useFieldArray } from '../composables';
-import type { FieldArrayContext, FieldValidation, MaybeArray } from '../types';
+
+import { useFieldArray } from '@/composables';
+import type { FieldArrayContext, FieldValidation, MaybeArray } from '@/types';
 
 const props = withDefaults(
   defineProps<{

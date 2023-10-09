@@ -1,4 +1,4 @@
-import type { FieldTransformer } from '../types/field';
+import type { FieldTransformer } from '@/types';
 
 export const toNumber =
   (transformNullOrUndefined: boolean = true): FieldTransformer =>

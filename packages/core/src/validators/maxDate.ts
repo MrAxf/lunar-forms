@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { formatMessage, isDate } from '../utils';
-import type { FieldValidation } from '../types/field';
+import type { FieldValidation } from '@/types';
+import { formatMessage, isDate } from '@/utils';
 
 export function maxDate(
   error: string,

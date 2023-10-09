@@ -7,14 +7,16 @@ import {
   ref,
   watch,
 } from 'vue';
+
 import type {
   FieldArrayContext,
   FieldArrayOptions,
   FieldArrayValue,
   FieldValues,
   FormContext,
-} from '../types';
-import { FORM_CONTEXT_KEY, getValueByPath, setValueByPath } from '../utils';
+} from '@/types';
+import { FORM_CONTEXT_KEY, getValueByPath, setValueByPath } from '@/utils';
+
 import { useFieldBase } from './useFieldBase';
 
 export function useFieldArray(

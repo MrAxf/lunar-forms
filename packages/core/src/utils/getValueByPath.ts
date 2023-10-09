@@ -1,4 +1,4 @@
-import { FieldValues, Maybe } from '../types';
+import type { FieldValues, Maybe } from '@/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function getValueByPath(

@@ -1,6 +1,7 @@
 import type { MaybeRef, Ref } from 'vue';
+
+import { FormContext } from './form';
 import type { Maybe, MaybeArray, MaybePromise, MaybeValue } from './utils';
-import { FormContext } from '.';
 
 export type FieldValue = MaybeValue<
   string | string[] | number | boolean | File | File[] | Date

@@ -1,4 +1,4 @@
-import { FieldValues } from '../types';
+import { FieldValues } from '@/types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export function setValueByPath(

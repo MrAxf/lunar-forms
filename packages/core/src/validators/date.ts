@@ -1,5 +1,5 @@
-import { formatMessage, isDate } from '../utils';
-import type { FieldValidation } from '../types/field';
+import { formatMessage, isDate } from '@/utils';
+import type { FieldValidation } from '@/types';
 
 export function date(error: string): FieldValidation {
   return (value) =>

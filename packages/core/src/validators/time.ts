@@ -1,5 +1,5 @@
-import { formatMessage } from '..';
-import type { FieldValidation } from '../types/field';
+import type { FieldValidation } from '@/types';
+import { formatMessage } from '@/utils';
 
 export const timeRegexp = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
 

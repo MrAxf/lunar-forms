@@ -1,5 +1,5 @@
-import { formatMessage, isNullOrUndefined } from '..';
-import type { FieldValidation } from '../types/field';
+import { formatMessage, isNullOrUndefined } from '@/utils';
+import type { FieldValidation } from '@/types';
 
 export function min(error: string, requirement: number): FieldValidation {
   return (value) => {

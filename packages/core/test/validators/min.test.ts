@@ -1,4 +1,5 @@
-import { describe, test, expect } from 'vitest';
+import { describe, expect, test } from 'vitest';
+
 import { min } from '@/validators';
 
 describe('Min validator', () => {
@@ -12,7 +13,7 @@ describe('Min validator', () => {
 
   test('should return undefined if pass not number value', () => {
     expect(min('error', 5)('hola')).undefined;
-    expect(min('error', 5)({ a: 1 })).undefined;
+    expect(min('error', 5)(['aaa'])).undefined;
   });
 
   test('should return error if value < requirement', () => {

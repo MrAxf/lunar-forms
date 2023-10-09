@@ -1,4 +1,4 @@
-import type { FieldTransformer } from '../types/field';
+import type { FieldTransformer } from '@/types';
 
 type Case = 'lower_case' | 'upper_case';
 export const LOWER_CASE: Case = 'lower_case';

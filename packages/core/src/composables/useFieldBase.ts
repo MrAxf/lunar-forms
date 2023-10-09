@@ -1,13 +1,14 @@
 import { type MaybeRef, ref, unref } from 'vue';
+
+import { ValidationError } from '@/errors';
 import type {
   FieldValidation,
   FieldValue,
   FormContext,
   Maybe,
   MaybeArray,
-} from '../types';
-import { ValidationError } from '../errors';
-import { toArray, validateFieldValue } from '../utils';
+} from '@/types';
+import { toArray, validateFieldValue } from '@/utils';
 
 export function useFieldBase({
   validations,

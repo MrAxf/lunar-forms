@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <script setup lang="ts" generic="T extends FieldValues">
-import { useForm } from '../composables';
-import type { FieldValues } from '../types';
+import { useForm } from '@/composables';
+import type { FieldValues } from '@/types';
 
 const props = defineProps<{
   initialValues?: Partial<T>;

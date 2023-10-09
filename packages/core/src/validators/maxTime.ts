@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { formatMessage } from '..';
-import type { FieldValidation } from '../types/field';
+import type { FieldValidation } from '@/types';
+import { formatMessage } from '@/utils';
+
 import { timeRegexp } from './time';
 
 const dateTemplate = '1912-06-23T';

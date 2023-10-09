@@ -1,5 +1,5 @@
-import { ValidationAbortedError, ValidationError } from '../errors';
-import { FieldValidation, FieldValue, FormContext, Maybe } from '../types';
+import { ValidationAbortedError, ValidationError } from '@/errors';
+import { FieldValidation, FieldValue, FormContext, Maybe } from '@/types';
 
 export function validateFieldValue(
   validations: FieldValidation[],

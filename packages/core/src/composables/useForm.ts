@@ -1,4 +1,6 @@
 import { type UnwrapRef, computed, provide, readonly, ref } from 'vue';
+
+import { ValidationAbortedError, ValidationError } from '@/errors';
 import type {
   FieldArrayContext,
   FieldData,
@@ -6,9 +8,8 @@ import type {
   FormContext,
   FormOptions,
   Maybe,
-} from '../types';
-import { FORM_CONTEXT_KEY, setValueByPath, validateFieldValue } from '../utils';
-import { ValidationAbortedError, ValidationError } from '../errors';
+} from '@/types';
+import { FORM_CONTEXT_KEY, setValueByPath, validateFieldValue } from '@/utils';
 
 export function useForm<T extends FieldValues>({
   initialValues = {},

@@ -4,21 +4,21 @@
 <script setup lang="ts">
 import {
   type Component,
+  Fragment,
   h,
   useAttrs,
-  withDirectives,
   vModelDynamic,
-  Fragment,
+  withDirectives,
 } from 'vue';
-import { useField } from '../composables';
+
+import { useField, useVModel } from '@/composables';
 import type {
   FieldData,
   FieldTransformer,
   FieldValidation,
   FieldValue,
   MaybeArray,
-} from '../types';
-import { useVModel } from '../composables/useVModel';
+} from '@/types';
 
 defineOptions({
   inheritAttrs: false,

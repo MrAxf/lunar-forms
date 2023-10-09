@@ -1,4 +1,5 @@
-import { describe, test, expect } from 'vitest';
+import { describe, expect, test } from 'vitest';
+
 import { max } from '@/validators';
 
 describe('Max validator', () => {
@@ -12,7 +13,7 @@ describe('Max validator', () => {
 
   test('should return undefined if pass not number value', () => {
     expect(max('error', 5)('hola')).undefined;
-    expect(max('error', 5)({ a: 1 })).undefined;
+    expect(max('error', 5)(['aa'])).undefined;
   });
 
   test('should return error if value > requirement', () => {

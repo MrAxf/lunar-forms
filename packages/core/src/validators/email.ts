@@ -1,5 +1,5 @@
-import { formatMessage } from '..';
-import type { FieldValidation } from '../types/field';
+import type { FieldValidation } from '@/types';
+import { formatMessage } from '@/utils';
 
 const emailRegexp =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
