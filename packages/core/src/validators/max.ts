@@ -1,4 +1,4 @@
-import { formatMessage, isNullOrUndefined } from '..';
+import { formatMessage, isNullOrUndefined } from '../utils';
 import type { FieldValidation } from '../types/field';
 
 export function max(error: string, requirement: number): FieldValidation {
