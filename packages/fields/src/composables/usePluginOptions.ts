@@ -1,6 +1,7 @@
 import { inject } from 'vue';
-import type { PluginOptions } from '../types';
-import { PLUGING_CONTEXT_KEY } from '../consts';
+
+import { PLUGING_CONTEXT_KEY } from '@/consts';
+import type { PluginOptions } from '@/types';
 
 export function usePluginOptions() {
   const pluginOptions = inject<PluginOptions>(PLUGING_CONTEXT_KEY);

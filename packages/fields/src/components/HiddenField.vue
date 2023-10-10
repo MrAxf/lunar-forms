@@ -4,8 +4,8 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
 import type {
-  FieldValue,
   FieldTransformer,
+  FieldValue,
   MaybeArray,
 } from '@lunar-forms/core';
 import { useField } from '@lunar-forms/core';

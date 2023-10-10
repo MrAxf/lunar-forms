@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { PluginOptions } from '../types';
+import { PluginOptions } from '@/types';
 
 const props = defineProps<{
   theme: PluginOptions['theme'];

@@ -3,17 +3,19 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, unref } from 'vue';
-import type { FieldValue, FieldValidation } from '@lunar-forms/core';
+import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import {
-  maxLength,
-  minLength,
+  maxLength as maxLengthValidator,
+  minLength as minLengthValidator,
   pattern as patterValidate,
   required as requiredValidator,
 } from '@lunar-forms/core';
-import { useCommonField, usePluginOptions } from '../composables';
+import { computed, unref } from 'vue';
+
+import { useCommonField, usePluginOptions } from '@/composables';
+import type { FieldCommonProps } from '@/types';
+
 import FieldWrapper from './FieldWrapper.vue';
-import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'SearchField',
@@ -62,9 +64,13 @@ const {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
     if (props.minLength)
-      validation.push(minLength(messages.text.minLength, props.minLength));
+      validation.push(
+        minLengthValidator(messages.text.minLength, props.minLength)
+      );
     if (props.maxLength)
-      validation.push(maxLength(messages.text.maxLength, props.maxLength));
+      validation.push(
+        maxLengthValidator(messages.text.maxLength, props.maxLength)
+      );
     if (props.pattern)
       validation.push(patterValidate(messages.text.pattern, props.pattern));
     if (props.validate) validation = validation.concat(unref(props.validate));

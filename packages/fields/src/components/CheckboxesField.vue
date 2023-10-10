@@ -3,12 +3,13 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, unref } from 'vue';
-import type { FieldValue, FieldValidation } from '@lunar-forms/core';
+import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
-import { toCheckboxesRadioLabelValues } from '../utils/checkboxesRadio';
-import type { CheckboxesRadioOptions, FieldCommonProps } from '../types';
-import { useCommonField, usePluginOptions } from '../composables';
+import { computed, unref } from 'vue';
+
+import { useCommonField, usePluginOptions } from '@/composables';
+import type { CheckboxesRadioOptions, FieldCommonProps } from '@/types';
+import { toCheckboxesRadioLabelValues } from '@/utils';
 
 defineOptions({
   name: 'CheckboxesField',

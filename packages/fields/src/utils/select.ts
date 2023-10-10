@@ -1,4 +1,4 @@
-import type { SelectLabelValue, SelectOptions } from '../types';
+import type { SelectLabelValue, SelectOptions } from '@/types';
 
 export function toSelectLabelValues(item?: SelectOptions): SelectLabelValue[] {
   if (!item) return [];

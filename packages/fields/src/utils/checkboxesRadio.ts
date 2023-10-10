@@ -1,7 +1,7 @@
 import type {
   CheckboxesRadioLabelValue,
   CheckboxesRadioOptions,
-} from '../types';
+} from '@/types';
 
 export function toCheckboxesRadioLabelValues(
   item?: CheckboxesRadioOptions

@@ -3,16 +3,18 @@
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts">
-import { computed, unref, ref } from 'vue';
-import type { FieldValue, Maybe, FieldValidation } from '@lunar-forms/core';
+import type { FieldValidation, FieldValue, Maybe } from '@lunar-forms/core';
 import {
-  required as requiredValidator,
   accept as acceptValidator,
   maxSize as maxSizeValidator,
+  required as requiredValidator,
 } from '@lunar-forms/core';
-import { useCommonField, usePluginOptions } from '../composables';
+import { computed, ref, unref } from 'vue';
+
+import { useCommonField, usePluginOptions } from '@/composables';
+import type { FieldCommonProps } from '@/types';
+
 import FieldWrapper from './FieldWrapper.vue';
-import { FieldCommonProps } from '..';
 
 defineOptions({
   name: 'FileField',
