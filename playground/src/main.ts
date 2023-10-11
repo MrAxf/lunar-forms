@@ -1,9 +1,10 @@
-import { createApp } from 'vue';
-import './style.css';
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
-import App from './App.vue';
 import { lunarFormsFieldPlugin } from '@lunar-forms/fields';
+import { createApp } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
+
+import App from './App.vue';
+import './style.css';
 import { tw } from './utils';
 
 createApp(App)
@@ -104,22 +105,22 @@ createApp(App)
       file: {
         accept: 'El formato del archivo no es valido',
         maxSize:
-          'El formato del archivo no puede pasar de los {requirement} bytes.',
+          'El tamaño del archivo no puede pasar de los {kb:requirement}.',
       },
       date: {
         valid: 'La fecha no tiene un formato válido',
-        min: 'La fecha debe ser superior a {requirement}.',
-        max: 'La fecha debe ser inferior a {requirement}.',
+        min: 'La fecha debe ser superior a {date:requirement}.',
+        max: 'La fecha debe ser inferior a {date:requirement}.',
       },
       datetime: {
         valid: 'La fecha y la hora no tiene un formato válido',
-        min: 'La fecha y la hora debe ser superior a {requirement}.',
-        max: 'La fecha y la hora debe ser inferior a {requirement}.',
+        min: 'La fecha y la hora debe ser superior a {datetime:requirement}.',
+        max: 'La fecha y la hora debe ser inferior a {datetime:requirement}.',
       },
       time: {
         valid: 'La hora no tiene un formato válido',
-        min: 'La hora debe ser superior a {requirement}.',
-        max: 'La hora debe ser inferior a {requirement}.',
+        min: 'La hora debe ser superior a {time:requirement}.',
+        max: 'La hora debe ser inferior a {time:requirement}.',
       },
       actions: {
         clear: 'Limpiar',

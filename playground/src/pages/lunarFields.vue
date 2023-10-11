@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { LunarForm, UPPER_CASE, toCase } from '@lunar-forms/core';
+import { KB, LunarForm } from '@lunar-forms/core';
 import {
   CheckboxField,
   CheckboxesField,
@@ -121,7 +121,7 @@ import {
         clear-button
         multiple
         :accept="['image/*', '.png']"
-        :max-size="40000"
+        :max-size="40 * KB"
       />
       <SearchField
         v-auto-animate

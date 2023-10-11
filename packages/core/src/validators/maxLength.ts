@@ -1,5 +1,5 @@
-import { formatMessage } from '@/utils';
 import type { FieldValidation } from '@/types';
+import { formatMessage } from '@/utils';
 
 export function maxLength(error: string, requirement: number): FieldValidation {
   return (value) =>

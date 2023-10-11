@@ -7,7 +7,13 @@ export function time(error: string): FieldValidation {
   return (value) =>
     !value || typeof value !== 'string' || timeRegexp.test(value)
       ? undefined
-      : formatMessage(error, {
-          value: String(value),
-        });
+      : formatMessage(
+          error,
+          {
+            value: String(value),
+          },
+          {
+            time: (value) => new Date(value).toLocaleTimeString(),
+          }
+        );
 }

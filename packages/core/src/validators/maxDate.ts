@@ -18,10 +18,29 @@ export function maxDate(
     const requirementDate = new Date(requirement);
 
     return valueDate.getTime() > requirementDate.getTime()
-      ? formatMessage(error, {
-          requirement: String(requirement),
-          value: String(value),
-        })
+      ? formatMessage(
+          error,
+          {
+            requirement: String(requirement),
+            value: String(value),
+          },
+          {
+            date: (value) =>
+              new Date(value).toLocaleDateString(undefined, {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+              }),
+            datetime: (value) =>
+              new Date(value).toLocaleString(undefined, {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              }),
+          }
+        )
       : undefined;
   };
 }

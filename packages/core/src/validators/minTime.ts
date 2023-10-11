@@ -20,10 +20,20 @@ export function minTime(error: string, requirement: string): FieldValidation {
     const requirementDate = new Date(`${dateTemplate}${requirement}`);
 
     return valueDate.getTime() < requirementDate.getTime()
-      ? formatMessage(error, {
-          requirement: String(requirement),
-          value: String(value),
-        })
+      ? formatMessage(
+          error,
+          {
+            requirement: String(requirement),
+            value: String(value),
+          },
+          {
+            time: (value) =>
+              new Date(`${dateTemplate}${value}`).toLocaleTimeString(
+                undefined,
+                { hour: '2-digit', minute: '2-digit' }
+              ),
+          }
+        )
       : undefined;
   };
 }

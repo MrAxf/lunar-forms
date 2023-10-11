@@ -65,9 +65,9 @@ const {
 
     validation.push(date(messages.date.valid));
     if (props.min)
-      validation.push(minDateValidator(messages.date.min, props.min));
+      validation.push(minDateValidator(messages.datetime.min, props.min));
     if (props.max)
-      validation.push(maxDateValidator(messages.date.max, props.max));
+      validation.push(maxDateValidator(messages.datetime.max, props.max));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
