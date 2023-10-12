@@ -2,13 +2,13 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends CheckboxesRadioLabelValue">
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { CheckboxesRadioOptions, FieldCommonProps } from '@/types';
+import type { CheckboxesRadioLabelValue, FieldCommonProps } from '@/types';
 import { toCheckboxesRadioLabelValues } from '@/utils';
 
 defineOptions({
@@ -22,7 +22,7 @@ const props = withDefaults(
       required?: boolean;
       disabled?: boolean;
       readonly?: boolean;
-      options?: CheckboxesRadioOptions;
+      options?: string[] | T[];
     }
   >(),
   {
@@ -40,6 +40,7 @@ defineEmits<{
 defineSlots<{
   prefix(): any;
   suffix(): any;
+  label(props: { id: string; data: T }): any;
 }>();
 
 const { theme, messages } = usePluginOptions();
@@ -60,7 +61,7 @@ const {
   oninput: undefined,
 });
 
-const checkboxesOptions = computed(() =>
+const checkboxesOptions = computed<T[]>(() =>
   toCheckboxesRadioLabelValues(props.options)
 );
 </script>
@@ -108,9 +109,11 @@ const checkboxesOptions = computed(() =>
                 <slot name="suffix"></slot>
               </div>
             </div>
-            <label :class="theme.classes.label" :for="`${id}[${idx}]`">{{
-              opt.label
-            }}</label>
+            <slot name="label" :id="`${id}[${idx}]`" :data="opt">
+              <label :class="theme.classes.label" :for="`${id}[${idx}]`">{{
+                opt.label
+              }}</label>
+            </slot>
           </div>
           <span :class="theme.classes.help" v-if="opt.help">{{
             opt.help

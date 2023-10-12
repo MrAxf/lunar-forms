@@ -147,24 +147,32 @@ import {
             label: 'Opción Label 1',
             value: 'Opción 1',
             help: 'Texto de ayuda de ejemplo',
+            icon: 'hey',
           },
           {
             label: 'Opción Label 2',
             value: 'Opción 2',
             help: 'Texto de ayuda de ejemplo',
+            icon: 'hey',
           },
           {
             label: 'Opción Label 3',
             value: 'Opción 3',
             help: 'Texto de ayuda de ejemplo',
+            icon: 'hey',
           },
           {
             label: 'Opción Label 4',
             value: 'Opción 4',
             help: 'Texto de ayuda de ejemplo',
+            icon: 'hey',
           },
         ]"
-      />
+      >
+        <template #label="{ id, data }">
+          <label :for="id">{{ data.label }}{{ data.icon }}</label>
+        </template>
+      </CheckboxesField>
       <RadioField
         v-auto-animate
         name="radio"

@@ -1,13 +1,4 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import type { FieldData, FieldOptions, FieldValue, FormContext } from '@/types';
-import {
-  FORM_CONTEXT_KEY,
-  getValueByPath,
-  noop,
-  setValueByPath,
-  toArray,
-  transformValue,
-} from '@/utils';
 import {
   customRef,
   getCurrentInstance,
@@ -19,6 +10,16 @@ import {
   unref,
   watch,
 } from 'vue';
+
+import type { FieldData, FieldOptions, FieldValue, FormContext } from '@/types';
+import {
+  FORM_CONTEXT_KEY,
+  getValueByPath,
+  noop,
+  setValueByPath,
+  toArray,
+  transformValue,
+} from '@/utils';
 
 import { useFieldBase } from './useFieldBase';
 
