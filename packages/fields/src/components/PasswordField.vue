@@ -11,10 +11,15 @@ import {
   pattern as patterValidate,
   required as requiredValidator,
 } from '@lunar-forms/core';
+import type { HTMLAttributes } from 'vue';
 import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, FieldCommonSlots } from '@/types';
+import type {
+  FieldCommonClassesProps,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -25,17 +30,19 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-      showButton?: boolean;
-      placeholder?: string;
-      minLength?: number;
-      maxLength?: number;
-      confirm?: string;
-      pattern?: RegExp;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        classInputBtn: HTMLAttributes['class'];
+        required?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        showButton?: boolean;
+        placeholder?: string;
+        minLength?: number;
+        maxLength?: number;
+        confirm?: string;
+        pattern?: RegExp;
+      }
   >(),
   {
     validateOn: 'input',
@@ -93,6 +100,12 @@ function onShow() {
     :label="props.label"
     :help="props.help"
     :error="error"
+    :class-help="props.classHelp"
+    :class-inner="props.classInner"
+    :class-label="props.classLabel"
+    :class-message="props.classMessage"
+    :class-outer="props.classOuter"
+    :class-wrapper="props.classWrapper"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -102,7 +115,10 @@ function onShow() {
     :data-input-btn="props.showButton ? true : null"
     :data-field="$options.name"
   >
-    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <div
+      v-if="$slots.prefix"
+      :class="[theme.classes.prefix, props.classPrefix]"
+    >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <input
@@ -116,7 +132,7 @@ function onShow() {
       :minlength="props.minLength"
       :maxlength="props.maxLength"
       :pattern="props.pattern?.toString()"
-      :class="theme.classes.input"
+      :class="[theme.classes.input, props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
@@ -128,7 +144,7 @@ function onShow() {
           ? theme.icons.visibilityOn
           : theme.icons.visibilityOff
       "
-      :class="theme.classes['input-btn']"
+      :class="[theme.classes['input-btn'], props.classInputBtn]"
       :title="
         inputType === 'password'
           ? messages.actions.setVisible
@@ -136,7 +152,10 @@ function onShow() {
       "
       @click="onShow"
     ></button>
-    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+    <div
+      v-if="$slots.suffix"
+      :class="[theme.classes.suffix, props.classSuffix]"
+    >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>

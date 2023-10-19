@@ -5,10 +5,12 @@
 <script setup lang="ts">
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
+import type { HTMLAttributes } from 'vue';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
 import type {
+  FieldCommonClassesProps,
   FieldCommonProps,
   FieldCommonSlots,
   SelectOptions,
@@ -24,12 +26,14 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      placeholder?: string;
-      options?: SelectOptions;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        classInputIcon: HTMLAttributes['class'];
+        required?: boolean;
+        disabled?: boolean;
+        placeholder?: string;
+        options?: SelectOptions;
+      }
   >(),
   {
     validateOn: 'change',
@@ -69,6 +73,12 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
     :label="props.label"
     :help="props.help"
     :error="error"
+    :class-help="props.classHelp"
+    :class-inner="props.classInner"
+    :class-label="props.classLabel"
+    :class-message="props.classMessage"
+    :class-outer="props.classOuter"
+    :class-wrapper="props.classWrapper"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-valid="valid ? true : null"
@@ -77,7 +87,10 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
     :data-field="$options.name"
     data-input-icon="true"
   >
-    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <div
+      v-if="$slots.prefix"
+      :class="[theme.classes.prefix, props.classPrefix]"
+    >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <select
@@ -86,7 +99,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
       :disabled="props.disabled"
       :required="props.required"
       :placeholder="props.placeholder"
-      :class="theme.classes.input"
+      :class="[theme.classes.input, props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     >
@@ -99,8 +112,14 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
         {{ opt.label }}
       </option>
     </select>
-    <div v-html="theme.icons.select" :class="theme.classes['input-icon']"></div>
-    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+    <div
+      v-html="theme.icons.select"
+      :class="[theme.classes['input-icon'], props.classInputIcon]"
+    ></div>
+    <div
+      v-if="$slots.suffix"
+      :class="[theme.classes.suffix, props.classSuffix]"
+    >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>

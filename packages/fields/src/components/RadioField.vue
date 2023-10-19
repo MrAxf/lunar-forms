@@ -9,7 +9,11 @@ import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
 import { createFieldsetContext } from '@/contexts';
-import type { FieldCommonProps, FieldsetLabelValue } from '@/types';
+import type {
+  FieldCommonProps,
+  FieldsetClassesProps,
+  FieldsetLabelValue,
+} from '@/types';
 import { toFieldsetLabelValues } from '@/utils';
 
 import { FieldsetInput } from '.';
@@ -21,12 +25,13 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-      options?: string[] | T[];
-    }
+    FieldCommonProps &
+      FieldsetClassesProps & {
+        required?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        options?: string[] | T[];
+      }
   >(),
   {
     validateOn: 'change',
@@ -69,7 +74,7 @@ createFieldsetContext(value, name, id, 'radio');
 
 <template>
   <div
-    :class="theme.classes.outer"
+    :class="[theme.classes.outer, props.classOuter]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -78,25 +83,38 @@ createFieldsetContext(value, name, id, 'radio');
     :data-touched="touched ? true : null"
     :data-field="$options.name"
   >
-    <fieldset :class="theme.classes.fieldset">
-      <legend :class="theme.classes.legend" v-if="props.label">
+    <fieldset :class="[theme.classes.fieldset, props.classFieldset]">
+      <legend
+        :class="[theme.classes.legend, props.classLegend]"
+        v-if="props.label"
+      >
         {{ props.label }}
       </legend>
-      <span v-if="props.help" :class="theme.classes.help">{{
+      <span v-if="props.help" :class="[theme.classes.help, props.classHelp]">{{
         props.help
       }}</span>
-      <ul :class="theme.classes.options">
+      <ul :class="[theme.classes.options, props.classOptions]">
         <li v-for="(opt, idx) in checkboxesOptions" :key="opt.label">
           <slot name="option" :option="opt" :idx="idx">
             <FieldsetInput
               :option="opt"
               :idx="idx"
+              :class-help="props.classHelp"
+              :class-inner="props.classInner"
+              :class-input="props.classInput"
+              :class-label="props.classLabel"
+              :class-option="props.classOption"
+              :class-prefix="props.classPrefix"
+              :class-suffix="props.classSuffix"
+              :class-wrapper="props.classWrapper"
               @change="fieldProps.change"
             />
           </slot>
         </li>
       </ul>
     </fieldset>
-    <span v-if="error" :class="theme.classes.message">{{ error }}</span>
+    <span v-if="error" :class="[theme.classes.message, props.classMessage]">{{
+      error
+    }}</span>
   </div>
 </template>

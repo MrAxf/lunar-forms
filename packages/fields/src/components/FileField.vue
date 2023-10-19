@@ -9,10 +9,15 @@ import {
   maxSize as maxSizeValidator,
   required as requiredValidator,
 } from '@lunar-forms/core';
+import type { HTMLAttributes } from 'vue';
 import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, FieldCommonSlots } from '@/types';
+import type {
+  FieldCommonClassesProps,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -23,13 +28,15 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      accept?: string | string[];
-      maxSize?: number;
-      clearButton?: boolean;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        classInputBtn: HTMLAttributes['class'];
+        required?: boolean;
+        disabled?: boolean;
+        accept?: string | string[];
+        maxSize?: number;
+        clearButton?: boolean;
+      }
   >(),
   {
     validateOn: 'change',
@@ -94,6 +101,12 @@ const acceptString = computed<Maybe<string>>(() => {
     :label="props.label"
     :help="props.help"
     :error="error"
+    :class-help="props.classHelp"
+    :class-inner="props.classInner"
+    :class-label="props.classLabel"
+    :class-message="props.classMessage"
+    :class-outer="props.classOuter"
+    :class-wrapper="props.classWrapper"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-valid="valid ? true : null"
@@ -102,7 +115,10 @@ const acceptString = computed<Maybe<string>>(() => {
     :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
-    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <div
+      v-if="$slots.prefix"
+      :class="[theme.classes.prefix, props.classPrefix]"
+    >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <input
@@ -112,7 +128,7 @@ const acceptString = computed<Maybe<string>>(() => {
       :id="id"
       :disabled="props.disabled"
       :required="props.required"
-      :class="theme.classes.input"
+      :class="[theme.classes.input, props.classInput]"
       :accept="acceptString"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
@@ -120,11 +136,14 @@ const acceptString = computed<Maybe<string>>(() => {
       v-if="props.clearButton"
       type="button"
       v-html="theme.icons.clear"
-      :class="theme.classes['input-btn']"
+      :class="[theme.classes['input-btn'], props.classInputBtn]"
       :title="messages.actions.clear"
       @click="onClear"
     ></button>
-    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+    <div
+      v-if="$slots.suffix"
+      :class="[theme.classes.suffix, props.classSuffix]"
+    >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>

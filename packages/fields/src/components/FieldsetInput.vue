@@ -4,6 +4,7 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts" generic="T extends FieldsetLabelValue">
 import type { FieldValue } from '@lunar-forms/core';
+import type { HTMLAttributes } from 'vue';
 import { ref } from 'vue';
 
 import { usePluginOptions } from '@/composables';
@@ -18,6 +19,14 @@ defineOptions({
 const props = defineProps<{
   option: T;
   idx: number;
+  classOption?: HTMLAttributes['class'];
+  classWrapper?: HTMLAttributes['class'];
+  classInner?: HTMLAttributes['class'];
+  classPrefix?: HTMLAttributes['class'];
+  classSuffix?: HTMLAttributes['class'];
+  classInput?: HTMLAttributes['class'];
+  classLabel?: HTMLAttributes['class'];
+  classHelp?: HTMLAttributes['class'];
 }>();
 
 const emit = defineEmits<{
@@ -42,15 +51,18 @@ const { value, name, id } = fieldsetContext;
 
 <template>
   <div
-    :class="theme.classes.option"
+    :class="[theme.classes.option, props.classOption]"
     :data-field="$options.name"
     :data-disabled="props.option.attrs?.disabled ? true : null"
     :data-readonly="props.option.attrs?.readonly ? true : null"
     :data-checked="inputRef?.checked ? true : null"
   >
-    <label :class="theme.classes.wrapper">
-      <div :class="theme.classes.inner">
-        <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <label :class="[theme.classes.wrapper, props.classWrapper]">
+      <div :class="[theme.classes.inner, props.classInner]">
+        <div
+          v-if="$slots.prefix"
+          :class="[theme.classes.prefix, props.classPrefix]"
+        >
           <slot name="prefix" v-bind="{ ...props.option, value }"></slot>
         </div>
         <input
@@ -58,20 +70,27 @@ const { value, name, id } = fieldsetContext;
           :type="fieldsetContext.type"
           :name="`${name}[${props.idx}]`"
           :id="`${id}[${props.idx}]`"
-          :class="theme.classes.input"
+          :class="[theme.classes.input, props.classInput]"
           :value="props.option.value"
           v-model="value"
           @change="(ev) => emit('change', ev)"
           v-bind="props.option.attrs"
         />
-        <div v-if="$slots.suffix" :class="theme.classes.suffix">
+        <div
+          v-if="$slots.suffix"
+          :class="[theme.classes.suffix, props.classSuffix]"
+        >
           <slot name="suffix" v-bind="{ ...props.option, value }"></slot>
         </div>
       </div>
-      <span :class="theme.classes.label">{{ props.option.label }}</span>
+      <span :class="[theme.classes.label, props.classLabel]">{{
+        props.option.label
+      }}</span>
     </label>
-    <span :class="theme.classes.help" v-if="props.option.help">{{
-      props.option.help
-    }}</span>
+    <span
+      :class="[theme.classes.help, props.classHelp]"
+      v-if="props.option.help"
+      >{{ props.option.help }}</span
+    >
   </div>
 </template>
