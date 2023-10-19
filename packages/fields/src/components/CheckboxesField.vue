@@ -8,7 +8,11 @@ import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { CheckboxesRadioLabelValue, FieldCommonProps } from '@/types';
+import type {
+  CheckboxesRadioLabelValue,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 import { toCheckboxesRadioLabelValues } from '@/utils';
 
 defineOptions({
@@ -37,17 +41,17 @@ defineEmits<{
   (e: 'change', ev: Event): void;
 }>();
 
-defineSlots<{
-  prefix(): any;
-  suffix(): any;
-  label(props: { id: string; data: T }): any;
-}>();
+defineSlots<
+  FieldCommonSlots & {
+    label(props: { id: string; data: T }): any;
+  }
+>();
 
 const { theme, messages } = usePluginOptions();
 
 const {
   id,
-  fieldData: { value, valid, touched, error, fieldProps },
+  fieldData,
   // @ts-ignore
 } = useCommonField({
   validate: computed(() => {
@@ -60,6 +64,8 @@ const {
   onfocus: undefined,
   oninput: undefined,
 });
+
+const { value, valid, touched, error, fieldProps } = fieldData;
 
 const checkboxesOptions = computed<T[]>(() =>
   toCheckboxesRadioLabelValues(props.options)
@@ -93,7 +99,7 @@ const checkboxesOptions = computed<T[]>(() =>
           <div :class="theme.classes.wrapper">
             <div :class="theme.classes.inner">
               <div v-if="$slots.prefix" :class="theme.classes.prefix">
-                <slot name="prefix"></slot>
+                <slot name="prefix" v-bind="fieldData"></slot>
               </div>
               <input
                 type="checkbox"
@@ -106,7 +112,7 @@ const checkboxesOptions = computed<T[]>(() =>
                 v-bind="opt.attrs"
               />
               <div v-if="$slots.suffix" :class="theme.classes.suffix">
-                <slot name="suffix"></slot>
+                <slot name="suffix" v-bind="fieldData"></slot>
               </div>
             </div>
             <slot name="label" :id="`${id}[${idx}]`" :data="opt">

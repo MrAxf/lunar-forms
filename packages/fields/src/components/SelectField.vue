@@ -8,7 +8,11 @@ import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, SelectOptions } from '@/types';
+import type {
+  FieldCommonProps,
+  FieldCommonSlots,
+  SelectOptions,
+} from '@/types';
 import { toSelectLabelValues } from '@/utils';
 
 import FieldWrapper from './FieldWrapper.vue';
@@ -40,17 +44,11 @@ defineEmits<{
   (e: 'input', ev: InputEvent): void;
 }>();
 
-defineSlots<{
-  prefix(): any;
-  suffix(): any;
-}>();
+defineSlots<FieldCommonSlots>();
 
 const { theme, messages } = usePluginOptions();
 
-const {
-  id,
-  fieldData: { value, valid, touched, error, fieldProps },
-} = useCommonField({
+const { id, fieldData } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -58,6 +56,8 @@ const {
     return validation;
   }),
 });
+
+const { value, valid, touched, error, fieldProps } = fieldData;
 
 const selectOptions = computed(() => toSelectLabelValues(props.options));
 </script>
@@ -78,7 +78,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
     data-input-icon="true"
   >
     <div v-if="$slots.prefix" :class="theme.classes.prefix">
-      <slot name="prefix"></slot>
+      <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <select
       :name="name"
@@ -101,7 +101,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
     </select>
     <div v-html="theme.icons.select" :class="theme.classes['input-icon']"></div>
     <div v-if="$slots.suffix" :class="theme.classes.suffix">
-      <slot name="suffix"></slot>
+      <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>
 </template>

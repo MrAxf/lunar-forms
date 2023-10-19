@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
+  FieldData,
   FieldTransformer,
   FieldValidation,
   FieldValue,
@@ -17,3 +19,8 @@ export interface FieldCommonProps {
   validate?: MaybeArray<FieldValidation>;
   validateOn?: 'input' | 'change' | 'blur' | null;
 }
+
+export type FieldCommonSlots = {
+  prefix(props: FieldData): any;
+  suffix(props: FieldData): any;
+};

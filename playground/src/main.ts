@@ -68,7 +68,7 @@ createApp(App)
         ].join(' '),
         'input-btn': tw`btn btn-sm btn-circle btn-ghost z-1 m-2 -ml-10 [&>svg]:w-[1.5em]`,
         'input-icon': tw`min-h-8 z-1 pointer-events-none m-2 -ml-10 grid h-8 w-8 place-content-center [&>svg]:w-[1.5em]`,
-        help: tw`text-sm italic`,
+        help: tw`text-sm italic -mt-2`,
         message: tw`text-error text-sm`,
         fieldset: tw`bg-base-300 rounded-box group-[[data-error]]/input:border-error flex flex-col gap-2 p-4 group-[[data-error]]/input:border`,
         legend: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-*`,

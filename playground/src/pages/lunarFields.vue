@@ -103,7 +103,11 @@ import {
         clear-button
         :min="5"
         :max="10"
-      />
+      >
+        <template #prefix="{ value }">
+          {{ value }}
+        </template>
+      </RangeField>
       <SelectField
         v-auto-animate
         name="select"

@@ -13,7 +13,7 @@ import {
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps } from '@/types';
+import type { FieldCommonProps, FieldCommonSlots } from '@/types';
 
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -47,18 +47,11 @@ defineEmits<{
   (e: 'input', ev: InputEvent): void;
 }>();
 
-defineSlots<{
-  prefix(): any;
-  suffix(): any;
-}>();
+defineSlots<FieldCommonSlots>();
 
 const { theme, messages } = usePluginOptions();
 
-const {
-  id,
-  fieldData: { value, valid, touched, error, fieldProps },
-  onClear,
-} = useCommonField({
+const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -72,6 +65,8 @@ const {
     return validation;
   }),
 });
+
+const { value, valid, touched, error, fieldProps } = fieldData;
 
 const minMaxDateAttrs = computed(() => {
   const min = new Date(props.min as any);
@@ -101,7 +96,7 @@ const minMaxDateAttrs = computed(() => {
     :data-field="$options.name"
   >
     <div v-if="$slots.prefix" :class="theme.classes.prefix">
-      <slot name="prefix"></slot>
+      <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <!-- @vue-ignore -->
     <input
@@ -127,7 +122,7 @@ const minMaxDateAttrs = computed(() => {
       @click="onClear"
     ></button>
     <div v-if="$slots.suffix" :class="theme.classes.suffix">
-      <slot name="suffix"></slot>
+      <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>
 </template>
