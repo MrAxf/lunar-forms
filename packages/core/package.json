@@ -19,7 +19,8 @@
     "dev": "vite build --mode development && vue-tsc --emitDeclarationOnly",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
     "types": "vue-tsc",
-    "test": "vitest"
+    "test": "vitest",
+    "publish": "pnpm build && npm publish"
   },
   "peerDependencies": {
     "vue": "^3.3.4"
