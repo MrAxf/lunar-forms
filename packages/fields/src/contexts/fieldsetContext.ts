@@ -7,9 +7,10 @@ const contextKey = 'FIELDSET_CONTEXT';
 export function createFieldsetContext(
   value: Ref<FieldValue>,
   name: string,
-  id: string
+  id: string,
+  type: 'checkbox' | 'radio'
 ) {
-  provide(contextKey, { name, id, value });
+  provide(contextKey, { name, id, value, type });
 }
 
 export function useFieldsetContext() {
@@ -17,5 +18,6 @@ export function useFieldsetContext() {
     value: Ref<FieldValue>;
     name: string;
     id: string;
+    type: 'checkbox' | 'radio';
   }>(contextKey);
 }

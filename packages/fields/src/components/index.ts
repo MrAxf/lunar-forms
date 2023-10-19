@@ -1,10 +1,10 @@
 import CheckboxField from './CheckboxField.vue';
 import CheckboxesField from './CheckboxesField.vue';
-import CheckboxesFieldInput from './CheckboxesFieldInput.vue';
 import ColorField from './ColorField.vue';
 import DateField from './DateField.vue';
 import DatetimeLocalField from './DatetimeLocalField.vue';
 import EmailField from './EmailField.vue';
+import FieldsetInput from './FieldsetInput.vue';
 import FileField from './FileField.vue';
 import HiddenField from './HiddenField.vue';
 import NumberField from './NumberField.vue';
@@ -21,7 +21,7 @@ import UrlField from './UrlField.vue';
 
 export {
   CheckboxesField,
-  CheckboxesFieldInput,
+  FieldsetInput,
   CheckboxField,
   ColorField,
   DateField,

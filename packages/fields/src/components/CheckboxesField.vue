@@ -12,7 +12,7 @@ import { createFieldsetContext } from '@/contexts';
 import type { CheckboxesRadioLabelValue, FieldCommonProps } from '@/types';
 import { toCheckboxesRadioLabelValues } from '@/utils';
 
-import { CheckboxesFieldInput } from '.';
+import { FieldsetInput } from '.';
 
 defineOptions({
   name: 'CheckboxesField',
@@ -68,7 +68,7 @@ const checkboxesOptions = computed<T[]>(() =>
   toCheckboxesRadioLabelValues(props.options)
 );
 
-createFieldsetContext(value, name, id);
+createFieldsetContext(value, name, id, 'checkbox');
 </script>
 
 <template>
@@ -92,7 +92,7 @@ createFieldsetContext(value, name, id);
       <ul :class="theme.classes.options">
         <li v-for="(opt, idx) in checkboxesOptions" :key="opt.label">
           <slot name="option" :option="opt" :idx="idx">
-            <CheckboxesFieldInput
+            <FieldsetInput
               :option="opt"
               :idx="idx"
               @change="fieldProps.change"

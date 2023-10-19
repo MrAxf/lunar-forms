@@ -55,7 +55,7 @@ const { value, name, id } = fieldsetContext;
         </div>
         <input
           ref="inputRef"
-          type="checkbox"
+          :type="fieldsetContext.type"
           :name="`${name}[${props.idx}]`"
           :id="`${id}[${props.idx}]`"
           :class="theme.classes.input"
