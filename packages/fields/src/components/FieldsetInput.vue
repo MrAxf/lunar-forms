@@ -2,13 +2,13 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
-<script setup lang="ts" generic="T extends CheckboxesRadioLabelValue">
+<script setup lang="ts" generic="T extends FieldsetLabelValue">
 import type { FieldValue } from '@lunar-forms/core';
 import { ref } from 'vue';
 
 import { usePluginOptions } from '@/composables';
 import { useFieldsetContext } from '@/contexts';
-import type { CheckboxesRadioLabelValue } from '@/types';
+import type { FieldsetLabelValue } from '@/types';
 
 defineOptions({
   name: 'CheckboxesFieldInput',

@@ -2,18 +2,17 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
-<script setup lang="ts">
+<script setup lang="ts" generic="T extends FieldsetLabelValue">
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type {
-  CheckboxesRadioOptions,
-  FieldCommonProps,
-  FieldCommonSlots,
-} from '@/types';
-import { toCheckboxesRadioLabelValues } from '@/utils';
+import { createFieldsetContext } from '@/contexts';
+import type { FieldCommonProps, FieldsetLabelValue } from '@/types';
+import { toFieldsetLabelValues } from '@/utils';
+
+import { FieldsetInput } from '.';
 
 defineOptions({
   name: 'RadioField',
@@ -26,7 +25,7 @@ const props = withDefaults(
       required?: boolean;
       disabled?: boolean;
       readonly?: boolean;
-      options?: CheckboxesRadioOptions;
+      options?: string[] | T[];
     }
   >(),
   {
@@ -39,7 +38,7 @@ defineEmits<{
   (e: 'change', ev: Event): void;
 }>();
 
-defineSlots<FieldCommonSlots>();
+defineSlots<{ option(props: { option: T; idx: number }): any }>();
 
 const { theme, messages } = usePluginOptions();
 
@@ -59,11 +58,13 @@ const {
   oninput: undefined,
 });
 
-const { value, valid, touched, error, fieldProps } = fieldData;
+const { value, valid, touched, error, fieldProps, name } = fieldData;
 
-const checkboxesOptions = computed(() =>
-  toCheckboxesRadioLabelValues(props.options)
+const checkboxesOptions = computed<T[]>(() =>
+  toFieldsetLabelValues(props.options)
 );
+
+createFieldsetContext(value, name, id, 'radio');
 </script>
 
 <template>
@@ -85,37 +86,14 @@ const checkboxesOptions = computed(() =>
         props.help
       }}</span>
       <ul :class="theme.classes.options">
-        <li
-          v-for="(opt, idx) in checkboxesOptions"
-          :class="theme.classes.option"
-          :key="opt.label"
-        >
-          <div :class="theme.classes.wrapper">
-            <div :class="theme.classes.inner">
-              <div v-if="$slots.prefix" :class="theme.classes.prefix">
-                <slot name="prefix" v-bind="fieldData"></slot>
-              </div>
-              <input
-                type="radio"
-                :name="name"
-                :id="`${id}[${idx}]`"
-                :class="theme.classes.input"
-                :value="opt.value"
-                v-model="value"
-                @change="fieldProps.onchange"
-                v-bind="opt.attrs"
-              />
-              <div v-if="$slots.suffix" :class="theme.classes.suffix">
-                <slot name="suffix" v-bind="fieldData"></slot>
-              </div>
-            </div>
-            <label :class="theme.classes.label" :for="`${id}[${idx}]`">{{
-              opt.label
-            }}</label>
-          </div>
-          <span :class="theme.classes.help" v-if="opt.help">{{
-            opt.help
-          }}</span>
+        <li v-for="(opt, idx) in checkboxesOptions" :key="opt.label">
+          <slot name="option" :option="opt" :idx="idx">
+            <FieldsetInput
+              :option="opt"
+              :idx="idx"
+              @change="fieldProps.change"
+            />
+          </slot>
         </li>
       </ul>
     </fieldset>

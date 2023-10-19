@@ -2,15 +2,15 @@
 <!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable vue/no-setup-props-destructure -->
 <!-- eslint-disable vue/require-default-prop -->
-<script setup lang="ts" generic="T extends CheckboxesRadioLabelValue">
+<script setup lang="ts" generic="T extends FieldsetLabelValue">
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
 import { createFieldsetContext } from '@/contexts';
-import type { CheckboxesRadioLabelValue, FieldCommonProps } from '@/types';
-import { toCheckboxesRadioLabelValues } from '@/utils';
+import type { FieldCommonProps, FieldsetLabelValue } from '@/types';
+import { toFieldsetLabelValues } from '@/utils';
 
 import { FieldsetInput } from '.';
 
@@ -65,7 +65,7 @@ const {
 const { value, valid, touched, error, fieldProps, name } = fieldData;
 
 const checkboxesOptions = computed<T[]>(() =>
-  toCheckboxesRadioLabelValues(props.options)
+  toFieldsetLabelValues(props.options)
 );
 
 createFieldsetContext(value, name, id, 'checkbox');

@@ -3,7 +3,7 @@ import { KB, LunarForm } from '@lunar-forms/core';
 import {
   CheckboxField,
   CheckboxesField,
-  CheckboxesFieldInput,
+  FieldsetInput,
   ColorField,
   DateField,
   DatetimeLocalField,
@@ -175,11 +175,11 @@ import {
         ]"
       >
         <template #option="{ option, idx }">
-          <CheckboxesFieldInput :option="option" :idx="idx">
+          <FieldsetInput :option="option" :idx="idx">
             <template #prefix>
               {{ option.icon }}
             </template>
-          </CheckboxesFieldInput>
+          </FieldsetInput>
         </template>
       </CheckboxesField>
       <RadioField
