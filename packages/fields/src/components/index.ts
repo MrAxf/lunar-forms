@@ -1,5 +1,6 @@
-import CheckboxesField from './CheckboxesField.vue';
 import CheckboxField from './CheckboxField.vue';
+import CheckboxesField from './CheckboxesField.vue';
+import CheckboxesFieldInput from './CheckboxesFieldInput.vue';
 import ColorField from './ColorField.vue';
 import DateField from './DateField.vue';
 import DatetimeLocalField from './DatetimeLocalField.vue';
@@ -13,13 +14,14 @@ import RangeField from './RangeField.vue';
 import SearchField from './SearchField.vue';
 import SelectField from './SelectField.vue';
 import TelField from './TelField.vue';
-import TextareaField from './TextareaField.vue';
 import TextField from './TextField.vue';
+import TextareaField from './TextareaField.vue';
 import TimeField from './TimeField.vue';
 import UrlField from './UrlField.vue';
 
 export {
   CheckboxesField,
+  CheckboxesFieldInput,
   CheckboxField,
   ColorField,
   DateField,

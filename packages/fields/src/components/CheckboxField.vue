@@ -5,7 +5,7 @@
 <script setup lang="ts">
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
-import { computed, unref } from 'vue';
+import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
 import type { FieldCommonProps, FieldCommonSlots } from '@/types';
@@ -27,6 +27,8 @@ const props = withDefaults(
   >(),
   {
     validateOn: 'change',
+    trueValue: true,
+    falseValue: false,
   }
 );
 
@@ -60,6 +62,8 @@ const { id, fieldData } = useCommonField({
 });
 
 const { value, valid, touched, error, fieldProps } = fieldData;
+
+const inputRef = ref<HTMLInputElement | null>(null);
 </script>
 
 <template>
@@ -72,14 +76,15 @@ const { value, valid, touched, error, fieldProps } = fieldData;
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
     :data-field="$options.name"
+    :data-checked="inputRef?.checked ? true : null"
   >
-    <div :class="theme.classes.wrapper">
+    <label :class="theme.classes.wrapper">
       <div :class="theme.classes.inner">
         <div v-if="$slots.prefix" :class="theme.classes.prefix">
           <slot name="prefix" v-bind="fieldData"></slot>
         </div>
         <input
-          v-if="props.trueValue !== undefined"
+          ref="inputRef"
           type="checkbox"
           :name="name"
           :id="id"
@@ -92,26 +97,14 @@ const { value, valid, touched, error, fieldProps } = fieldData;
           v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
-        <input
-          v-else
-          type="checkbox"
-          :name="name"
-          :id="id"
-          :disabled="props.disabled"
-          :readonly="props.readonly"
-          :required="props.required"
-          :class="theme.classes.input"
-          v-model="value"
-          v-bind="{ ...$attrs, ...fieldProps }"
-        />
         <div v-if="$slots.suffix" :class="theme.classes.suffix">
           <slot name="suffix" v-bind="fieldData"></slot>
         </div>
       </div>
-      <label v-if="props.label" :class="theme.classes.label" :for="id">{{
+      <span v-if="props.label" :class="theme.classes.label">{{
         props.label
-      }}</label>
-    </div>
+      }}</span>
+    </label>
     <span v-if="props.help" :class="theme.classes.help">{{ props.help }}</span>
     <span v-if="error" :class="theme.classes.message">{{ error }}</span>
   </div>
