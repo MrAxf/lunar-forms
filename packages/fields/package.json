@@ -18,7 +18,8 @@
   "scripts": {
     "dev": "vite build --mode development && vue-tsc --emitDeclarationOnly",
     "build": "vite build && vue-tsc --emitDeclarationOnly",
-    "types": "vue-tsc"
+    "types": "vue-tsc",
+    "publish": "pnpm build && npm publish"
   },
   "peerDependencies": {
     "@lunar-forms/core": "0.2.0",
