@@ -8,3 +8,5 @@ export const plugin: Plugin = {
     app.provide(PLUGING_CONTEXT_KEY, options);
   },
 };
+
+export const config = (config: PluginOptions) => config;

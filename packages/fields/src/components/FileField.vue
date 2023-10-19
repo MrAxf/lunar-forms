@@ -30,7 +30,7 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputBtn: HTMLAttributes['class'];
+        classInputBtn?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         accept?: string | string[];

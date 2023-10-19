@@ -3,11 +3,11 @@ import { KB, LunarForm } from '@lunar-forms/core';
 import {
   CheckboxField,
   CheckboxesField,
-  FieldsetInput,
   ColorField,
   DateField,
   DatetimeLocalField,
   EmailField,
+  FieldsetInput,
   FileField,
   HiddenField,
   NumberField,
@@ -187,6 +187,7 @@ import {
         name="radio"
         label="Radio"
         help="Texto de prueba"
+        class-input="!radio-primary"
         :options="[
           {
             label: 'Opción Label 1',

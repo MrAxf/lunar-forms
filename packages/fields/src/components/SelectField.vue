@@ -28,7 +28,7 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputIcon: HTMLAttributes['class'];
+        classInputIcon?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         placeholder?: string;

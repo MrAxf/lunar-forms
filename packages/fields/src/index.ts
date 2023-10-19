@@ -1,3 +1,6 @@
 export * from './components';
 export * from './types';
-export { plugin as lunarFormsFieldPlugin } from './plugin';
+export {
+  plugin as lunarFormsFieldsPlugin,
+  config as lunarFormsFieldsConfig,
+} from './plugin';

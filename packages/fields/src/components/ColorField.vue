@@ -8,7 +8,11 @@ import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, FieldCommonSlots } from '@/types';
+import type {
+  FieldCommonClassesProps,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -19,11 +23,12 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        required?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+      }
   >(),
   {
     validateOn: 'change',
@@ -62,6 +67,12 @@ const { value, valid, touched, error, fieldProps } = fieldData;
     :label="props.label"
     :help="props.help"
     :error="error"
+    :class-help="props.classHelp"
+    :class-inner="props.classInner"
+    :class-label="props.classLabel"
+    :class-message="props.classMessage"
+    :class-outer="props.classOuter"
+    :class-wrapper="props.classWrapper"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -70,7 +81,10 @@ const { value, valid, touched, error, fieldProps } = fieldData;
     :data-touched="touched ? true : null"
     :data-field="$options.name"
   >
-    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <div
+      v-if="$slots.prefix"
+      :class="[theme.classes.prefix, props.classPrefix]"
+    >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <input
@@ -80,11 +94,14 @@ const { value, valid, touched, error, fieldProps } = fieldData;
       :disabled="props.disabled"
       :readonly="props.readonly"
       :required="props.required"
-      :class="theme.classes.input"
+      :class="[theme.classes.input, props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
-    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+    <div
+      v-if="$slots.suffix"
+      :class="[theme.classes.suffix, props.classSuffix]"
+    >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>

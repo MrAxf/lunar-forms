@@ -8,7 +8,11 @@ import { required as requiredValidator } from '@lunar-forms/core';
 import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, FieldCommonSlots } from '@/types';
+import type {
+  FieldCommonClassesProps,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 
 defineOptions({
   name: 'CheckboxField',
@@ -17,13 +21,14 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-      trueValue?: FieldValue;
-      falseValue?: FieldValue;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        required?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        trueValue?: FieldValue;
+        falseValue?: FieldValue;
+      }
   >(),
   {
     validateOn: 'change',
@@ -68,7 +73,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
 
 <template>
   <div
-    :class="theme.classes.outer"
+    :class="[theme.classes.outer, props.classOuter]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -78,9 +83,12 @@ const inputRef = ref<HTMLInputElement | null>(null);
     :data-field="$options.name"
     :data-checked="inputRef?.checked ? true : null"
   >
-    <label :class="theme.classes.wrapper">
-      <div :class="theme.classes.inner">
-        <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <label :class="[theme.classes.wrapper, props.classWrapper]">
+      <div :class="[theme.classes.inner, props.classInner]">
+        <div
+          v-if="$slots.prefix"
+          :class="[theme.classes.prefix, props.classPrefix]"
+        >
           <slot name="prefix" v-bind="fieldData"></slot>
         </div>
         <input
@@ -91,21 +99,30 @@ const inputRef = ref<HTMLInputElement | null>(null);
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :class="theme.classes.input"
+          :class="[theme.classes.input, props.classInput]"
           :true-value="props.trueValue"
           :false-value="props.falseValue"
           v-model="value"
           v-bind="{ ...$attrs, ...fieldProps }"
         />
-        <div v-if="$slots.suffix" :class="theme.classes.suffix">
+        <div
+          v-if="$slots.suffix"
+          :class="[theme.classes.suffix, props.classSuffix]"
+        >
           <slot name="suffix" v-bind="fieldData"></slot>
         </div>
       </div>
-      <span v-if="props.label" :class="theme.classes.label">{{
-        props.label
-      }}</span>
+      <span
+        v-if="props.label"
+        :class="[theme.classes.label, props.classLabel]"
+        >{{ props.label }}</span
+      >
     </label>
-    <span v-if="props.help" :class="theme.classes.help">{{ props.help }}</span>
-    <span v-if="error" :class="theme.classes.message">{{ error }}</span>
+    <span v-if="props.help" :class="[theme.classes.help, props.classHelp]">{{
+      props.help
+    }}</span>
+    <span v-if="error" :class="[theme.classes.message, props.classMessage]">{{
+      error
+    }}</span>
   </div>
 </template>

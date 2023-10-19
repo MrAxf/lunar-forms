@@ -10,10 +10,15 @@ import {
   minDate as minDateValidator,
   required as requiredValidator,
 } from '@lunar-forms/core';
+import type { HTMLAttributes } from 'vue';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
-import type { FieldCommonProps, FieldCommonSlots } from '@/types';
+import type {
+  FieldCommonClassesProps,
+  FieldCommonProps,
+  FieldCommonSlots,
+} from '@/types';
 
 import FieldWrapper from './FieldWrapper.vue';
 
@@ -24,15 +29,17 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps & {
-      required?: boolean;
-      disabled?: boolean;
-      readonly?: boolean;
-      clearButton?: boolean;
-      placeholder?: string;
-      min?: string | Date;
-      max?: string | Date;
-    }
+    FieldCommonProps &
+      FieldCommonClassesProps & {
+        classInputBtn?: HTMLAttributes['class'];
+        required?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        clearButton?: boolean;
+        placeholder?: string;
+        min?: string | Date;
+        max?: string | Date;
+      }
   >(),
   {
     validateOn: 'input',
@@ -86,6 +93,12 @@ const minMaxDateAttrs = computed(() => {
     :label="props.label"
     :help="props.help"
     :error="error"
+    :class-help="props.classHelp"
+    :class-inner="props.classInner"
+    :class-label="props.classLabel"
+    :class-message="props.classMessage"
+    :class-outer="props.classOuter"
+    :class-wrapper="props.classWrapper"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -95,7 +108,10 @@ const minMaxDateAttrs = computed(() => {
     :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
-    <div v-if="$slots.prefix" :class="theme.classes.prefix">
+    <div
+      v-if="$slots.prefix"
+      :class="[theme.classes.prefix, $props.classPrefix]"
+    >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
     <!-- @vue-ignore -->
@@ -109,7 +125,7 @@ const minMaxDateAttrs = computed(() => {
       :placeholder="props.placeholder"
       :min="minMaxDateAttrs.min"
       :max="minMaxDateAttrs.max"
-      :class="theme.classes.input"
+      :class="[theme.classes.input, $props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
@@ -117,11 +133,14 @@ const minMaxDateAttrs = computed(() => {
       v-if="props.clearButton"
       type="button"
       v-html="theme.icons.clear"
-      :class="theme.classes['input-btn']"
+      :class="[theme.classes['input-btn'], props.classInputBtn]"
       :title="messages.actions.clear"
       @click="onClear"
     ></button>
-    <div v-if="$slots.suffix" :class="theme.classes.suffix">
+    <div
+      v-if="$slots.suffix"
+      :class="[theme.classes.suffix, props.classSuffix]"
+    >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
   </FieldWrapper>
