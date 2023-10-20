@@ -56,7 +56,17 @@ defineEmits<{
 
 defineSlots<FieldCommonSlots>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    icons,
+    classes: {
+      global,
+      groups: { inputText: groupClasess },
+      fields: { date: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
@@ -88,17 +98,25 @@ const minMaxDateAttrs = computed(() => {
 
 <template>
   <FieldWrapper
-    :theme="theme"
+    :global="global"
     :id="id"
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="props.classHelp"
-    :class-inner="props.classInner"
-    :class-label="props.classLabel"
-    :class-message="props.classMessage"
-    :class-outer="props.classOuter"
-    :class-wrapper="props.classWrapper"
+    :class-help="[groupClasess.help, fieldClasses.help, props.classHelp]"
+    :class-inner="[groupClasess.inner, fieldClasses.inner, props.classInner]"
+    :class-label="[groupClasess.label, fieldClasses.label, props.classLabel]"
+    :class-message="[
+      groupClasess.message,
+      fieldClasses.message,
+      props.classMessage,
+    ]"
+    :class-outer="[groupClasess.outer, fieldClasses.outer, props.classOuter]"
+    :class-wrapper="[
+      groupClasess.wrapper,
+      fieldClasses.wrapper,
+      props.classWrapper,
+    ]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -110,7 +128,12 @@ const minMaxDateAttrs = computed(() => {
   >
     <div
       v-if="$slots.prefix"
-      :class="[theme.classes.prefix, props.classPrefix]"
+      :class="[
+        global.prefix,
+        groupClasess.prefix,
+        fieldClasses.prefix,
+        props.classPrefix,
+      ]"
     >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
@@ -125,21 +148,36 @@ const minMaxDateAttrs = computed(() => {
       :placeholder="props.placeholder"
       :min="minMaxDateAttrs.min"
       :max="minMaxDateAttrs.max"
-      :class="[theme.classes.input, props.classInput]"
+      :class="[
+        global.input,
+        groupClasess.input,
+        fieldClasses.input,
+        props.classInput,
+      ]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
     <button
       v-if="props.clearButton"
       type="button"
-      v-html="theme.icons.clear"
-      :class="[theme.classes['input-btn'], props.classInputBtn]"
+      v-html="icons.clear"
+      :class="[
+        global['input-btn'],
+        groupClasess['input-btn'],
+        fieldClasses['input-btn'],
+        props.classInputBtn,
+      ]"
       :title="messages.actions.clear"
       @click="onClear"
     ></button>
     <div
       v-if="$slots.suffix"
-      :class="[theme.classes.suffix, props.classSuffix]"
+      :class="[
+        global.suffix,
+        groupClasess.suffix,
+        fieldClasses.suffix,
+        props.classSuffix,
+      ]"
     >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>

@@ -45,7 +45,16 @@ defineEmits<{
 
 defineSlots<{ option(props: { option: T; idx: number }): any }>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    classes: {
+      global,
+      groups: { inputFieldset: groupClasses },
+      fields: { radio: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const {
   id,
@@ -74,7 +83,12 @@ createFieldsetContext(value, name, id, 'radio');
 
 <template>
   <div
-    :class="[theme.classes.outer, props.classOuter]"
+    :class="[
+      global.outer,
+      groupClasses.outer,
+      fieldClasses.outer,
+      props.classOuter,
+    ]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -83,17 +97,43 @@ createFieldsetContext(value, name, id, 'radio');
     :data-touched="touched ? true : null"
     :data-field="$options.name"
   >
-    <fieldset :class="[theme.classes.fieldset, props.classFieldset]">
+    <fieldset
+      :class="[
+        global.fieldset,
+        groupClasses.fieldset,
+        fieldClasses.fieldset,
+        props.classFieldset,
+      ]"
+    >
       <legend
-        :class="[theme.classes.legend, props.classLegend]"
+        :class="[
+          global.legend,
+          groupClasses.legend,
+          fieldClasses.legend,
+          props.classLegend,
+        ]"
         v-if="props.label"
       >
         {{ props.label }}
       </legend>
-      <span v-if="props.help" :class="[theme.classes.help, props.classHelp]">{{
-        props.help
-      }}</span>
-      <ul :class="[theme.classes.options, props.classOptions]">
+      <span
+        v-if="props.help"
+        :class="[
+          global.help,
+          groupClasses.help,
+          fieldClasses.help,
+          props.classHelp,
+        ]"
+        >{{ props.help }}</span
+      >
+      <ul
+        :class="[
+          global.options,
+          groupClasses.options,
+          fieldClasses.options,
+          props.classHelp,
+        ]"
+      >
         <li v-for="(opt, idx) in checkboxesOptions" :key="opt.label">
           <slot name="option" :option="opt" :idx="idx">
             <FieldsetInput
@@ -101,11 +141,11 @@ createFieldsetContext(value, name, id, 'radio');
               :idx="idx"
               :class-help="props.classHelp"
               :class-inner="props.classInner"
-              :class-input="props.classInput"
-              :class-label="props.classLabel"
-              :class-option="props.classOption"
-              :class-prefix="props.classPrefix"
-              :class-suffix="props.classSuffix"
+              :class-input="[groupClasses.input, props.classInput]"
+              :class-label="[groupClasses.label, props.classLabel]"
+              :class-option="[groupClasses.option, props.classOption]"
+              :class-prefix="[groupClasses.prefix, props.classPrefix]"
+              :class-suffix="[groupClasses.suffix, props.classSuffix]"
               :class-wrapper="props.classWrapper"
               @change="fieldProps.change"
             />
@@ -113,8 +153,15 @@ createFieldsetContext(value, name, id, 'radio');
         </li>
       </ul>
     </fieldset>
-    <span v-if="error" :class="[theme.classes.message, props.classMessage]">{{
-      error
-    }}</span>
+    <span
+      v-if="error"
+      :class="[
+        global.message,
+        groupClasses.message,
+        fieldClasses.message,
+        props.classMessage,
+      ]"
+      >{{ error }}</span
+    >
   </div>
 </template>

@@ -38,7 +38,14 @@ defineSlots<{
   suffix(props: T & { value: FieldValue }): any;
 }>();
 
-const { theme } = usePluginOptions();
+const {
+  theme: {
+    classes: {
+      global,
+      groups: { inputCheckable: groupClasses },
+    },
+  },
+} = usePluginOptions();
 
 const inputRef = ref<HTMLInputElement | null>(null);
 
@@ -51,17 +58,17 @@ const { value, name, id } = fieldsetContext;
 
 <template>
   <div
-    :class="[theme.classes.option, props.classOption]"
+    :class="[global.option, props.classOption]"
     :data-field="$options.name"
     :data-disabled="props.option.attrs?.disabled ? true : null"
     :data-readonly="props.option.attrs?.readonly ? true : null"
     :data-checked="inputRef?.checked ? true : null"
   >
-    <label :class="[theme.classes.wrapper, props.classWrapper]">
-      <div :class="[theme.classes.inner, props.classInner]">
+    <label :class="[global.wrapper, groupClasses.wrapper, props.classWrapper]">
+      <div :class="[global.inner, groupClasses.inner, props.classInner]">
         <div
           v-if="$slots.prefix"
-          :class="[theme.classes.prefix, props.classPrefix]"
+          :class="[global.prefix, groupClasses.prefix, props.classPrefix]"
         >
           <slot name="prefix" v-bind="{ ...props.option, value }"></slot>
         </div>
@@ -70,7 +77,7 @@ const { value, name, id } = fieldsetContext;
           :type="fieldsetContext.type"
           :name="`${name}[${props.idx}]`"
           :id="`${id}[${props.idx}]`"
-          :class="[theme.classes.input, props.classInput]"
+          :class="[global.input, groupClasses.input, props.classInput]"
           :value="props.option.value"
           v-model="value"
           @change="(ev) => emit('change', ev)"
@@ -78,17 +85,17 @@ const { value, name, id } = fieldsetContext;
         />
         <div
           v-if="$slots.suffix"
-          :class="[theme.classes.suffix, props.classSuffix]"
+          :class="[global.suffix, groupClasses.suffix, props.classSuffix]"
         >
           <slot name="suffix" v-bind="{ ...props.option, value }"></slot>
         </div>
       </div>
-      <span :class="[theme.classes.label, props.classLabel]">{{
+      <span :class="[global.label, groupClasses.label, props.classLabel]">{{
         props.option.label
       }}</span>
     </label>
     <span
-      :class="[theme.classes.help, props.classHelp]"
+      :class="[global.help, groupClasses.help, props.classHelp]"
       v-if="props.option.help"
       >{{ props.option.help }}</span
     >

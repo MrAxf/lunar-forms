@@ -50,7 +50,16 @@ defineEmits<{
 
 defineSlots<FieldCommonSlots>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    icons,
+    classes: {
+      global,
+      fields: { select: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const { id, fieldData } = useCommonField({
   validate: computed(() => {
@@ -68,17 +77,17 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
 
 <template>
   <FieldWrapper
-    :theme="theme"
+    :global="global"
     :id="id"
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="props.classHelp"
-    :class-inner="props.classInner"
-    :class-label="props.classLabel"
-    :class-message="props.classMessage"
-    :class-outer="props.classOuter"
-    :class-wrapper="props.classWrapper"
+    :class-help="[fieldClasses.help, props.classHelp]"
+    :class-inner="[fieldClasses.inner, props.classInner]"
+    :class-label="[fieldClasses.label, props.classLabel]"
+    :class-message="[fieldClasses.message, props.classMessage]"
+    :class-outer="[fieldClasses.outer, props.classOuter]"
+    :class-wrapper="[fieldClasses.wrapper, props.classWrapper]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-valid="valid ? true : null"
@@ -89,7 +98,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
   >
     <div
       v-if="$slots.prefix"
-      :class="[theme.classes.prefix, props.classPrefix]"
+      :class="[global.prefix, fieldClasses.prefix, props.classPrefix]"
     >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
@@ -99,7 +108,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
       :disabled="props.disabled"
       :required="props.required"
       :placeholder="props.placeholder"
-      :class="[theme.classes.input, props.classInput]"
+      :class="[global.input, fieldClasses.input, props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     >
@@ -113,12 +122,16 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
       </option>
     </select>
     <div
-      v-html="theme.icons.select"
-      :class="[theme.classes['input-icon'], props.classInputIcon]"
+      v-html="icons.select"
+      :class="[
+        global['input-icon'],
+        fieldClasses['input-icon'],
+        props.classInputIcon,
+      ]"
     ></div>
     <div
       v-if="$slots.suffix"
-      :class="[theme.classes.suffix, props.classSuffix]"
+      :class="[global.suffix, fieldClasses.suffix, props.classSuffix]"
     >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>

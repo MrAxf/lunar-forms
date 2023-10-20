@@ -53,7 +53,16 @@ const emit = defineEmits<{
 
 defineSlots<FieldCommonSlots>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    icons,
+    classes: {
+      global,
+      fields: { file: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
@@ -96,17 +105,17 @@ const acceptString = computed<Maybe<string>>(() => {
 
 <template>
   <FieldWrapper
-    :theme="theme"
+    :global="global"
     :id="id"
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="props.classHelp"
-    :class-inner="props.classInner"
-    :class-label="props.classLabel"
-    :class-message="props.classMessage"
-    :class-outer="props.classOuter"
-    :class-wrapper="props.classWrapper"
+    :class-help="[fieldClasses.help, props.classHelp]"
+    :class-inner="[fieldClasses.inner, props.classInner]"
+    :class-label="[fieldClasses.label, props.classLabel]"
+    :class-message="[fieldClasses.message, props.classMessage]"
+    :class-outer="[fieldClasses.outer, props.classOuter]"
+    :class-wrapper="[fieldClasses.wrapper, props.classWrapper]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-valid="valid ? true : null"
@@ -117,7 +126,7 @@ const acceptString = computed<Maybe<string>>(() => {
   >
     <div
       v-if="$slots.prefix"
-      :class="[theme.classes.prefix, props.classPrefix]"
+      :class="[global.prefix, fieldClasses.prefix, props.classPrefix]"
     >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
@@ -128,21 +137,25 @@ const acceptString = computed<Maybe<string>>(() => {
       :id="id"
       :disabled="props.disabled"
       :required="props.required"
-      :class="[theme.classes.input, props.classInput]"
+      :class="[global.input, fieldClasses.input, props.classInput]"
       :accept="acceptString"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
     <button
       v-if="props.clearButton"
       type="button"
-      v-html="theme.icons.clear"
-      :class="[theme.classes['input-btn'], props.classInputBtn]"
+      v-html="icons.clear"
+      :class="[
+        global['input-btn'],
+        fieldClasses['input-btn'],
+        props.classInputBtn,
+      ]"
       :title="messages.actions.clear"
       @click="onClear"
     ></button>
     <div
       v-if="$slots.suffix"
-      :class="[theme.classes.suffix, props.classSuffix]"
+      :class="[global.suffix, fieldClasses.suffix, props.classSuffix]"
     >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>

@@ -55,7 +55,16 @@ if (
 
 defineSlots<FieldCommonSlots>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    classes: {
+      global,
+      groups: { inputCheckable: groupClasess },
+      fields: { checkbox: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const { id, fieldData } = useCommonField({
   validate: computed(() => {
@@ -73,7 +82,12 @@ const inputRef = ref<HTMLInputElement | null>(null);
 
 <template>
   <div
-    :class="[theme.classes.outer, props.classOuter]"
+    :class="[
+      global.outer,
+      groupClasess.outer,
+      fieldClasses.outer,
+      props.classOuter,
+    ]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -83,11 +97,30 @@ const inputRef = ref<HTMLInputElement | null>(null);
     :data-field="$options.name"
     :data-checked="inputRef?.checked ? true : null"
   >
-    <label :class="[theme.classes.wrapper, props.classWrapper]">
-      <div :class="[theme.classes.inner, props.classInner]">
+    <label
+      :class="[
+        global.wrapper,
+        groupClasess.wrapper,
+        fieldClasses.wrapper,
+        props.classWrapper,
+      ]"
+    >
+      <div
+        :class="[
+          global.inner,
+          groupClasess.inner,
+          fieldClasses.inner,
+          props.classInner,
+        ]"
+      >
         <div
           v-if="$slots.prefix"
-          :class="[theme.classes.prefix, props.classPrefix]"
+          :class="[
+            global.prefix,
+            groupClasess.prefix,
+            fieldClasses.prefix,
+            props.classPrefix,
+          ]"
         >
           <slot name="prefix" v-bind="fieldData"></slot>
         </div>
@@ -99,7 +132,12 @@ const inputRef = ref<HTMLInputElement | null>(null);
           :disabled="props.disabled"
           :readonly="props.readonly"
           :required="props.required"
-          :class="[theme.classes.input, props.classInput]"
+          :class="[
+            global.input,
+            groupClasess.input,
+            fieldClasses.input,
+            props.classInput,
+          ]"
           :true-value="props.trueValue"
           :false-value="props.falseValue"
           v-model="value"
@@ -107,22 +145,46 @@ const inputRef = ref<HTMLInputElement | null>(null);
         />
         <div
           v-if="$slots.suffix"
-          :class="[theme.classes.suffix, props.classSuffix]"
+          :class="[
+            global.suffix,
+            groupClasess.suffix,
+            fieldClasses.suffix,
+            props.classSuffix,
+          ]"
         >
           <slot name="suffix" v-bind="fieldData"></slot>
         </div>
       </div>
       <span
         v-if="props.label"
-        :class="[theme.classes.label, props.classLabel]"
+        :class="[
+          global.label,
+          groupClasess.label,
+          fieldClasses.label,
+          props.classLabel,
+        ]"
         >{{ props.label }}</span
       >
     </label>
-    <span v-if="props.help" :class="[theme.classes.help, props.classHelp]">{{
-      props.help
-    }}</span>
-    <span v-if="error" :class="[theme.classes.message, props.classMessage]">{{
-      error
-    }}</span>
+    <span
+      v-if="props.help"
+      :class="[
+        global.help,
+        groupClasess.help,
+        fieldClasses.help,
+        props.classHelp,
+      ]"
+      >{{ props.help }}</span
+    >
+    <span
+      v-if="error"
+      :class="[
+        global.message,
+        groupClasess.message,
+        fieldClasses.message,
+        props.classMessage,
+      ]"
+      >{{ error }}</span
+    >
   </div>
 </template>

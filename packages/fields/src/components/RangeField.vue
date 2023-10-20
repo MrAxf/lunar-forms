@@ -52,7 +52,15 @@ defineEmits<{
 
 defineSlots<FieldCommonSlots>();
 
-const { theme, messages } = usePluginOptions();
+const {
+  theme: {
+    classes: {
+      global,
+      fields: { range: fieldClasses },
+    },
+  },
+  messages,
+} = usePluginOptions();
 
 const { id, fieldData } = useCommonField({
   validate: computed(() => {
@@ -78,17 +86,17 @@ const { value, valid, touched, error, fieldProps } = fieldData;
 
 <template>
   <FieldWrapper
-    :theme="theme"
+    :global="global"
     :id="id"
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="props.classHelp"
-    :class-inner="props.classInner"
-    :class-label="props.classLabel"
-    :class-message="props.classMessage"
-    :class-outer="props.classOuter"
-    :class-wrapper="props.classWrapper"
+    :class-help="[fieldClasses.help, props.classHelp]"
+    :class-inner="[fieldClasses.inner, props.classInner]"
+    :class-label="[fieldClasses.label, props.classLabel]"
+    :class-message="[fieldClasses.message, props.classMessage]"
+    :class-outer="[fieldClasses.outer, props.classOuter]"
+    :class-wrapper="[fieldClasses.wrapper, props.classWrapper]"
     :data-required="props.required ? true : null"
     :data-disabled="props.disabled ? true : null"
     :data-readonly="props.readonly ? true : null"
@@ -99,7 +107,7 @@ const { value, valid, touched, error, fieldProps } = fieldData;
   >
     <div
       v-if="$slots.prefix"
-      :class="[theme.classes.prefix, props.classPrefix]"
+      :class="[global.prefix, fieldClasses.prefix, props.classPrefix]"
     >
       <slot name="prefix" v-bind="fieldData"></slot>
     </div>
@@ -112,13 +120,13 @@ const { value, valid, touched, error, fieldProps } = fieldData;
       :required="props.required"
       :min="props.min"
       :max="props.max"
-      :class="[theme.classes.input, props.classInput]"
+      :class="[global.input, fieldClasses.input, props.classInput]"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
     <div
       v-if="$slots.suffix"
-      :class="[theme.classes.suffix, props.classSuffix]"
+      :class="[global.suffix, fieldClasses.suffix, props.classSuffix]"
     >
       <slot name="suffix" v-bind="fieldData"></slot>
     </div>
