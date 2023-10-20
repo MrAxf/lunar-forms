@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue';
 import { KB, LunarForm } from '@lunar-forms/core';
 import {
   CheckboxField,
@@ -39,6 +40,7 @@ import {
         placeholder="Texto ..."
         :max-length="10"
         :pattern="/^[A-Za-z]{3}$/"
+        required
       />
       <TextareaField
         v-auto-animate
@@ -106,7 +108,7 @@ import {
         :max="10"
       >
         <template #prefix="{ value }">
-          {{ value }}
+          <span class="px-2 text-center">{{ value || '0' }}</span>
         </template>
       </RangeField>
       <SelectField
@@ -134,7 +136,18 @@ import {
         label="Search"
         help="Texto de prueba"
         placeholder="Texto ..."
-      />
+      >
+        <template #prefix>
+          <Icon icon="material-symbols:search" height="1.5em" class="ml-2" />
+        </template>
+        <template #suffix>
+          <button type="button" class="btn btn-primary">
+            <span>
+              <Icon icon="material-symbols:search" />
+            </span>
+          </button>
+        </template>
+      </SearchField>
       <CheckboxField
         v-auto-animate
         name="checkbox"
@@ -147,6 +160,7 @@ import {
         label="Checkboxes"
         help="Texto de prueba"
         placeholder="Checkboxes ..."
+        required
         :options="[
           {
             label: 'Opción Label 1',

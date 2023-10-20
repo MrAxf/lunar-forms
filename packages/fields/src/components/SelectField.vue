@@ -93,6 +93,8 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
+    :data-prefix="$slots.prefix ? true : null"
+    :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
     data-input-icon="true"
   >

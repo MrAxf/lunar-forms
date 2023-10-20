@@ -96,6 +96,8 @@ const inputRef = ref<HTMLInputElement | null>(null);
     :data-touched="touched ? true : null"
     :data-field="$options.name"
     :data-checked="inputRef?.checked ? true : null"
+    :data-prefix="$slots.prefix ? true : null"
+    :data-suffix="$slots.suffix ? true : null"
   >
     <label
       :class="[

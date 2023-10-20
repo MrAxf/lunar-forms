@@ -131,6 +131,8 @@ function onShow() {
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
     :data-input-btn="props.showButton ? true : null"
+    :data-prefix="$slots.prefix ? true : null"
+    :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
   >
     <div

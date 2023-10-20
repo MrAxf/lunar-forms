@@ -63,6 +63,8 @@ const { value, name, id } = fieldsetContext;
     :data-disabled="props.option.attrs?.disabled ? true : null"
     :data-readonly="props.option.attrs?.readonly ? true : null"
     :data-checked="inputRef?.checked ? true : null"
+    :data-prefix="$slots.prefix ? true : null"
+    :data-suffix="$slots.suffix ? true : null"
   >
     <label :class="[global.wrapper, groupClasses.wrapper, props.classWrapper]">
       <div :class="[global.inner, groupClasses.inner, props.classInner]">

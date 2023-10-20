@@ -87,6 +87,8 @@ const { value, valid, touched, error, fieldProps } = fieldData;
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
+    :data-prefix="$slots.prefix ? true : null"
+    :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
   >
     <div

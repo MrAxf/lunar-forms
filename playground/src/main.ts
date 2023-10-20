@@ -1,5 +1,8 @@
 import { autoAnimatePlugin } from '@formkit/auto-animate/vue';
-import { lunarFormsFieldsConfig, lunarFormsFieldsPlugin } from '@lunar-forms/fields';
+import {
+  lunarFormsFieldsConfig,
+  lunarFormsFieldsPlugin,
+} from '@lunar-forms/fields';
 import { createApp } from 'vue';
 import { createRouter, createWebHashHistory } from 'vue-router';
 
@@ -29,53 +32,124 @@ createApp(App)
     lunarFormsFieldsConfig({
       theme: {
         classes: {
-          outer: tw`group/input m-3 flex flex-col gap-2 [--input-pr:1rem] [&[data-input-btn]]:[--input-pr:3rem] [&[data-input-icon]]:[--input-pr:3rem]`,
-          wrapper: [
-            tw`flex flex-col gap-2`,
-            tw`group-[[data-field=CheckboxField]]/input:flex-row group-[[data-field=CheckboxField]]/input:items-center`,
-            tw`group-[[data-field=CheckboxesField]]/input:flex-row group-[[data-field=CheckboxesField]]/input:items-center`,
-            tw`group-[[data-field=RadioField]]/input:flex-row group-[[data-field=RadioField]]/input:items-center`,
-          ].join(' '),
-          label: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-* group-[[data-required][data-field=CheckboxesField]]/input:after:content-none group-[[data-required][data-field=RadioField]]/input:after:content-none`,
-          inner: tw`join flex`,
-          prefix: tw`bg-primary flex items-center p-3 `,
-          suffix: tw`bg-primary flex items-center p-3`,
-          input: [
-            tw`[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input`,
-            tw`[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:bg-base-300`,
-            tw`[&:is(textarea)]:textarea [&:is(textarea)]:bg-base-300`,
-            tw`[&:is(select)]:select [&:is(select)]:bg-base-300 [&:is(select)]:bg-none`,
-            tw`[&:is(input)[type=checkbox]]:checkbox [&:is(input)[type=checkbox]]:my-3`,
-            tw`[&:is(input)[type=radio]]:radio [&:is(input)[type=radio]]:my-3`,
-            tw`[&:is(input)[type=range]]:range [&:is(input)[type=range]]:my-3`,
-            tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
-            tw`[&:is(input)[type=search]::-webkit-search-decoration]:appearance-none`,
-            tw`[&:is(input)[type=search]::-webkit-search-cancel-button]:appearance-none`,
-            tw`[&:is(input)[type=search]::-webkit-search-results-button]:appearance-none`,
-            tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
-            tw`[&:is(input)[type=color]]:h-12 [&:is(input)[type=color]]:cursor-pointer [&:is(input)[type=color]]:appearance-none [&:is(input)[type=color]]:overflow-hidden [&:is(input)[type=color]]:rounded-md [&:is(input)[type=color]]:!p-0`,
-            tw`[&:is(input)[type=color]]:focus:border-primary [&:is(input)[type=color]]:border-base-300 [&:is(input)[type=color]]:border-2`,
-            tw`[&:is(input)[type=color]::-moz-color-swatch]:[border:none] [&:is(input)[type=color]::-webkit-color-swatch]:border-none`,
-            tw`[&:is(input)[type=color]::-moz-color-swatch]:w-full [&:is(input)[type=color]::-webkit-color-swatch]:w-full`,
-            tw`[&:is(input)[type=color]::-moz-color-swatch]:h-full [&:is(input)[type=color]::-webkit-color-swatch]:h-full`,
-            tw`[&:is(input)[type=color]::-moz-color-swatch-wrapper]:p-0 [&:is(input)[type=color]::-webkit-color-swatch-wrapper]:p-0`,
-            tw`group-[[data-error]]/input:[&:is(input)[type=checkbox]]:checkbox-error`,
-            tw`group-[[data-error]]/input:[&:is(input)[type=radio]]:radio-error`,
-            tw`group-[[data-error]]/input:[&:is(input)[type=range]]:range-error`,
-            tw`group-[[data-error]]/input:[&:is(input)[type=file]]:file-input-error`,
-            tw`group-[[data-error]]/input:[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input-error`,
-            tw`group-[[data-error]]/input:[&:is(textarea)]:textarea-error`,
-            tw`group-[[data-error]]/input:[&:is(select)]:select-error`,
-            tw`join-item w-full appearance-none !pr-[--input-pr] ![isolation:unset]`,
-          ].join(' '),
-          'input-btn': tw`btn btn-sm btn-circle btn-ghost z-1 m-2 -ml-10 [&>svg]:w-[1.5em]`,
-          'input-icon': tw`min-h-8 z-1 pointer-events-none m-2 -ml-10 grid h-8 w-8 place-content-center [&>svg]:w-[1.5em]`,
-          help: tw`text-sm italic -mt-2`,
-          message: tw`text-error text-sm`,
-          fieldset: tw`bg-base-300 rounded-box group-[[data-error]]/input:border-error flex flex-col gap-2 p-4 group-[[data-error]]/input:border`,
-          legend: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-*`,
-          options: tw`flex flex-col gap-3`,
-          option: tw``,
+          global: {
+            outer: 'm-3 flex flex-col gap-2',
+            wrapper: 'flex flex-col gap-2',
+            inner: 'flex',
+            input: 'lunar-input-btn:pr-12 lunar-error:input-error',
+            'input-btn':
+              'btn btn-sm btn-circle btn-ghost z-1 m-2 -ml-10 [&>svg]:w-[1.5em]',
+            'input-icon':
+              'min-h-8 z-1 pointer-events-none m-2 -ml-10 grid h-8 w-8 place-content-center [&>svg]:w-[1.5em]',
+            label:
+              'lunar-required:after:text-error lunar-required:after:content-["*"]',
+            legend:
+              'lunar-required:after:text-error lunar-required:after:content-["*"]',
+            help: 'text-xs -mt-2',
+            message: 'text-error text-sm',
+          },
+          groups: {
+            inputCheckable: {},
+            inputFieldset: {
+              label: '!after:content-none',
+            },
+            inputText: {
+              input:
+                'input bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none',
+              prefix: 'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
+              suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
+            },
+          },
+          fields: {
+            checkbox: {
+              input: 'checkbox',
+            },
+            checkboxes: {
+              input: 'checkbox',
+            },
+            color: {},
+            date: {},
+            datetimeLocal: {},
+            email: {},
+            file: {
+              input:
+                'file-input bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none',
+              prefix: 'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
+              suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
+            },
+            number: {},
+            password: {},
+            radio: {
+              input: 'radio',
+            },
+            range: {
+              input: 'range w-full',
+            },
+            search: {},
+            select: {
+              input:
+                'select bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
+              prefix: 'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
+              suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
+            },
+            tel: {},
+            text: {},
+            textarea: {
+              input:
+                'textarea bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none',
+              prefix: 'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
+              suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
+            },
+            time: {},
+            url: {},
+          },
+          // outer: tw`group/input m-3 flex flex-col gap-2 [--input-pr:1rem] [&[data-input-btn]]:[--input-pr:3rem] [&[data-input-icon]]:[--input-pr:3rem]`,
+          // wrapper: [
+          //   tw`flex flex-col gap-2`,
+          //   tw`group-[[data-field=CheckboxField]]/input:flex-row group-[[data-field=CheckboxField]]/input:items-center`,
+          //   tw`group-[[data-field=CheckboxesField]]/input:flex-row group-[[data-field=CheckboxesField]]/input:items-center`,
+          //   tw`group-[[data-field=RadioField]]/input:flex-row group-[[data-field=RadioField]]/input:items-center`,
+          // ].join(' '),
+          // label: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-* group-[[data-required][data-field=CheckboxesField]]/input:after:content-none group-[[data-required][data-field=RadioField]]/input:after:content-none`,
+          // inner: tw`join flex`,
+          // prefix: tw`bg-primary flex items-center p-3 `,
+          // suffix: tw`bg-primary flex items-center p-3`,
+          // input: [
+          //   tw`[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input`,
+          //   tw`[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:bg-base-300`,
+          //   tw`[&:is(textarea)]:textarea [&:is(textarea)]:bg-base-300`,
+          //   tw`[&:is(select)]:select [&:is(select)]:bg-base-300 [&:is(select)]:bg-none`,
+          //   tw`[&:is(input)[type=checkbox]]:checkbox [&:is(input)[type=checkbox]]:my-3`,
+          //   tw`[&:is(input)[type=radio]]:radio [&:is(input)[type=radio]]:my-3`,
+          //   tw`[&:is(input)[type=range]]:range [&:is(input)[type=range]]:my-3`,
+          //   tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
+          //   tw`[&:is(input)[type=search]::-webkit-search-decoration]:appearance-none`,
+          //   tw`[&:is(input)[type=search]::-webkit-search-cancel-button]:appearance-none`,
+          //   tw`[&:is(input)[type=search]::-webkit-search-results-button]:appearance-none`,
+          //   tw`[&:is(input)[type=file]]:file-input [&:is(input)[type=file]]:bg-base-300`,
+          //   tw`[&:is(input)[type=color]]:h-12 [&:is(input)[type=color]]:cursor-pointer [&:is(input)[type=color]]:appearance-none [&:is(input)[type=color]]:overflow-hidden [&:is(input)[type=color]]:rounded-md [&:is(input)[type=color]]:!p-0`,
+          //   tw`[&:is(input)[type=color]]:focus:border-primary [&:is(input)[type=color]]:border-base-300 [&:is(input)[type=color]]:border-2`,
+          //   tw`[&:is(input)[type=color]::-moz-color-swatch]:[border:none] [&:is(input)[type=color]::-webkit-color-swatch]:border-none`,
+          //   tw`[&:is(input)[type=color]::-moz-color-swatch]:w-full [&:is(input)[type=color]::-webkit-color-swatch]:w-full`,
+          //   tw`[&:is(input)[type=color]::-moz-color-swatch]:h-full [&:is(input)[type=color]::-webkit-color-swatch]:h-full`,
+          //   tw`[&:is(input)[type=color]::-moz-color-swatch-wrapper]:p-0 [&:is(input)[type=color]::-webkit-color-swatch-wrapper]:p-0`,
+          //   tw`group-[[data-error]]/input:[&:is(input)[type=checkbox]]:checkbox-error`,
+          //   tw`group-[[data-error]]/input:[&:is(input)[type=radio]]:radio-error`,
+          //   tw`group-[[data-error]]/input:[&:is(input)[type=range]]:range-error`,
+          //   tw`group-[[data-error]]/input:[&:is(input)[type=file]]:file-input-error`,
+          //   tw`group-[[data-error]]/input:[&:is(input):not([type=checkbox]):not([type=radio]):not([type=file]):not([type=range]):not([type=color])]:input-error`,
+          //   tw`group-[[data-error]]/input:[&:is(textarea)]:textarea-error`,
+          //   tw`group-[[data-error]]/input:[&:is(select)]:select-error`,
+          //   tw`join-item w-full appearance-none !pr-[--input-pr] ![isolation:unset]`,
+          // ].join(' '),
+          // 'input-btn': tw`btn btn-sm btn-circle btn-ghost z-1 m-2 -ml-10 [&>svg]:w-[1.5em]`,
+          // 'input-icon': tw`min-h-8 z-1 pointer-events-none m-2 -ml-10 grid h-8 w-8 place-content-center [&>svg]:w-[1.5em]`,
+          // help: tw`text-sm italic -mt-2`,
+          // message: tw`text-error text-sm`,
+          // fieldset: tw`bg-base-300 rounded-box group-[[data-error]]/input:border-error flex flex-col gap-2 p-4 group-[[data-error]]/input:border`,
+          // legend: tw`group-[[data-required]]/input:after:text-error group-[[data-required]]/input:after:content-*`,
+          // options: tw`flex flex-col gap-3`,
+          // option: tw``,
         },
         icons: {
           clear: `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12 13.4l-4.9 4.9q-.275.275-.7.275t-.7-.275q-.275-.275-.275-.7t.275-.7l4.9-4.9l-4.9-4.9q-.275-.275-.275-.7t.275-.7q.275-.275.7-.275t.7.275l4.9 4.9l4.9-4.9q.275-.275.7-.275t.7.275q.275.275.275.7t-.275.7L13.4 12l4.9 4.9q.275.275.275.7t-.275.7q-.275.275-.7.275t-.7-.275L12 13.4Z"/></svg>`,
