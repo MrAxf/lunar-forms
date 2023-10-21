@@ -9,6 +9,7 @@ export default defineConfig(({ mode }) => ({
       entry: {
         tailwindcssPlugin: resolve(__dirname, 'src/tailwindcss/index.ts'),
         themesDaisyui: resolve(__dirname, 'src/themes/daisyui/index.ts'),
+        messages: resolve(__dirname, 'src/messages/index.ts'),
       },
     },
     sourcemap: mode === 'development',

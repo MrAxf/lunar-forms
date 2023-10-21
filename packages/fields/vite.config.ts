@@ -1,7 +1,7 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
 import { resolve } from 'node:path';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -13,10 +13,9 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     lib: {
-      entry: {
-        index: resolve(__dirname, 'src/index.ts'),
-      },
+      entry: resolve(__dirname, 'src/index.ts'),
       name: 'LunarFormsFields',
+      fileName: 'index',
     },
     sourcemap: mode === 'development',
     rollupOptions: {

@@ -36,6 +36,11 @@
       "import": "./dist/themesDaisyui.js",
       "require": "./dist/themesDaisyui.cjs",
       "types": "./dist/themes/daisyui/index.d.ts"
+    },
+    "./messages": {
+      "import": "./dist/messages.js",
+      "require": "./dist/messages.cjs",
+      "types": "./dist/messages/index.d.ts"
     }
   },
   "files": [
