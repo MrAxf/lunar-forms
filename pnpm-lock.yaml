@@ -153,6 +153,21 @@ importers:
         specifier: ^1.8.19
         version: 1.8.19(typescript@5.2.2)
 
+  packages/theming:
+    devDependencies:
+      '@lunar-forms/fields':
+        specifier: workspace:*
+        version: link:../fields
+      tailwindcss:
+        specifier: ^3.3.3
+        version: 3.3.3
+      typescript:
+        specifier: ^5.0.2
+        version: 5.2.2
+      vite:
+        specifier: ^4.5.0
+        version: 4.5.0(@types/node@20.8.7)
+
   playground:
     dependencies:
       '@formkit/auto-animate':
@@ -164,6 +179,9 @@ importers:
       '@lunar-forms/fields':
         specifier: workspace:*
         version: link:../packages/fields
+      '@lunar-forms/theming':
+        specifier: workspace:*
+        version: link:../packages/theming
       vue:
         specifier: ^3.3.4
         version: 3.3.4

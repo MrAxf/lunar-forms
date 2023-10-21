@@ -12,6 +12,7 @@
     "@formkit/auto-animate": "^0.8.0",
     "@lunar-forms/core": "workspace:*",
     "@lunar-forms/fields": "workspace:*",
+    "@lunar-forms/theming": "workspace:*",
     "vue": "^3.3.4",
     "vue-router": "4.2.5"
   },

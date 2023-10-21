@@ -1,0 +1,44 @@
+{
+  "name": "@lunar-forms/theming",
+  "version": "0.2.1",
+  "description": "",
+  "scripts": {
+    "dev": "vite build --mode development && tsc --emitDeclarationOnly",
+    "build": "vite build && tsc --emitDeclarationOnly",
+    "types": "tsc",
+    "publish": "pnpm build && npm publish"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@lunar-forms/fields": "workspace:*",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.5.0"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.3.3"
+  },
+  "peerDependenciesMeta": {
+    "tailwindcss": {
+      "optional": true
+    }
+  },
+  "type": "module",
+  "exports": {
+    "./tailwindcss": {
+      "import": "./dist/tailwindcssPlugin.js",
+      "require": "./dist/tailwindcssPlugin.cjs",
+      "types": "./dist/tailwindcss/index.d.ts"
+    },
+    "./themes/daisyui": {
+      "import": "./dist/themesDaisyui.js",
+      "require": "./dist/themesDaisyui.cjs",
+      "types": "./dist/themes/daisyui/index.d.ts"
+    }
+  },
+  "files": [
+    "dist/*"
+  ]
+}
