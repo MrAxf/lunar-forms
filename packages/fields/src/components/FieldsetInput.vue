@@ -4,30 +4,23 @@
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts" generic="T extends FieldsetLabelValue">
 import type { FieldValue } from '@lunar-forms/core';
-import type { HTMLAttributes } from 'vue';
 import { ref } from 'vue';
 
 import { usePluginOptions } from '@/composables';
 import { useFieldsetContext } from '@/contexts';
-import type { FieldsetLabelValue } from '@/types';
+import type { FieldsetInputClassesProps, FieldsetLabelValue } from '@/types';
 
 defineOptions({
   name: 'CheckboxesFieldInput',
   inheritAttrs: false,
 });
 
-const props = defineProps<{
-  option: T;
-  idx: number;
-  classOption?: HTMLAttributes['class'];
-  classWrapper?: HTMLAttributes['class'];
-  classInner?: HTMLAttributes['class'];
-  classPrefix?: HTMLAttributes['class'];
-  classSuffix?: HTMLAttributes['class'];
-  classInput?: HTMLAttributes['class'];
-  classLabel?: HTMLAttributes['class'];
-  classHelp?: HTMLAttributes['class'];
-}>();
+const props = defineProps<
+  FieldsetInputClassesProps & {
+    option: T;
+    idx: number;
+  }
+>();
 
 const emit = defineEmits<{
   (e: 'change', ev: Event): void;

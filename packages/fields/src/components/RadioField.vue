@@ -12,6 +12,7 @@ import { createFieldsetContext } from '@/contexts';
 import type {
   FieldCommonProps,
   FieldsetClassesProps,
+  FieldsetInputClassesProps,
   FieldsetLabelValue,
 } from '@/types';
 import { toFieldsetLabelValues } from '@/utils';
@@ -43,7 +44,13 @@ defineEmits<{
   (e: 'change', ev: Event): void;
 }>();
 
-defineSlots<{ option(props: { option: T; idx: number }): any }>();
+defineSlots<{
+  option(props: {
+    option: T;
+    idx: number;
+    classes: FieldsetInputClassesProps;
+  }): any;
+}>();
 
 const {
   theme: {
@@ -77,6 +84,17 @@ const { value, valid, touched, error, fieldProps, name } = fieldData;
 const checkboxesOptions = computed<T[]>(() =>
   toFieldsetLabelValues(props.options)
 );
+
+const fieldsetInputClasses = computed(() => ({
+  classHelp: props.classHelp,
+  classInner: props.classInner,
+  classInput: [groupClasses.input, fieldClasses.input, props.classInput],
+  classLabel: [groupClasses.label, fieldClasses.label, props.classLabel],
+  classOption: [groupClasses.option, fieldClasses.option, props.classOption],
+  classPrefix: [groupClasses.prefix, fieldClasses.prefix, props.classPrefix],
+  classSuffix: [groupClasses.suffix, fieldClasses.suffix, props.classSuffix],
+  classWrapper: props.classWrapper,
+}));
 
 createFieldsetContext(value, name, id, 'radio');
 </script>
@@ -135,19 +153,17 @@ createFieldsetContext(value, name, id, 'radio');
         ]"
       >
         <li v-for="(opt, idx) in checkboxesOptions" :key="opt.label">
-          <slot name="option" :option="opt" :idx="idx">
+          <slot
+            name="option"
+            :option="opt"
+            :idx="idx"
+            :classes="fieldsetInputClasses"
+          >
             <FieldsetInput
               :option="opt"
               :idx="idx"
-              :class-help="props.classHelp"
-              :class-inner="props.classInner"
-              :class-input="[groupClasses.input, props.classInput]"
-              :class-label="[groupClasses.label, props.classLabel]"
-              :class-option="[groupClasses.option, props.classOption]"
-              :class-prefix="[groupClasses.prefix, props.classPrefix]"
-              :class-suffix="[groupClasses.suffix, props.classSuffix]"
-              :class-wrapper="props.classWrapper"
               @change="fieldProps.change"
+              v-bind="fieldsetInputClasses"
             />
           </slot>
         </li>

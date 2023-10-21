@@ -40,8 +40,18 @@ import {
         placeholder="Texto ..."
         :max-length="10"
         :pattern="/^[A-Za-z]{3}$/"
-        required
-      />
+      >
+        <template #prefix>
+          <Icon icon="material-symbols:search" height="1.5em" class="ml-2" />
+        </template>
+        <template #suffix>
+          <button type="button" class="btn btn-primary">
+            <span>
+              <Icon icon="material-symbols:search" />
+            </span>
+          </button>
+        </template>
+      </TextField>
       <TextareaField
         v-auto-animate
         name="textarea"
@@ -108,7 +118,7 @@ import {
         :max="10"
       >
         <template #prefix="{ value }">
-          <span class="px-2 text-center">{{ value || '0' }}</span>
+          <span class="px-2 text-center">{{ value }}</span>
         </template>
       </RangeField>
       <SelectField
@@ -153,6 +163,7 @@ import {
         name="checkbox"
         label="Checkbox"
         help="Texto de prueba"
+        class-outer="justify-center"
       />
       <CheckboxesField
         v-auto-animate
@@ -188,8 +199,8 @@ import {
           },
         ]"
       >
-        <template #option="{ option, idx }">
-          <FieldsetInput :option="option" :idx="idx">
+        <template #option="{ option, idx, classes }">
+          <FieldsetInput :option="option" :idx="idx" v-bind="classes">
             <template #prefix>
               {{ option.icon }}
             </template>
@@ -202,6 +213,7 @@ import {
         label="Radio"
         help="Texto de prueba"
         class-input="!radio-primary"
+        required
         :options="[
           {
             label: 'Opción Label 1',
@@ -274,7 +286,7 @@ import {
       </div>
     </section>
     <section
-      class="bg-base-300 rounded-box sticky top-[5vh] h-[90vh] w-[40%] flex-grow-0 p-5"
+      class="bg-base-300 rounded-box sticky top-[5vh] h-[90vh] w-[40%] flex-grow-0 p-5 overflow-x-hidden"
     >
       <pre>{{ { values, errors } }}</pre>
     </section>

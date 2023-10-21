@@ -33,6 +33,17 @@ export interface FieldCommonClassesProps {
   classSuffix?: HTMLAttributes['class'];
 }
 
+export interface FieldsetInputClassesProps {
+  classOption?: HTMLAttributes['class'];
+  classWrapper?: HTMLAttributes['class'];
+  classInner?: HTMLAttributes['class'];
+  classPrefix?: HTMLAttributes['class'];
+  classSuffix?: HTMLAttributes['class'];
+  classInput?: HTMLAttributes['class'];
+  classLabel?: HTMLAttributes['class'];
+  classHelp?: HTMLAttributes['class'];
+}
+
 export interface FieldsetClassesProps {
   classOuter?: HTMLAttributes['class'];
   classFieldset?: HTMLAttributes['class'];
