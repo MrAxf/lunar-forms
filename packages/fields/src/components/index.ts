@@ -5,6 +5,7 @@ import DateField from './DateField.vue';
 import DatetimeLocalField from './DatetimeLocalField.vue';
 import EmailField from './EmailField.vue';
 import FieldsetInput from './FieldsetInput.vue';
+import FieldWrapper from './FieldWrapper.vue';
 import FileField from './FileField.vue';
 import HiddenField from './HiddenField.vue';
 import NumberField from './NumberField.vue';
@@ -40,4 +41,5 @@ export {
   TextField,
   TimeField,
   UrlField,
+  FieldWrapper,
 };

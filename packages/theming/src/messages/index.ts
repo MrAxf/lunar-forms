@@ -1,3 +1,3 @@
-import esES from './esES';
+import esES from './es-es';
 
 export { esES };

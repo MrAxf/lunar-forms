@@ -1,12 +1,12 @@
-import type { PluginOptions } from '@lunar-forms/fields';
+import type { DeepPartial, PluginOptions } from '@lunar-forms/fields';
 
-const theme: PluginOptions['theme'] = {
+const theme: DeepPartial<PluginOptions['theme']> = {
   classes: {
     global: {
       outer: 'm-3 flex flex-col gap-2',
       wrapper: 'flex flex-col gap-2',
       inner: 'flex',
-      input: 'lunar-input-btn:pr-12',
+      input: 'lunar-input-btn:pr-12 lunar-input-icon:pr-12',
       'input-btn':
         'btn btn-sm btn-circle btn-ghost z-1 m-2 -ml-10 [&>svg]:w-[1.5em]',
       'input-icon':
@@ -49,9 +49,6 @@ const theme: PluginOptions['theme'] = {
         suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
         inner: 'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
       },
-      date: {},
-      datetimeLocal: {},
-      email: {},
       file: {
         input:
           'file-input bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none',
@@ -59,15 +56,12 @@ const theme: PluginOptions['theme'] = {
         suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
         inner: 'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
       },
-      number: {},
-      password: {},
       radio: {
         input: 'radio',
       },
       range: {
         input: 'range w-full lunar-error:range-error',
       },
-      search: {},
       select: {
         input:
           'select bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
@@ -75,8 +69,6 @@ const theme: PluginOptions['theme'] = {
         suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
         inner: 'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
       },
-      tel: {},
-      text: {},
       textarea: {
         input:
           'textarea bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none',
@@ -84,8 +76,6 @@ const theme: PluginOptions['theme'] = {
         suffix: 'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
         inner: 'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
       },
-      time: {},
-      url: {},
     },
   },
   icons: {

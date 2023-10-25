@@ -43,18 +43,18 @@ export function useField(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const vm: any = getCurrentInstance();
   const formContext: FormContext | undefined =
-    vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY);
+    vm?.provides[FORM_CONTEXT_KEY] || inject(FORM_CONTEXT_KEY, undefined);
 
-  let valueData: FieldValue = undefined;
+  const valueData = ref<FieldValue>();
   const dirty = ref(false);
   const touched = ref(false);
 
   const valueProxy = {
     get() {
-      return valueData;
+      return valueData.value;
     },
     set(newValue: FieldValue) {
-      valueData = newValue;
+      valueData.value = newValue;
     },
   };
 

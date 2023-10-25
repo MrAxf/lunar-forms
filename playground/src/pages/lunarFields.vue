@@ -23,6 +23,7 @@ import {
   TimeField,
   UrlField,
 } from '@lunar-forms/fields';
+import { SelectMenuField } from '@lunar-forms/popover-fields';
 </script>
 
 <template>
@@ -125,6 +126,14 @@ import {
         v-auto-animate
         name="select"
         label="Select"
+        help="Texto de prueba"
+        placeholder="Select ..."
+        :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+      />
+      <SelectMenuField
+        v-auto-animate
+        name="electMenu"
+        label="Select Menu"
         help="Texto de prueba"
         placeholder="Select ..."
         :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
