@@ -46,6 +46,8 @@ const props = withDefaults(
         classInputIcon?: HTMLAttributes['class'];
         classOptions?: HTMLAttributes['class'];
         classOption?: HTMLAttributes['class'];
+        classDropdownWrapper?: HTMLAttributes['class'];
+        classOptionSelectedicon?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         multiple?: boolean;
@@ -135,7 +137,9 @@ const inputText = computedAsync(async () => {
     value.value.length > 0
   ) {
     return (
-      await Promise.all(value.value.map((item: FieldValue) => getLabel(item)))
+      await Promise.all(
+        value.value.slice(0, 3).map((item: FieldValue) => getLabel(item))
+      )
     ).join(', ');
   }
   return props.placeholder;
@@ -263,17 +267,22 @@ onMounted(() => {
             props.classInput,
           ]"
         >
-          {{ inputText }}
+          <span>{{ inputText }}</span>
+          <span
+            v-if="props.multiple && Array.isArray(value) && value.length > 1"
+            >{{ value.length }}</span
+          >
+          <div
+            v-html="icons.select"
+            :class="[
+              global['input-icon'],
+              groupClasess['input-icon'],
+              fieldClasses['input-icon'],
+              props.classInputIcon,
+            ]"
+          ></div>
         </ListboxButton>
-        <div
-          v-html="icons.select"
-          :class="[
-            global['input-icon'],
-            groupClasess['input-icon'],
-            fieldClasses['input-icon'],
-            props.classInputIcon,
-          ]"
-        ></div>
+
         <div
           v-if="$slots.suffix"
           :class="[
@@ -290,13 +299,21 @@ onMounted(() => {
           ref="floating"
           :style="floatingStyles"
           :class="[
-            global.options,
-            groupClasess.options,
-            fieldClasses.options,
-            props.classOptions,
+            global['dropdown-wrapper'],
+            groupClasess['dropdown-wrapper'],
+            fieldClasses['dropdown-wrapper'],
+            props.classDropdownWrapper,
           ]"
         >
-          <ListboxOptions>
+          <ListboxOptions
+            as="ul"
+            :class="[
+              global.options,
+              groupClasess.options,
+              fieldClasses.options,
+              props.classOptions,
+            ]"
+          >
             <ListboxOption
               v-for="option in selectOptions"
               v-slot="{ active, selected }"
@@ -321,8 +338,10 @@ onMounted(() => {
               >
                 <div
                   :class="[
+                    global['option-selected-icon'],
                     groupClasess['option-selected-icon'],
                     fieldClasses['option-selected-icon'],
+                    props.classOptionSelectedicon,
                   ]"
                 >
                   <div v-if="selected" v-html="icons.optionSelected"></div>

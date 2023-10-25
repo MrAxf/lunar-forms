@@ -6,6 +6,10 @@ import { LunarDropdownFieldsOptions } from '@/types';
 export const plugin =
   (pluginOptions: DeepPartial<LunarDropdownFieldsOptions>) =>
   (options: PluginOptions) => {
+    (options as any).theme.classes.global = {
+      ...options.theme.classes.global,
+      ...pluginOptions.theme?.classes?.global,
+    };
     (options as any).theme.classes.fields.selectMenu = {
       ...pluginOptions.theme?.classes?.fields?.selectMenu,
     };
