@@ -132,11 +132,21 @@ import { SelectMenuField } from '@lunar-forms/popover-fields';
       />
       <SelectMenuField
         v-auto-animate
-        name="electMenu"
+        name="selectMenu"
         label="Select Menu"
         help="Texto de prueba"
         placeholder="Select ..."
-        :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+        multiple
+        :options="[
+          { label: 'Opción 1', value: 1 },
+          { label: 'Opción 2', value: 2 },
+          { label: 'Opción 3', value: 3 },
+          { label: 'Opción 4', value: 4 },
+          { label: 'Opción 5', value: 5 },
+          { label: 'Opción 6', value: 6 },
+          { label: 'Opción 7', value: 7 },
+          { label: 'Opción 8', value: 8 },
+        ]"
       />
       <FileField
         v-auto-animate

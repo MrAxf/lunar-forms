@@ -38,12 +38,14 @@ const props = withDefaults(
         classOption?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
+        multiple?: boolean;
         placeholder?: string;
         options?: string[] | T[];
       }
   >(),
   {
     validateOn: 'change',
+    multiple: false,
   }
 );
 
@@ -52,7 +54,6 @@ defineEmits<{
   (e: 'blur', ev: FocusEvent): void;
   (e: 'change', ev: Event): void;
   (e: 'focus', ev: FocusEvent): void;
-  (e: 'input', ev: InputEvent): void;
 }>();
 
 defineSlots<FieldCommonSlots>();
@@ -78,18 +79,45 @@ const { fieldData } = useCommonField({
   }),
 });
 
-const { value, error, valid, touched } = fieldData;
+const { value, error, valid, touched, fieldProps } = fieldData;
 
 const selectOptions = computed(() => toSelectLabelValues(props.options));
 
 const reference = ref<MaybeElement>(null);
 const floating = ref<any>(null);
 
+const labelCache = new Map<FieldValue, string>();
+
 const { floatingStyles } = useFloating(reference, floating, {
   placement: 'bottom',
   middleware: [flip(), offset(10)],
   whileElementsMounted: autoUpdate,
 });
+
+const inputText = computed(() => {
+  if (!props.multiple && value.value) {
+    return getLabel(value.value);
+  } else if (
+    props.multiple &&
+    Array.isArray(value.value) &&
+    value.value.length > 0
+  ) {
+    return value.value.map((item: FieldValue) => getLabel(item)).join(', ');
+  }
+  return props.placeholder;
+});
+
+function getLabel(value: FieldValue) {
+  if (labelCache.has(value)) {
+    return labelCache.get(value);
+  }
+  const labelValue = selectOptions.value.find((item) => item.value === value);
+  if (labelValue) {
+    labelCache.set(labelValue.value, labelValue.label);
+    return labelValue.label;
+  }
+  return null;
+}
 </script>
 
 <template>
@@ -112,7 +140,7 @@ const { floatingStyles } = useFloating(reference, floating, {
   >
     <Listbox
       v-model="value"
-      v-slot="{ open, value: slotVal }"
+      v-slot="{ open }"
       as="div"
       :class="[
         global.wrapper,
@@ -120,6 +148,8 @@ const { floatingStyles } = useFloating(reference, floating, {
         fieldClasses.wrapper,
         props.classWrapper,
       ]"
+      :multiple="props.multiple"
+      :disabled="props.disabled"
     >
       <ListboxLabel
         v-if="props.label"
@@ -152,14 +182,17 @@ const { floatingStyles } = useFloating(reference, floating, {
         </div>
         <ListboxButton
           ref="reference"
+          @blur="fieldProps.blur"
+          @focus="fieldProps.focus"
           :class="[
             global.input,
             groupClasess.input,
             fieldClasses.input,
             props.classInput,
           ]"
-          >{{ slotVal ?? props.placeholder }}</ListboxButton
         >
+          {{ inputText }}
+        </ListboxButton>
         <div
           v-html="icons.select"
           :class="[
@@ -198,8 +231,10 @@ const { floatingStyles } = useFloating(reference, floating, {
               :key="option.label"
               :value="option.value"
               as="template"
+              :disabled="option.attrs?.disabled ? true : false"
             >
               <li
+                @click="fieldProps.change"
                 :class="[
                   global.option,
                   groupClasess.option,
@@ -211,7 +246,15 @@ const { floatingStyles } = useFloating(reference, floating, {
                   },
                 ]"
               >
-                {{ option.label }}
+                <div
+                  :class="[
+                    groupClasess['option-selected-icon'],
+                    fieldClasses['option-selected-icon'],
+                  ]"
+                >
+                  <div v-if="selected" v-html="icons.optionSelected"></div>
+                </div>
+                <span>{{ option.label }}</span>
               </li>
             </ListboxOption>
           </ListboxOptions>

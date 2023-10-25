@@ -3,6 +3,7 @@ import type { CommonClasses } from '@lunar-forms/fields';
 export interface SelectClasses {
   options?: string;
   option?: string;
+  'option-selected-icon'?: string;
 }
 
 export interface LunarPopoverFieldsOptions {
@@ -20,6 +21,9 @@ export interface LunarPopoverFieldsOptions {
             'input-icon'?: string;
           };
       };
+    };
+    icons: {
+      optionSelected: string;
     };
   };
 }

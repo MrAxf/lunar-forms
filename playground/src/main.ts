@@ -41,7 +41,7 @@ createApp(App)
               groups: {
                 inputSelect: {
                   input:
-                    'text-left px-4 rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
+                    'text-left px-4 overflow-hidden truncate rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
                   prefix:
                     'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
                   suffix:
@@ -49,11 +49,17 @@ createApp(App)
                   inner:
                     'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
                   options:
-                    'menu dropdown-content z-[1] bg-base-300 w-full rounded-[--rounded-btn] border border-color-[hsl(var(--bc)/0.2)]] max-h-[15rem] overflow-y-auto',
+                    'dropdown-content p-2 z-[1] bg-base-300 w-full rounded-[--rounded-btn] border border-color-[hsl(var(--bc)/0.2)]] max-h-[15rem] overflow-y-auto flex flex-col',
                   option:
-                    'px-4 py-2 rounded-[--rounded-btn] cursor-pointer transition-colors [&.active]:bg-base-100 [&.selected]:bg-base-100',
+                    'flex items-center px-4 text-md py-2 rounded-[--rounded-btn] cursor-pointer transition-colors [&.active]:bg-base-100 [&.selected]:bg-base-100',
+                  'option-selected-icon':
+                    'w-6 h-6 [&>svg]:w-full [&>svg]:h-full',
                 },
               },
+            },
+            icons: {
+              optionSelected:
+                '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m9.55 18l-5.7-5.7l1.425-1.425L9.55 15.15l9.175-9.175L20.15 7.4L9.55 18Z"/></svg>',
             },
           },
         }),
