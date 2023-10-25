@@ -7,9 +7,12 @@ export interface SelectLabelValue {
   attrs?: OptionHTMLAttributes;
 }
 
-export type SelectOptions = string[] | SelectLabelValue[];
-
 export type SelectLabelValueAsync<T extends SelectLabelValue> = (options?: {
   page: number;
   hasMore: () => void;
 }) => Promise<T[]>;
+
+export type SelectOptions =
+  | string[]
+  | SelectLabelValue[]
+  | SelectLabelValueAsync<SelectLabelValue>;

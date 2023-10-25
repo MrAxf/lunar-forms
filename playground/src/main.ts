@@ -3,7 +3,7 @@ import {
   defineLunarFormsFieldsConfig,
   lunarFormsFieldsPlugin,
 } from '@lunar-forms/fields';
-import { popoverFieldsPlugin } from '@lunar-forms/popover-fields';
+import { dropdownFieldsPlugin } from '@lunar-forms/dropdown-fields';
 import { esES as messages } from '@lunar-forms/theming/messages';
 import theme from '@lunar-forms/theming/themes/daisyui';
 import { createApp } from 'vue';
@@ -25,6 +25,10 @@ createApp(App)
           path: '/fields',
           component: () => import('./pages/lunarFields.vue'),
         },
+        {
+          path: '/dropdown-fields',
+          component: () => import('./pages/lunarDropdownFields.vue'),
+        },
       ],
     })
   )
@@ -35,13 +39,13 @@ createApp(App)
       theme,
       messages,
       plugins: [
-        popoverFieldsPlugin({
+        dropdownFieldsPlugin({
           theme: {
             classes: {
               groups: {
                 inputSelect: {
                   input:
-                    'text-left px-4 overflow-hidden truncate rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
+                    'text-left lunar-input-icon:pr-12 px-4 overflow-hidden truncate rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
                   prefix:
                     'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
                   suffix:

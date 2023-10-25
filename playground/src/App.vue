@@ -27,6 +27,11 @@ import lunarFormLogo from './assets/logo.svg';
               >Fields</router-link
             >
           </li>
+          <li>
+            <router-link to="/dropdown-fields" active-class="bg-base-100"
+              >Dropdown Fields</router-link
+            >
+          </li>
         </ul>
       </nav>
     </div>

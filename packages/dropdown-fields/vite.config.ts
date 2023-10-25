@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
-      name: 'LunarFormsPopoverFields',
+      name: 'LunarFormsDropdownFields',
       fileName: 'index',
     },
     sourcemap: mode === 'development',

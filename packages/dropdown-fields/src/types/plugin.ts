@@ -6,7 +6,7 @@ export interface SelectClasses {
   'option-selected-icon'?: string;
 }
 
-export interface LunarPopoverFieldsOptions {
+export interface LunarDropdownFieldsOptions {
   theme: {
     classes: {
       fields: {

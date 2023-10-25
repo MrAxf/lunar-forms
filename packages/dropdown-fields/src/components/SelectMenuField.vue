@@ -25,10 +25,10 @@ import {
   useIntersectionObserver,
 } from '@vueuse/core';
 import type { HTMLAttributes } from 'vue';
-import { computed, onMounted, ref, unref, watch } from 'vue';
+import { computed, onMounted, ref, unref } from 'vue';
 
 import type {
-  LunarPopoverFieldsOptions,
+  LunarDropdownFieldsOptions,
   SelectLabelValue,
   SelectLabelValueAsync,
 } from '@/types';
@@ -82,7 +82,7 @@ const {
       groups: { inputSelect: groupClasess },
     },
   },
-} = usePluginOptions<LunarPopoverFieldsOptions & PluginOptions>();
+} = usePluginOptions<LunarDropdownFieldsOptions & PluginOptions>();
 
 const { fieldData } = useCommonField({
   validate: computed(() => {
@@ -118,7 +118,7 @@ useIntersectionObserver(
   ([{ isIntersecting }]) => {
     if (isIntersecting) {
       isMore.value = false;
-      getAsyncData();
+      getData();
     }
   },
   {
@@ -166,12 +166,16 @@ function hasMore() {
   currentpage.value++;
 }
 
-async function getAsyncData() {
+async function getData() {
   isLoading.value = true;
   try {
-    const data = await (props.options as SelectLabelValueAsync<T>)({
+    const data = await toSelectLabelValues<T>(props.options)({
       page: currentpage.value,
       hasMore,
+    });
+
+    data.forEach((item) => {
+      labelCache.set(item.value, item.label);
     });
 
     // @ts-ignore
@@ -184,18 +188,8 @@ async function getAsyncData() {
 }
 
 onMounted(() => {
-  if (typeof props.options === 'function') {
-    getAsyncData();
-  }
+  getData();
 });
-
-watch(
-  () => props.options,
-  (newVal: string[] | T[] | SelectLabelValueAsync<T> | undefined) => {
-    if (Array.isArray(newVal))
-      selectOptions.value = toSelectLabelValues(newVal);
-  }
-);
 </script>
 
 <template>

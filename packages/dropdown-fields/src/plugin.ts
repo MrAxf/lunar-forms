@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { DeepPartial, PluginOptions } from '@lunar-forms/fields';
 
-import { LunarPopoverFieldsOptions } from '@/types';
+import { LunarDropdownFieldsOptions } from '@/types';
 
 export const plugin =
-  (pluginOptions: DeepPartial<LunarPopoverFieldsOptions>) =>
+  (pluginOptions: DeepPartial<LunarDropdownFieldsOptions>) =>
   (options: PluginOptions) => {
     (options as any).theme.classes.fields.selectMenu = {
       ...pluginOptions.theme?.classes?.fields?.selectMenu,

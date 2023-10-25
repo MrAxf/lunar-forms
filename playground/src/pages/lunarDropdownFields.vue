@@ -1,0 +1,86 @@
+<!-- eslint-disable vue/attribute-hyphenation -->
+<script lang="ts" setup>
+import { FieldValue, LunarForm } from '@lunar-forms/core';
+import { SelectMenuField } from '@lunar-forms/dropdown-fields';
+
+async function asyncOptions({
+  page,
+  hasMore,
+}: {
+  page: number;
+  hasMore: () => void;
+}) {
+  const data = await fetch(`https://swapi.dev/api/people/?page=${page}`).then(
+    (response) => response.json()
+  );
+
+  if (data.next) hasMore();
+
+  return data.results.map((item: { name: string; url: string }) => ({
+    label: item.name,
+    value: item.url,
+  }));
+}
+
+async function loadOption(val: FieldValue, cache?: string) {
+  if (cache) return cache;
+
+  const data = await fetch(val as string).then((response) => response.json());
+
+  return data.name;
+}
+</script>
+
+<template>
+  <LunarForm
+    class="flex gap-5"
+    v-slot="{ values, errors }"
+    @submit="(value) => console.log(value)"
+  >
+    <section class="grid w-[60%] flex-grow grid-cols-2">
+      <SelectMenuField
+        v-auto-animate
+        name="selectMenuList"
+        label="Select Menu List"
+        help="Texto de prueba"
+        placeholder="Select ..."
+        multiple
+        :options="[
+          { label: 'Opción 1', value: 1 },
+          { label: 'Opción 2', value: 2 },
+          { label: 'Opción 3', value: 3 },
+          { label: 'Opción 4', value: 4 },
+          { label: 'Opción 5', value: 5 },
+          { label: 'Opción 6', value: 6 },
+          { label: 'Opción 7', value: 7 },
+          { label: 'Opción 8', value: 8 },
+        ]"
+      />
+      <SelectMenuField
+        v-auto-animate
+        name="selectMenuAsync"
+        label="Select Menu Async"
+        help="Texto de prueba"
+        placeholder="Select ..."
+        multiple
+        :options="asyncOptions"
+        :initial-value="[
+          'https://swapi.dev/api/people/83/',
+          'https://swapi.dev/api/people/79/',
+          'https://swapi.dev/api/people/75',
+        ]"
+        :load-option="loadOption"
+      />
+
+      <div class="m-3 flex place-items-center gap-5">
+        <button class="btn btn-primary" type="submit">Submit</button>
+        <button class="btn btn-accent" type="reset">Reset</button>
+      </div>
+    </section>
+    <section
+      class="bg-base-300 rounded-box sticky top-[5vh] h-[90vh] w-[40%] flex-grow-0 p-5 overflow-x-hidden"
+    >
+      <pre>{{ { values, errors } }}</pre>
+    </section>
+  </LunarForm>
+</template>

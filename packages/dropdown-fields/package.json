@@ -1,8 +1,8 @@
 {
-  "name": "@lunar-forms/popover-fields",
+  "name": "@lunar-forms/dropdown-fields",
   "version": "0.3.0",
   "type": "module",
-  "description": "A set of fields components with popovers for Lunar Forms.",
+  "description": "A set of fields components with dropdown for Lunar Forms.",
   "files": [
     "dist"
   ],
