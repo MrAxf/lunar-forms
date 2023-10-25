@@ -8,3 +8,8 @@ export interface SelectLabelValue {
 }
 
 export type SelectOptions = string[] | SelectLabelValue[];
+
+export type SelectLabelValueAsync<T extends SelectLabelValue> = (options?: {
+  page: number;
+  hasMore: () => void;
+}) => Promise<T[]>;

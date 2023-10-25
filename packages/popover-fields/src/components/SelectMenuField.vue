@@ -1,3 +1,4 @@
+<!-- eslint-disable @typescript-eslint/ban-ts-comment -->
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts" generic="T extends SelectLabelValue">
@@ -9,7 +10,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue';
-import type { FieldValidation, FieldValue } from '@lunar-forms/core';
+import type { FieldValidation, FieldValue, Maybe } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import type {
   FieldCommonClassesProps,
@@ -18,10 +19,19 @@ import type {
   PluginOptions,
 } from '@lunar-forms/fields';
 import { useCommonField, usePluginOptions } from '@lunar-forms/fields';
-import type { MaybeElement } from '@vueuse/core';
-import { type HTMLAttributes, computed, ref, unref } from 'vue';
+import {
+  type MaybeElement,
+  computedAsync,
+  useIntersectionObserver,
+} from '@vueuse/core';
+import type { HTMLAttributes } from 'vue';
+import { computed, onMounted, ref, unref, watch } from 'vue';
 
-import type { LunarPopoverFieldsOptions, SelectLabelValue } from '@/types';
+import type {
+  LunarPopoverFieldsOptions,
+  SelectLabelValue,
+  SelectLabelValueAsync,
+} from '@/types';
 import { toSelectLabelValues } from '@/utils';
 
 defineOptions({
@@ -40,7 +50,11 @@ const props = withDefaults(
         disabled?: boolean;
         multiple?: boolean;
         placeholder?: string;
-        options?: string[] | T[];
+        options?: string[] | T[] | SelectLabelValueAsync<T>;
+        loadOption?: (
+          value: FieldValue,
+          cachedValue?: string
+        ) => Promise<string>;
       }
   >(),
   {
@@ -81,10 +95,15 @@ const { fieldData } = useCommonField({
 
 const { value, error, valid, touched, fieldProps } = fieldData;
 
-const selectOptions = computed(() => toSelectLabelValues(props.options));
+const isLoading = ref(false);
+const isMore = ref(false);
+const currentpage = ref(1);
+
+const selectOptions = ref<T[]>([]);
 
 const reference = ref<MaybeElement>(null);
 const floating = ref<any>(null);
+const ioTarget = ref<MaybeElement>(null);
 
 const labelCache = new Map<FieldValue, string>();
 
@@ -94,30 +113,89 @@ const { floatingStyles } = useFloating(reference, floating, {
   whileElementsMounted: autoUpdate,
 });
 
-const inputText = computed(() => {
+useIntersectionObserver(
+  ioTarget,
+  ([{ isIntersecting }]) => {
+    if (isIntersecting) {
+      isMore.value = false;
+      getAsyncData();
+    }
+  },
+  {
+    root: floating,
+  }
+);
+
+const inputText = computedAsync(async () => {
   if (!props.multiple && value.value) {
-    return getLabel(value.value);
+    return await getLabel(value.value);
   } else if (
     props.multiple &&
     Array.isArray(value.value) &&
     value.value.length > 0
   ) {
-    return value.value.map((item: FieldValue) => getLabel(item)).join(', ');
+    return (
+      await Promise.all(value.value.map((item: FieldValue) => getLabel(item)))
+    ).join(', ');
   }
   return props.placeholder;
 });
 
-function getLabel(value: FieldValue) {
+async function getLabel(value: FieldValue) {
+  let cachedValue: Maybe<string> = undefined;
   if (labelCache.has(value)) {
-    return labelCache.get(value);
+    cachedValue = labelCache.get(value);
   }
-  const labelValue = selectOptions.value.find((item) => item.value === value);
-  if (labelValue) {
-    labelCache.set(labelValue.value, labelValue.label);
-    return labelValue.label;
+  const label = props.loadOption
+    ? await props.loadOption(value, cachedValue)
+    : selectOptions.value.find((item) => item.value === value)?.label;
+  if (label) {
+    labelCache.set(value, label);
+    return label;
   }
   return null;
 }
+
+function onOptionSelected(ev: Event, option: SelectLabelValue) {
+  fieldProps.onchange(ev);
+  labelCache.set(option.value, option.label);
+}
+
+function hasMore() {
+  isMore.value = true;
+  currentpage.value++;
+}
+
+async function getAsyncData() {
+  isLoading.value = true;
+  try {
+    const data = await (props.options as SelectLabelValueAsync<T>)({
+      page: currentpage.value,
+      hasMore,
+    });
+
+    // @ts-ignore
+    selectOptions.value = selectOptions.value.concat(data);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  if (typeof props.options === 'function') {
+    getAsyncData();
+  }
+});
+
+watch(
+  () => props.options,
+  (newVal: string[] | T[] | SelectLabelValueAsync<T> | undefined) => {
+    if (Array.isArray(newVal))
+      selectOptions.value = toSelectLabelValues(newVal);
+  }
+);
 </script>
 
 <template>
@@ -182,8 +260,8 @@ function getLabel(value: FieldValue) {
         </div>
         <ListboxButton
           ref="reference"
-          @blur="fieldProps.blur"
-          @focus="fieldProps.focus"
+          @blur="fieldProps.onblur"
+          @focus="fieldProps.onfocus"
           :class="[
             global.input,
             groupClasess.input,
@@ -233,8 +311,8 @@ function getLabel(value: FieldValue) {
               as="template"
               :disabled="option.attrs?.disabled ? true : false"
             >
+              <!-- @vue-ignore -->
               <li
-                @click="fieldProps.change"
                 :class="[
                   global.option,
                   groupClasess.option,
@@ -245,6 +323,7 @@ function getLabel(value: FieldValue) {
                     selected,
                   },
                 ]"
+                @click="(ev) => onOptionSelected(ev, option)"
               >
                 <div
                   :class="[
@@ -258,6 +337,8 @@ function getLabel(value: FieldValue) {
               </li>
             </ListboxOption>
           </ListboxOptions>
+          <span v-if="isLoading">Loading...</span>
+          <span v-if="!isLoading && isMore" ref="ioTarget">load more...</span>
         </div>
       </div>
     </Listbox>

@@ -1,6 +1,7 @@
+<!-- eslint-disable vue/attribute-hyphenation -->
 <script lang="ts" setup>
 import { Icon } from '@iconify/vue';
-import { KB, LunarForm } from '@lunar-forms/core';
+import { FieldValue, KB, LunarForm } from '@lunar-forms/core';
 import {
   CheckboxField,
   CheckboxesField,
@@ -24,6 +25,33 @@ import {
   UrlField,
 } from '@lunar-forms/fields';
 import { SelectMenuField } from '@lunar-forms/popover-fields';
+
+async function asyncOptions({
+  page,
+  hasMore,
+}: {
+  page: number;
+  hasMore: () => void;
+}) {
+  const data = await fetch(`https://swapi.dev/api/people/?page=${page}`).then(
+    (response) => response.json()
+  );
+
+  if (data.next) hasMore();
+
+  return data.results.map((item: { name: string; url: string }) => ({
+    label: item.name,
+    value: item.url,
+  }));
+}
+
+async function loadOption(val: FieldValue, cache?: string) {
+  if (cache) return cache;
+
+  const data = await fetch(val as string).then((response) => response.json());
+
+  return data.name;
+}
 </script>
 
 <template>
@@ -130,7 +158,7 @@ import { SelectMenuField } from '@lunar-forms/popover-fields';
         placeholder="Select ..."
         :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
       />
-      <SelectMenuField
+      <!-- <SelectMenuField
         v-auto-animate
         name="selectMenu"
         label="Select Menu"
@@ -147,6 +175,21 @@ import { SelectMenuField } from '@lunar-forms/popover-fields';
           { label: 'Opción 7', value: 7 },
           { label: 'Opción 8', value: 8 },
         ]"
+      /> -->
+      <SelectMenuField
+        v-auto-animate
+        name="selectMenu"
+        label="Select Menu"
+        help="Texto de prueba"
+        placeholder="Select ..."
+        multiple
+        :options="asyncOptions"
+        :initial-value="[
+          'https://swapi.dev/api/people/83/',
+          'https://swapi.dev/api/people/79/',
+          'https://swapi.dev/api/people/75',
+        ]"
+        :load-option="loadOption"
       />
       <FileField
         v-auto-animate
