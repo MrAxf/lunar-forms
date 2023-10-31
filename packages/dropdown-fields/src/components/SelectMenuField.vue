@@ -2,7 +2,7 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts" generic="T extends SelectLabelValue">
-import { autoUpdate, flip, offset, useFloating } from '@floating-ui/vue';
+import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue';
 import {
   Listbox,
   ListboxButton,
@@ -10,7 +10,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue';
-import type { FieldValidation, FieldValue, Maybe } from '@lunar-forms/core';
+import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
 import type {
   FieldCommonClassesProps,
@@ -25,7 +25,7 @@ import {
   useIntersectionObserver,
 } from '@vueuse/core';
 import type { HTMLAttributes } from 'vue';
-import { computed, onMounted, ref, unref } from 'vue';
+import { computed, normalizeClass, onMounted, ref, unref } from 'vue';
 
 import type {
   LunarDropdownFieldsOptions,
@@ -48,15 +48,25 @@ const props = withDefaults(
         classOption?: HTMLAttributes['class'];
         classDropdownWrapper?: HTMLAttributes['class'];
         classOptionSelectedicon?: HTMLAttributes['class'];
+        classOptionContent?: HTMLAttributes['class'];
+        classOptionLoading?: HTMLAttributes['class'];
+        classOptionLoadingLoader?: HTMLAttributes['class'];
+        classDropdownContent?: HTMLAttributes['class'];
+        classInputContent?: HTMLAttributes['class'];
+        classInputCount?: HTMLAttributes['class'];
+        classInputLoading?: HTMLAttributes['class'];
+        classDropdownEnterActive?: HTMLAttributes['class'];
+        classDropdownEnterFrom?: HTMLAttributes['class'];
+        classDropdownEnterTo?: HTMLAttributes['class'];
+        classDropdownLeaveActive?: HTMLAttributes['class'];
+        classDropdownLeaveFrom?: HTMLAttributes['class'];
+        classDropdownLeaveTo?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         multiple?: boolean;
         placeholder?: string;
         options?: string[] | T[] | SelectLabelValueAsync<T>;
-        loadOption?: (
-          value: FieldValue,
-          cachedValue?: string
-        ) => Promise<string>;
+        loadOption?: (value: FieldValue) => Promise<T>;
       }
   >(),
   {
@@ -72,7 +82,16 @@ defineEmits<{
   (e: 'focus', ev: FocusEvent): void;
 }>();
 
-defineSlots<FieldCommonSlots>();
+defineSlots<
+  FieldCommonSlots & {
+    option(props: {
+      option: T;
+      class: HTMLAttributes['class'];
+      active?: boolean;
+      selected?: boolean;
+    }): any;
+  }
+>();
 
 const {
   messages,
@@ -105,13 +124,14 @@ const selectOptions = ref<T[]>([]);
 
 const reference = ref<MaybeElement>(null);
 const floating = ref<any>(null);
+const ioRoot = ref<MaybeElement>(null);
 const ioTarget = ref<MaybeElement>(null);
 
-const labelCache = new Map<FieldValue, string>();
+const labelCache = new Map<FieldValue, T>();
 
 const { floatingStyles } = useFloating(reference, floating, {
   placement: 'bottom',
-  middleware: [flip(), offset(10)],
+  middleware: [flip(), offset(10), shift()],
   whileElementsMounted: autoUpdate,
 });
 
@@ -124,45 +144,43 @@ useIntersectionObserver(
     }
   },
   {
-    root: floating,
+    root: ioRoot,
   }
 );
 
-const inputText = computedAsync(async () => {
+const selectedOption = computedAsync<T | T[] | string>(async () => {
   if (!props.multiple && value.value) {
-    return await getLabel(value.value);
+    return await getOption(value.value);
   } else if (
     props.multiple &&
     Array.isArray(value.value) &&
     value.value.length > 0
   ) {
-    return (
-      await Promise.all(
-        value.value.slice(0, 3).map((item: FieldValue) => getLabel(item))
-      )
-    ).join(', ');
+    return await Promise.all(
+      value.value.slice(0, 3).map((item: FieldValue) => getOption(item))
+    );
   }
   return props.placeholder;
 });
 
-async function getLabel(value: FieldValue) {
-  let cachedValue: Maybe<string> = undefined;
+async function getOption(value: FieldValue) {
   if (labelCache.has(value)) {
-    cachedValue = labelCache.get(value);
+    return labelCache.get(value) as T;
   }
-  const label = props.loadOption
-    ? await props.loadOption(value, cachedValue)
-    : selectOptions.value.find((item) => item.value === value)?.label;
-  if (label) {
-    labelCache.set(value, label);
-    return label;
+  const option = props.loadOption
+    ? await props.loadOption(value)
+    : selectOptions.value.find((item) => item.value === value);
+  if (!option) {
+    return { value: value, label: 'Elemento no encontrado' } as T;
   }
-  return null;
+  // @ts-ignore
+  labelCache.set(value, option);
+  return option as T;
 }
 
-function onOptionSelected(ev: Event, option: SelectLabelValue) {
+function onOptionSelected(ev: Event, option: T) {
   fieldProps.onchange(ev);
-  labelCache.set(option.value, option.label);
+  labelCache.set(option.value, option);
 }
 
 function hasMore() {
@@ -179,7 +197,7 @@ async function getData() {
     });
 
     data.forEach((item) => {
-      labelCache.set(item.value, item.label);
+      labelCache.set(item.value, item);
     });
 
     // @ts-ignore
@@ -212,6 +230,7 @@ onMounted(() => {
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
+    :data-loading="isLoading ? true : null"
     data-input-icon="true"
   >
     <Listbox
@@ -267,9 +286,68 @@ onMounted(() => {
             props.classInput,
           ]"
         >
-          <span>{{ inputText }}</span>
+          <div
+            :class="[
+              global['input-content'],
+              groupClasess['input-content'],
+              fieldClasses['input-content'],
+              props.classInputContent,
+            ]"
+          >
+            <slot
+              name="option"
+              v-if="
+                !props.multiple &&
+                selectedOption &&
+                !Array.isArray(selectedOption) &&
+                typeof selectedOption !== 'string'
+              "
+              :option="selectedOption"
+              :class="[
+                global['option-content'],
+                groupClasess['option-content'],
+                fieldClasses['option-content'],
+                props.classOptionContent,
+              ]"
+            >
+              <span>{{ selectedOption.label }}</span>
+            </slot>
+            <template
+              v-else-if="
+                props.multiple &&
+                selectedOption &&
+                Array.isArray(selectedOption) &&
+                selectedOption.length > 0 &&
+                typeof selectedOption !== 'string'
+              "
+            >
+              <span v-for="(option, idx) in selectedOption" :key="option.label"
+                >{{ option.label
+                }}<span v-if="selectedOption.length - 1 !== idx">,&nbsp;</span
+                ><span v-else-if="selectedOption.length < value.length"
+                  >...</span
+                ></span
+              >
+            </template>
+            <span v-else>{{ selectedOption }}</span>
+          </div>
+          <span
+            v-if="isLoading"
+            :class="[
+              global['input-loading'],
+              groupClasess['input-loading'],
+              fieldClasses['input-loading'],
+              props.classInputLoading,
+            ]"
+          ></span>
           <span
             v-if="props.multiple && Array.isArray(value) && value.length > 1"
+            :class="[
+              global['input-count'],
+              groupClasess['input-count'],
+              fieldClasses['input-count'],
+              props.classInputCount,
+            ]"
             >{{ value.length }}</span
           >
           <div
@@ -294,65 +372,183 @@ onMounted(() => {
         >
           <slot name="suffix" v-bind="fieldData"></slot>
         </div>
-        <div
-          v-if="open"
-          ref="floating"
-          :style="floatingStyles"
-          :class="[
-            global['dropdown-wrapper'],
-            groupClasess['dropdown-wrapper'],
-            fieldClasses['dropdown-wrapper'],
-            props.classDropdownWrapper,
-          ]"
+        <Transition
+          :enter-active-class="
+            normalizeClass([
+              global['dropdown-enter-active'],
+              groupClasess['dropdown-enter-active'],
+              fieldClasses['dropdown-enter-active'],
+              props.classDropdownEnterActive,
+            ])
+          "
+          :enter-from-class="
+            normalizeClass([
+              global['dropdown-enter-from'],
+              groupClasess['dropdown-enter-from'],
+              fieldClasses['dropdown-enter-from'],
+              props.classDropdownEnterFrom,
+            ])
+          "
+          :enter-to-class="
+            normalizeClass([
+              global['dropdown-enter-to'],
+              groupClasess['dropdown-enter-to'],
+              fieldClasses['dropdown-enter-to'],
+              props.classDropdownEnterTo,
+            ])
+          "
+          :leave-active-class="
+            normalizeClass([
+              global['dropdown-leave-active'],
+              groupClasess['dropdown-leave-active'],
+              fieldClasses['dropdown-leave-active'],
+              props.classDropdownLeaveActive,
+            ])
+          "
+          :leave-from-class="
+            normalizeClass([
+              global['dropdown-leave-from'],
+              groupClasess['dropdown-leave-from'],
+              fieldClasses['dropdown-leave-from'],
+              props.classDropdownLeaveFrom,
+            ])
+          "
+          :leave-to-class="
+            normalizeClass([
+              global['dropdown-leave-to'],
+              groupClasess['dropdown-leave-to'],
+              fieldClasses['dropdown-leave-to'],
+              props.classDropdownLeaveTo,
+            ])
+          "
         >
-          <ListboxOptions
-            as="ul"
+          <div
+            v-if="open"
+            ref="floating"
+            :style="floatingStyles"
             :class="[
-              global.options,
-              groupClasess.options,
-              fieldClasses.options,
-              props.classOptions,
+              global['dropdown-wrapper'],
+              groupClasess['dropdown-wrapper'],
+              fieldClasses['dropdown-wrapper'],
+              props.classDropdownWrapper,
             ]"
           >
-            <ListboxOption
-              v-for="option in selectOptions"
-              v-slot="{ active, selected }"
-              :key="option.label"
-              :value="option.value"
-              as="template"
-              :disabled="option.attrs?.disabled ? true : false"
+            <div
+              ref="ioRoot"
+              :class="[
+                global['dropdown-content'],
+                groupClasess['dropdown-content'],
+                fieldClasses['dropdown-content'],
+                props.classDropdownContent,
+              ]"
             >
-              <!-- @vue-ignore -->
-              <li
+              <ListboxOptions
+                as="ul"
                 :class="[
-                  global.option,
-                  groupClasess.option,
-                  fieldClasses.option,
-                  props.classOption,
-                  {
-                    active,
-                    selected,
-                  },
+                  global.options,
+                  groupClasess.options,
+                  fieldClasses.options,
+                  props.classOptions,
                 ]"
-                @click="(ev) => onOptionSelected(ev, option)"
               >
-                <div
-                  :class="[
-                    global['option-selected-icon'],
-                    groupClasess['option-selected-icon'],
-                    fieldClasses['option-selected-icon'],
-                    props.classOptionSelectedicon,
-                  ]"
+                <ListboxOption
+                  v-for="option in selectOptions"
+                  v-slot="{ active, selected }"
+                  :key="option.label"
+                  :value="option.value"
+                  as="template"
+                  :disabled="option.attrs?.disabled ? true : false"
                 >
-                  <div v-if="selected" v-html="icons.optionSelected"></div>
-                </div>
-                <span>{{ option.label }}</span>
-              </li>
-            </ListboxOption>
-          </ListboxOptions>
-          <span v-if="isLoading">Loading...</span>
-          <span v-if="!isLoading && isMore" ref="ioTarget">load more...</span>
-        </div>
+                  <!-- @vue-ignore -->
+                  <li
+                    :class="[
+                      global.option,
+                      groupClasess.option,
+                      fieldClasses.option,
+                      props.classOption,
+                      {
+                        active,
+                        selected,
+                      },
+                    ]"
+                    @click="(ev) => onOptionSelected(ev, option)"
+                  >
+                    <div
+                      :class="[
+                        global['option-selected-icon'],
+                        groupClasess['option-selected-icon'],
+                        fieldClasses['option-selected-icon'],
+                        props.classOptionSelectedicon,
+                      ]"
+                    >
+                      <div v-if="selected" v-html="icons.optionSelected"></div>
+                    </div>
+                    <!-- @vue-ignore -->
+                    <slot
+                      name="option"
+                      :option="option"
+                      :active="active"
+                      :selected="selected"
+                      :class="[
+                        global['option-content'],
+                        groupClasess['option-content'],
+                        fieldClasses['option-content'],
+                        props.classOptionContent,
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          global['option-content'],
+                          groupClasess['option-content'],
+                          fieldClasses['option-content'],
+                          props.classOptionContent,
+                        ]"
+                        :title="option.label"
+                        >{{ option.label }}</span
+                      >
+                    </slot>
+                  </li>
+                </ListboxOption>
+              </ListboxOptions>
+              <div
+                :class="[
+                  global['option-loading'],
+                  groupClasess['option-loading'],
+                  fieldClasses['option-loading'],
+                  props.classOptionLoading,
+                ]"
+              >
+                <span
+                  :class="[
+                    global['option-loading-loader'],
+                    groupClasess['option-loading-loader'],
+                    fieldClasses['option-loading-loader'],
+                    props.classOptionLoadingLoader,
+                  ]"
+                ></span>
+              </div>
+              <div
+                v-if="!isLoading && isMore"
+                ref="ioTarget"
+                :class="[
+                  global['option-loading'],
+                  groupClasess['option-loading'],
+                  fieldClasses['option-loading'],
+                  props.classOptionLoading,
+                ]"
+              >
+                <span
+                  :class="[
+                    global['option-loading-loader'],
+                    groupClasess['option-loading-loader'],
+                    fieldClasses['option-loading-loader'],
+                    props.classOptionLoadingLoader,
+                  ]"
+                ></span>
+              </div>
+            </div>
+          </div>
+        </Transition>
       </div>
     </Listbox>
     <span

@@ -25,9 +25,9 @@ async function asyncOptions({
 async function loadOption(val: FieldValue, cache?: string) {
   if (cache) return cache;
 
-  const data = await fetch(val as string).then((response) => response.json());
+  const item = await fetch(val as string).then((response) => response.json());
 
-  return data.name;
+  return { label: item.name, value: item.url };
 }
 </script>
 
@@ -65,9 +65,9 @@ async function loadOption(val: FieldValue, cache?: string) {
         multiple
         :options="asyncOptions"
         :initial-value="[
-          'https://swapi.dev/api/people/83/',
-          'https://swapi.dev/api/people/79/',
-          'https://swapi.dev/api/people/75',
+          'https://swapi.dev/api/people/1/',
+          'https://swapi.dev/api/people/2/',
+          'https://swapi.dev/api/people/3/',
         ]"
         :load-option="loadOption"
       />
