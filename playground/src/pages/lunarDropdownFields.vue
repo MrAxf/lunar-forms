@@ -1,18 +1,49 @@
 <!-- eslint-disable vue/attribute-hyphenation -->
 <script lang="ts" setup>
 import { FieldValue, LunarForm } from '@lunar-forms/core';
-import { SelectMenuField } from '@lunar-forms/dropdown-fields';
+import {
+  AutocompleteField,
+  SelectMenuField,
+} from '@lunar-forms/dropdown-fields';
 
 async function asyncOptions({
   page,
   hasMore,
+  signal,
 }: {
   page: number;
   hasMore: () => void;
+  signal: AbortSignal;
 }) {
-  const data = await fetch(`https://swapi.dev/api/people/?page=${page}`).then(
-    (response) => response.json()
-  );
+  const data = await fetch(`https://swapi.dev/api/people/?page=${page}`, {
+    signal,
+  }).then((response) => response.json());
+
+  if (data.next) hasMore();
+
+  return data.results.map((item: { name: string; url: string }) => ({
+    label: item.name,
+    value: item.url,
+  }));
+}
+
+async function autocompleteAsyncOptions({
+  page,
+  hasMore,
+  search,
+  signal,
+}: {
+  page: number;
+  hasMore: () => void;
+  search: string;
+  signal: AbortSignal;
+}) {
+  const data = await fetch(
+    `https://swapi.dev/api/people/?search=${search}&page=${page}`,
+    {
+      signal,
+    }
+  ).then((response) => response.json());
 
   if (data.next) hasMore();
 
@@ -70,6 +101,18 @@ async function loadOption(val: FieldValue, cache?: string) {
           'https://swapi.dev/api/people/3/',
         ]"
         :load-option="loadOption"
+      />
+
+      <AutocompleteField
+        v-auto-animate
+        name="autocompleteAsync"
+        label="Autocomplete Async"
+        help="Texto de prueba"
+        placeholder="Select ..."
+        search-placeholder="Buscar..."
+        :options="autocompleteAsyncOptions"
+        :load-option="loadOption"
+        multiple
       />
 
       <div class="m-3 flex place-items-center gap-5">

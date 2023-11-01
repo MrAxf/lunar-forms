@@ -4,11 +4,12 @@
 <script setup lang="ts" generic="T extends SelectLabelValue">
 import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue';
 import {
-  Listbox,
-  ListboxButton,
-  ListboxLabel,
-  ListboxOption,
-  ListboxOptions,
+  Combobox,
+  ComboboxButton,
+  ComboboxInput,
+  ComboboxLabel,
+  ComboboxOption,
+  ComboboxOptions,
 } from '@headlessui/vue';
 import type { FieldValidation, FieldValue } from '@lunar-forms/core';
 import { required as requiredValidator } from '@lunar-forms/core';
@@ -22,10 +23,11 @@ import { useCommonField, usePluginOptions } from '@lunar-forms/fields';
 import {
   type MaybeElement,
   computedAsync,
+  useDebounce,
   useIntersectionObserver,
 } from '@vueuse/core';
 import type { HTMLAttributes } from 'vue';
-import { computed, normalizeClass, onMounted, ref, unref } from 'vue';
+import { computed, normalizeClass, ref, unref, watch } from 'vue';
 
 import { GetDataAbortedError } from '@/errors';
 import type {
@@ -33,7 +35,7 @@ import type {
   SelectLabelValue,
   SelectLabelValueAsync,
 } from '@/types';
-import { toSelectLabelValues } from '@/utils';
+import { toAutocompleteLabelValues } from '@/utils';
 
 defineOptions({
   name: 'SelectField',
@@ -62,10 +64,14 @@ const props = withDefaults(
         classDropdownLeaveActive?: HTMLAttributes['class'];
         classDropdownLeaveFrom?: HTMLAttributes['class'];
         classDropdownLeaveTo?: HTMLAttributes['class'];
+        classSearchInput?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         multiple?: boolean;
         placeholder?: string;
+        searchPlaceholder?: string;
+        debounce?: number;
+        minSearchLength?: number;
         options?: string[] | T[] | SelectLabelValueAsync<T>;
         loadOption?: (value: FieldValue) => Promise<T>;
       }
@@ -73,6 +79,8 @@ const props = withDefaults(
   {
     validateOn: 'change',
     multiple: false,
+    debounce: 300,
+    minSearchLength: 0,
   }
 );
 
@@ -104,7 +112,7 @@ const {
     icons,
     classes: {
       global,
-      fields: { selectMenu: fieldClasses },
+      fields: { autocomplete: fieldClasses },
       groups: { inputSelect: groupClasess },
     },
   },
@@ -124,6 +132,9 @@ const { value, error, valid, touched, fieldProps } = fieldData;
 const isLoading = ref(false);
 const isMore = ref(false);
 const currentpage = ref(1);
+
+const searchText = ref('');
+const debouncedSearchText = useDebounce(searchText, props.debounce);
 
 const selectOptions = ref<T[]>([]);
 
@@ -212,9 +223,10 @@ function getData() {
     (async () => {
       isLoading.value = true;
       try {
-        const data = await toSelectLabelValues<T>(props.options)({
+        const data = await toAutocompleteLabelValues<T>(props.options)({
           page: currentpage.value,
           hasMore,
+          search: debouncedSearchText.value,
           signal,
         });
 
@@ -240,10 +252,15 @@ function reset() {
   selectOptions.value = [];
   currentpage.value = 1;
   isMore.value = false;
+  if ((debouncedSearchText.value.length ?? 0) <= props.minSearchLength) {
+    getDataAbortController.abort();
+    getDataAbortController = new AbortController();
+    return;
+  }
   getData();
 }
 
-onMounted(() => {
+watch(debouncedSearchText, () => {
   reset();
 });
 </script>
@@ -267,7 +284,7 @@ onMounted(() => {
     :data-loading="isLoading ? true : null"
     data-input-icon="true"
   >
-    <Listbox
+    <Combobox
       v-model="value"
       v-slot="{ open }"
       as="div"
@@ -280,7 +297,7 @@ onMounted(() => {
       :multiple="props.multiple"
       :disabled="props.disabled"
     >
-      <ListboxLabel
+      <ComboboxLabel
         v-if="props.label"
         :class="[
           global.label,
@@ -288,7 +305,7 @@ onMounted(() => {
           fieldClasses.label,
           props.classLabel,
         ]"
-        >{{ props.label }}</ListboxLabel
+        >{{ props.label }}</ComboboxLabel
       >
       <div
         :class="[
@@ -309,7 +326,7 @@ onMounted(() => {
         >
           <slot name="prefix" v-bind="fieldData"></slot>
         </div>
-        <ListboxButton
+        <ComboboxButton
           ref="reference"
           @blur="fieldProps.onblur"
           @focus="fieldProps.onfocus"
@@ -393,7 +410,7 @@ onMounted(() => {
               props.classInputIcon,
             ]"
           ></div>
-        </ListboxButton>
+        </ComboboxButton>
 
         <div
           v-if="$slots.suffix"
@@ -467,6 +484,19 @@ onMounted(() => {
               props.classDropdownWrapper,
             ]"
           >
+            <ComboboxInput
+              name="search"
+              :class="[
+                global['search-input'],
+                fieldClasses['search-input'],
+                props.classSearchInput,
+              ]"
+              :display-value="() => searchText"
+              :placeholder="props.searchPlaceholder"
+              autofocus
+              autocomplete="off"
+              @change="searchText = $event.target.value"
+            />
             <div
               ref="ioRoot"
               :class="[
@@ -476,7 +506,7 @@ onMounted(() => {
                 props.classDropdownContent,
               ]"
             >
-              <ListboxOptions
+              <ComboboxOptions
                 as="ul"
                 :class="[
                   global.options,
@@ -485,7 +515,7 @@ onMounted(() => {
                   props.classOptions,
                 ]"
               >
-                <ListboxOption
+                <ComboboxOption
                   v-for="option in selectOptions"
                   v-slot="{ active, selected }"
                   :key="option.label"
@@ -542,8 +572,8 @@ onMounted(() => {
                       >
                     </slot>
                   </li>
-                </ListboxOption>
-              </ListboxOptions>
+                </ComboboxOption>
+              </ComboboxOptions>
               <div
                 v-if="isLoading"
                 :class="[
@@ -585,7 +615,7 @@ onMounted(() => {
           </div>
         </Transition>
       </div>
-    </Listbox>
+    </Combobox>
     <span
       v-if="props.help"
       :class="[

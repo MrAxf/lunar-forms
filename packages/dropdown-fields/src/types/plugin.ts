@@ -43,11 +43,17 @@ export interface LunarDropdownFieldsOptions {
         'dropdown-leave-active'?: string;
         'dropdown-leave-from'?: string;
         'dropdown-leave-to'?: string;
+        'search-input'?: string;
       };
       fields: {
         selectMenu: CommonClasses &
           SelectClasses & {
             'input-icon'?: string;
+          };
+        autocomplete: CommonClasses &
+          SelectClasses & {
+            'input-icon'?: string;
+            'search-input'?: string;
           };
       };
       groups: {

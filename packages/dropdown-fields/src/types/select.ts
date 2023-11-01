@@ -9,7 +9,9 @@ export interface SelectLabelValue {
 
 export type SelectLabelValueAsync<T extends SelectLabelValue> = (options?: {
   page: number;
+  search?: string;
   hasMore: () => void;
+  signal: AbortSignal;
 }) => Promise<T[]>;
 
 export type SelectOptions =

@@ -78,6 +78,11 @@ createApp(App)
                   'dropdown-leave-to': 'opacity-0 scale-50',
                 },
               },
+              fields: {
+                autocomplete: {
+                  'search-input': 'input input-sm m-2',
+                },
+              },
             },
             icons: {
               optionSelected:

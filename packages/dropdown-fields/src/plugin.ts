@@ -13,6 +13,9 @@ export const plugin =
     (options as any).theme.classes.fields.selectMenu = {
       ...pluginOptions.theme?.classes?.fields?.selectMenu,
     };
+    (options as any).theme.classes.fields.autocomplete = {
+      ...pluginOptions.theme?.classes?.fields?.autocomplete,
+    };
     (options as any).theme.classes.groups.inputSelect = {
       ...pluginOptions.theme?.classes?.groups?.inputSelect,
     };
