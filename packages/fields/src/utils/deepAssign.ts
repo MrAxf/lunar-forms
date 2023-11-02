@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export function deepAssign<T>(base: Text, rest: any): T {
+export function deepAssign<T>(base: T, rest: any): T {
   if (!isPlainObject(rest)) return deepAssign(base, {});
 
   const toReturn = Object.assign({}, rest);

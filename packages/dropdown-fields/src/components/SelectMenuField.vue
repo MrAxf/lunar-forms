@@ -36,7 +36,7 @@ import type {
 import { changeEvent, toSelectLabelValues } from '@/utils';
 
 defineOptions({
-  name: 'SelectField',
+  name: 'SelectMenuField',
   inheritAttrs: false,
 });
 

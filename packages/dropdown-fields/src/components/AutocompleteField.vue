@@ -38,7 +38,7 @@ import type {
 import { changeEvent, toAutocompleteLabelValues } from '@/utils';
 
 defineOptions({
-  name: 'SelectField',
+  name: 'AutocompleteField',
   inheritAttrs: false,
 });
 
