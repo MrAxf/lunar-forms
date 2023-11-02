@@ -1,5 +1,6 @@
 <!-- eslint-disable vue/attribute-hyphenation -->
 <script lang="ts" setup>
+import { Icon } from '@iconify/vue/dist/iconify.js';
 import { FieldValue, LunarForm } from '@lunar-forms/core';
 import {
   AutocompleteField,
@@ -35,11 +36,13 @@ async function autocompleteAsyncOptions({
 }: {
   page: number;
   hasMore: () => void;
-  search: string;
+  search?: string;
   signal: AbortSignal;
 }) {
   const data = await fetch(
-    `https://swapi.dev/api/people/?search=${search}&page=${page}`,
+    `https://swapi.dev/api/people/?${
+      search ? `search=${search}` : ''
+    }&page=${page}`,
     {
       signal,
     }
@@ -53,9 +56,7 @@ async function autocompleteAsyncOptions({
   }));
 }
 
-async function loadOption(val: FieldValue, cache?: string) {
-  if (cache) return cache;
-
+async function loadOption(val: FieldValue) {
   const item = await fetch(val as string).then((response) => response.json());
 
   return { label: item.name, value: item.url };
@@ -113,7 +114,41 @@ async function loadOption(val: FieldValue, cache?: string) {
         :options="autocompleteAsyncOptions"
         :load-option="loadOption"
         multiple
+        :min-search-length="3"
       />
+
+      <AutocompleteField
+        v-auto-animate
+        name="frameworks"
+        label="Frameworks"
+        help="Elija sus frameworks"
+        placeholder="Elija sus frameworks ..."
+        search-placeholder="Buscar..."
+        :options="[
+          {
+            label: 'Vue',
+            value: 'Vue',
+            icon: 'logos:vue',
+          },
+          {
+            label: 'React',
+            value: 'React',
+            icon: 'devicon:react',
+          },
+          {
+            label: 'Svelte',
+            value: 'Svelte',
+            icon: 'devicon:svelte',
+          },
+        ]"
+      >
+        <template #option="{ option }">
+          <div :class="['flex items-center gap-2']">
+            <Icon :icon="option.icon" height="1rem" />
+            <span>{{ option.label }}</span>
+          </div>
+        </template>
+      </AutocompleteField>
 
       <div class="m-3 flex place-items-center gap-5">
         <button class="btn btn-primary" type="submit">Submit</button>

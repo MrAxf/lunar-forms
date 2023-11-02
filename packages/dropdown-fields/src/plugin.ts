@@ -23,4 +23,8 @@ export const plugin =
       ...options.theme.icons,
       ...pluginOptions.theme?.icons,
     };
+    (options as any).messages = {
+      ...options.messages,
+      ...pluginOptions.messages,
+    };
   };

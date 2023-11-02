@@ -108,7 +108,7 @@ export function useField(
     optionsOnFocus(ev);
   }
 
-  function onchange(ev: InputEvent) {
+  function onchange(ev: Event) {
     dirty.value = true;
     optionsOnChange(ev);
     if (validateOn === 'change') {
@@ -127,15 +127,17 @@ export function useField(
   }
 
   function setInitialValue() {
+    const unrefInitialValue = unref(initialValue);
     if (type === 'checkbox') {
-      if (initialValue === undefined) value.value = falseValue;
-      else if (Array.isArray(initialValue)) value.value = initialValue;
+      if (unrefInitialValue === undefined) value.value = falseValue;
+      else if (Array.isArray(unrefInitialValue))
+        value.value = unrefInitialValue;
       else value.value = trueValue;
-    } else if (initialValue !== undefined) value.value = initialValue;
+    } else if (unrefInitialValue !== undefined) value.value = unrefInitialValue;
   }
 
   function reset() {
-    if (initialValue !== undefined) setInitialValue();
+    if (unref(initialValue) !== undefined) setInitialValue();
     else value.value = getValueByPath(formContext?.values.value, name);
     error.value = undefined;
     dirty.value = false;

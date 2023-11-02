@@ -158,7 +158,5 @@ export const defineLunarFormsFieldsConfig = (
 
   config.plugins?.forEach((plugin) => plugin(baseConfig));
 
-  console.log(baseConfig);
-
   return baseConfig;
 };

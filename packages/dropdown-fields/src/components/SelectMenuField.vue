@@ -33,7 +33,7 @@ import type {
   SelectLabelValue,
   SelectLabelValueAsync,
 } from '@/types';
-import { toSelectLabelValues } from '@/utils';
+import { changeEvent, toSelectLabelValues } from '@/utils';
 
 defineOptions({
   name: 'SelectField',
@@ -62,11 +62,12 @@ const props = withDefaults(
         classDropdownLeaveActive?: HTMLAttributes['class'];
         classDropdownLeaveFrom?: HTMLAttributes['class'];
         classDropdownLeaveTo?: HTMLAttributes['class'];
+        classDropdownMessage?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         multiple?: boolean;
         placeholder?: string;
-        options?: string[] | T[] | SelectLabelValueAsync<T>;
+        options: string[] | T[] | SelectLabelValueAsync<T>;
         loadOption?: (value: FieldValue) => Promise<T>;
       }
   >(),
@@ -78,9 +79,7 @@ const props = withDefaults(
 
 defineEmits<{
   (e: 'update:modelValue', value: FieldValue): void;
-  (e: 'blur', ev: FocusEvent): void;
   (e: 'change', ev: Event): void;
-  (e: 'focus', ev: FocusEvent): void;
 }>();
 
 defineSlots<
@@ -117,6 +116,12 @@ const { fieldData } = useCommonField({
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+  initialValue: computed(() =>
+    props.multiple ? props.initialValue ?? [] : props.initialValue
+  ),
+  onblur: undefined,
+  onfocus: undefined,
+  oninput: undefined,
 });
 
 const { value, error, valid, touched, fieldProps } = fieldData;
@@ -147,7 +152,12 @@ useIntersectionObserver(
   ([{ isIntersecting }]) => {
     if (isIntersecting) {
       isMore.value = false;
-      getData();
+      try {
+        getData();
+      } catch (error) {
+        if (error instanceof GetDataAbortedError) return;
+        console.error(error);
+      }
     }
   },
   {
@@ -155,7 +165,7 @@ useIntersectionObserver(
   }
 );
 
-const selectedOption = computedAsync<T | T[] | string>(async () => {
+const selectedOption = computedAsync(async () => {
   if (!props.multiple && value.value) {
     return await getOption(value.value);
   } else if (
@@ -168,7 +178,7 @@ const selectedOption = computedAsync<T | T[] | string>(async () => {
     );
   }
   return props.placeholder;
-});
+}, props.placeholder);
 
 async function getOption(value: FieldValue) {
   if (labelCache.has(value)) {
@@ -183,11 +193,6 @@ async function getOption(value: FieldValue) {
   // @ts-ignore
   labelCache.set(value, option);
   return option as T;
-}
-
-function onOptionSelected(ev: Event, option: T) {
-  fieldProps.onchange(ev);
-  labelCache.set(option.value, option);
 }
 
 function hasMore() {
@@ -228,7 +233,6 @@ function getData() {
         resolve();
       } catch (error) {
         isLoading.value = false;
-        if (error instanceof GetDataAbortedError) return;
         console.error(error);
         reject(error);
       }
@@ -240,7 +244,12 @@ function reset() {
   selectOptions.value = [];
   currentpage.value = 1;
   isMore.value = false;
-  getData();
+  try {
+    getData();
+  } catch (error) {
+    if (error instanceof GetDataAbortedError) return;
+    console.error(error);
+  }
 }
 
 onMounted(() => {
@@ -268,7 +277,13 @@ onMounted(() => {
     data-input-icon="true"
   >
     <Listbox
-      v-model="value"
+      :model-value="value"
+      @update:model-value="
+        (newVal) => {
+          value = newVal;
+          fieldProps.onchange(changeEvent);
+        }
+      "
       v-slot="{ open }"
       as="div"
       :class="[
@@ -358,7 +373,10 @@ onMounted(() => {
               <span v-for="(option, idx) in selectedOption" :key="option.label"
                 >{{ option.label
                 }}<span v-if="selectedOption.length - 1 !== idx">,&nbsp;</span
-                ><span v-else-if="selectedOption.length < value.length"
+                ><span
+                  v-else-if="
+                    Array.isArray(value) && selectedOption.length < value.length
+                  "
                   >...</span
                 ></span
               >
@@ -505,7 +523,6 @@ onMounted(() => {
                         selected,
                       },
                     ]"
-                    @click="(ev) => onOptionSelected(ev, option)"
                   >
                     <div
                       :class="[
@@ -580,6 +597,17 @@ onMounted(() => {
                     props.classOptionLoadingLoader,
                   ]"
                 ></span>
+              </div>
+              <div
+                v-if="!isLoading && selectOptions.length === 0"
+                :class="[
+                  global['dropdown-message'],
+                  groupClasess['dropdown-message'],
+                  fieldClasses['dropdown-message'],
+                  props.classDropdownMessage,
+                ]"
+              >
+                <span>{{ messages.notFoundResults }}</span>
               </div>
             </div>
           </div>

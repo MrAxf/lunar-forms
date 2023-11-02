@@ -20,6 +20,7 @@ export interface SelectClasses {
   'dropdown-leave-active'?: string;
   'dropdown-leave-from'?: string;
   'dropdown-leave-to'?: string;
+  'dropdown-message'?: string;
 }
 
 export interface LunarDropdownFieldsOptions {
@@ -43,6 +44,7 @@ export interface LunarDropdownFieldsOptions {
         'dropdown-leave-active'?: string;
         'dropdown-leave-from'?: string;
         'dropdown-leave-to'?: string;
+        'dropdown-message'?: string;
         'search-input'?: string;
       };
       fields: {
@@ -66,5 +68,9 @@ export interface LunarDropdownFieldsOptions {
     icons: {
       optionSelected: string;
     };
+  };
+  messages: {
+    notFoundResults: string;
+    minSearchType: string;
   };
 }

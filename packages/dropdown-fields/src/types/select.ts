@@ -7,7 +7,7 @@ export interface SelectLabelValue {
   attrs?: OptionHTMLAttributes;
 }
 
-export type SelectLabelValueAsync<T extends SelectLabelValue> = (options?: {
+export type SelectLabelValueAsync<T extends SelectLabelValue> = (options: {
   page: number;
   search?: string;
   hasMore: () => void;

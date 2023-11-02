@@ -14,14 +14,16 @@ export function toAutocompleteLabelValues<T extends SelectLabelValue>(
     return async ({ search }) =>
       item
         .filter((val) =>
-          (val as string).toLowerCase().includes(search.toLowerCase())
+          (val as string).toLowerCase().includes(search?.toLowerCase() ?? '')
         )
         .map((val) => ({ label: val as string, value: val as string }) as T);
   if (Array.isArray(item) && typeof item[0] === 'object')
     // @ts-ignore
     return async ({ search }) =>
       item.filter((val) =>
-        (val as T).label.toLocaleLowerCase().includes(search.toLowerCase())
+        (val as T).label
+          .toLocaleLowerCase()
+          .includes(search?.toLowerCase() ?? '')
       ) as T[];
 
   return item as SelectLabelValueAsync<T>;

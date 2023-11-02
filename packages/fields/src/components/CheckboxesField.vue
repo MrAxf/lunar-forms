@@ -164,7 +164,7 @@ createFieldsetContext(value, name, id, 'checkbox');
             <FieldsetInput
               :option="opt"
               :idx="idx"
-              @change="fieldProps.change"
+              @change="fieldProps.onchange"
               v-bind="fieldsetInputClasses"
             />
           </slot>

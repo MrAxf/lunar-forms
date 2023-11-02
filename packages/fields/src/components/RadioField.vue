@@ -162,7 +162,7 @@ createFieldsetContext(value, name, id, 'radio');
             <FieldsetInput
               :option="opt"
               :idx="idx"
-              @change="fieldProps.change"
+              @change="fieldProps.onchange"
               v-bind="fieldsetInputClasses"
             />
           </slot>

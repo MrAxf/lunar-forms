@@ -22,7 +22,7 @@ export type FieldTransformer = (
 ) => FieldValue;
 
 export interface FieldOptions {
-  initialValue?: FieldValue;
+  initialValue?: MaybeRef<FieldValue>;
   validate?: MaybeRef<MaybeArray<FieldValidation>>;
   transform?: MaybeRef<MaybeArray<FieldTransformer>>;
   refine?: MaybeRef<MaybeArray<FieldTransformer>>;
@@ -55,7 +55,7 @@ export interface FieldData {
   fieldProps: {
     oninput: (ev: InputEvent) => void;
     onfocus: (ev: FocusEvent) => void;
-    onchange: (ev: InputEvent) => void;
+    onchange: (ev: Event) => void;
     onblur: (ev: FocusEvent) => void;
   };
 }
