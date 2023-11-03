@@ -1,6 +1,6 @@
 {
   "name": "@lunar-forms/dropdown-fields",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "type": "module",
   "description": "A set of fields components with dropdown for Lunar Forms.",
   "files": [
@@ -19,7 +19,7 @@
     "dev": "vite build --mode development && vue-tsc --emitDeclarationOnly && resolve-tspaths --project tsconfig.json",
     "build": "vite build && vue-tsc --emitDeclarationOnly && resolve-tspaths --project tsconfig.json",
     "types": "vue-tsc",
-    "publish": "pnpm build && npm publish"
+    "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
     "@lunar-forms/core": "0.3.0",

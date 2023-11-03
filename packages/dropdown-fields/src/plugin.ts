@@ -54,7 +54,7 @@ const defaultConfig: LunarDropdownFieldsOptions = {
             ['input-icon', 'lunar-input-icon'],
           ].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-field-select-menu'),
+            val.replace('lunar-', 'lunar-field-select-menu-'),
           ])
         ),
         autocomplete: Object.fromEntries(
@@ -65,7 +65,7 @@ const defaultConfig: LunarDropdownFieldsOptions = {
             ['search-input', 'lunar-search-input'],
           ].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-field-autocomplete'),
+            val.replace('lunar-', 'lunar-field-autocomplete-'),
           ])
         ),
       },
@@ -77,7 +77,7 @@ const defaultConfig: LunarDropdownFieldsOptions = {
             ['input-icon', 'lunar-input-icon'],
           ].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-group-input-select'),
+            val.replace('lunar-', 'lunar-group-input-select-'),
           ])
         ),
       },

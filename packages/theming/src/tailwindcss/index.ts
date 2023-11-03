@@ -2,6 +2,7 @@ import plugin from 'tailwindcss/plugin';
 
 const dataAttributes = [
   'required',
+  'disabled',
   'readonly',
   'valid',
   'error',
@@ -11,6 +12,7 @@ const dataAttributes = [
   'input-icon',
   'prefix',
   'suffix',
+  'loading',
 ];
 
 export default plugin(({ matchVariant }) => {

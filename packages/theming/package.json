@@ -1,12 +1,12 @@
 {
   "name": "@lunar-forms/theming",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "",
   "scripts": {
     "dev": "vite build --mode development && tsc --emitDeclarationOnly",
     "build": "vite build && tsc --emitDeclarationOnly",
     "types": "tsc",
-    "publish": "pnpm build && npm publish"
+    "prepublishOnly": "pnpm build"
   },
   "keywords": [],
   "author": "",
