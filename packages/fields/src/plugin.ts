@@ -6,9 +6,7 @@ import { deepAssign } from './utils';
 
 interface defineLunarFormsFieldsConfigParams
   extends DeepPartial<PluginOptions> {
-  plugins?: (<T extends PluginOptions, U extends PluginOptions>(
-    options: U
-  ) => T)[];
+  plugins?: (<T extends PluginOptions>(options: T) => T)[];
 }
 
 export const plugin: Plugin = {

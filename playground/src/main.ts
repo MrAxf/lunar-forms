@@ -45,7 +45,7 @@ createApp(App)
               groups: {
                 inputSelect: {
                   input:
-                    'h-12 flex items-center text-left px-4 overflow-hidden truncate rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none',
+                    'h-12 flex items-center text-left px-4 overflow-hidden truncate rounded-[--rounded-btn] focus:outline focus:outline-2 focus:outline-offset-2 focus:[outline-color:hsl(var(--bc)/0.2)] bg-base-300 w-full appearance-none ![isolation:unset] lunar-prefix:rounded-l-none lunar-suffix:rounded-r-none bg-none lunar-input-icon:!pr-4',
                   prefix:
                     'flex items-center bg-base-300 rounded-l-[--rounded-btn]',
                   suffix:

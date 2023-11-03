@@ -95,4 +95,4 @@ const defaultConfig: LunarDropdownFieldsOptions = {
 export const plugin =
   (pluginOptions: DeepPartial<LunarDropdownFieldsOptions>) =>
   <T extends PluginOptions>(options: T) =>
-    deepAssign(deepAssign(pluginOptions, defaultConfig), options);
+    deepAssign(deepAssign(pluginOptions, defaultConfig), options) as T;

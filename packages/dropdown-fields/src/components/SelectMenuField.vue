@@ -2,7 +2,6 @@
 <!-- eslint-disable @typescript-eslint/no-explicit-any -->
 <!-- eslint-disable vue/require-default-prop -->
 <script setup lang="ts" generic="T extends SelectLabelValue">
-import { autoUpdate, flip, offset, shift, useFloating } from '@floating-ui/vue';
 import {
   Listbox,
   ListboxButton,
@@ -19,21 +18,17 @@ import type {
   PluginOptions,
 } from '@lunar-forms/fields';
 import { useCommonField, usePluginOptions } from '@lunar-forms/fields';
-import {
-  type MaybeElement,
-  computedAsync,
-  useIntersectionObserver,
-} from '@vueuse/core';
 import type { HTMLAttributes } from 'vue';
-import { computed, normalizeClass, onMounted, ref, unref } from 'vue';
+import { computed, normalizeClass, toRef, unref } from 'vue';
 
-import { GetDataAbortedError } from '@/errors';
 import type {
+  InputSelectCommonProps,
   LunarDropdownFieldsOptions,
   SelectLabelValue,
-  SelectLabelValueAsync,
 } from '@/types';
 import { changeEvent, toSelectLabelValues } from '@/utils';
+
+import { useInputSelectField } from '..';
 
 defineOptions({
   name: 'SelectMenuField',
@@ -42,34 +37,7 @@ defineOptions({
 
 const props = withDefaults(
   defineProps<
-    FieldCommonProps &
-      FieldCommonClassesProps & {
-        classInputIcon?: HTMLAttributes['class'];
-        classOptions?: HTMLAttributes['class'];
-        classOption?: HTMLAttributes['class'];
-        classDropdownWrapper?: HTMLAttributes['class'];
-        classOptionSelectedicon?: HTMLAttributes['class'];
-        classOptionContent?: HTMLAttributes['class'];
-        classOptionLoading?: HTMLAttributes['class'];
-        classOptionLoadingLoader?: HTMLAttributes['class'];
-        classDropdownContent?: HTMLAttributes['class'];
-        classInputContent?: HTMLAttributes['class'];
-        classInputCount?: HTMLAttributes['class'];
-        classInputLoading?: HTMLAttributes['class'];
-        classDropdownEnterActive?: HTMLAttributes['class'];
-        classDropdownEnterFrom?: HTMLAttributes['class'];
-        classDropdownEnterTo?: HTMLAttributes['class'];
-        classDropdownLeaveActive?: HTMLAttributes['class'];
-        classDropdownLeaveFrom?: HTMLAttributes['class'];
-        classDropdownLeaveTo?: HTMLAttributes['class'];
-        classDropdownMessage?: HTMLAttributes['class'];
-        required?: boolean;
-        disabled?: boolean;
-        multiple?: boolean;
-        placeholder?: string;
-        options: string[] | T[] | SelectLabelValueAsync<T>;
-        loadOption?: (value: FieldValue) => Promise<T>;
-      }
+    FieldCommonProps & FieldCommonClassesProps & InputSelectCommonProps<T>
   >(),
   {
     validateOn: 'change',
@@ -94,7 +62,7 @@ defineSlots<
 >();
 
 defineExpose({
-  reset,
+  reset: resetOptions,
 });
 
 const {
@@ -126,135 +94,39 @@ const { fieldData } = useCommonField({
 
 const { value, error, valid, touched, fieldProps } = fieldData;
 
-const isLoading = ref(false);
-const isMore = ref(false);
-const currentpage = ref(1);
+const {
+  isLoading,
+  isMore,
 
-const selectOptions = ref<T[]>([]);
+  selectOptions,
 
-const reference = ref<MaybeElement>(null);
-const floating = ref<any>(null);
-const ioRoot = ref<MaybeElement>(null);
-const ioTarget = ref<MaybeElement>(null);
-
-const labelCache = new Map<FieldValue, T>();
-
-let getDataAbortController = new AbortController();
-
-const { floatingStyles } = useFloating(reference, floating, {
-  placement: 'bottom',
-  middleware: [flip(), offset(10), shift()],
-  whileElementsMounted: autoUpdate,
-});
-
-useIntersectionObserver(
+  reference,
+  floating,
+  ioRoot,
   ioTarget,
-  ([{ isIntersecting }]) => {
-    if (isIntersecting) {
-      isMore.value = false;
-      try {
-        getData();
-      } catch (error) {
-        if (error instanceof GetDataAbortedError) return;
-        console.error(error);
-      }
-    }
-  },
-  {
-    root: ioRoot,
-  }
-);
 
-const selectedOption = computedAsync(async () => {
-  if (!props.multiple && value.value) {
-    return await getOption(value.value);
-  } else if (
-    props.multiple &&
-    Array.isArray(value.value) &&
-    value.value.length > 0
-  ) {
-    return await Promise.all(
-      value.value.slice(0, 3).map((item: FieldValue) => getOption(item))
-    );
-  }
-  return props.placeholder;
-}, props.placeholder);
+  selectedOption,
 
-async function getOption(value: FieldValue) {
-  if (labelCache.has(value)) {
-    return labelCache.get(value) as T;
-  }
-  const option = props.loadOption
-    ? await props.loadOption(value)
-    : selectOptions.value.find((item) => item.value === value);
-  if (!option) {
-    return { value: value, label: 'Elemento no encontrado' } as T;
-  }
-  // @ts-ignore
-  labelCache.set(value, option);
-  return option as T;
-}
+  floatingStyles,
 
-function hasMore() {
-  isMore.value = true;
-  currentpage.value++;
-}
-
-function getData() {
-  getDataAbortController.abort();
-  getDataAbortController = new AbortController();
-
-  const signal = getDataAbortController.signal;
-  return new Promise<void>((resolve, reject) => {
-    const abortError = new GetDataAbortedError('Get data aborted');
-
-    if (signal.aborted) reject(abortError);
-
-    signal.addEventListener('abort', () => {
-      reject(abortError);
+  reset,
+} = useInputSelectField<T>({
+  isMultiple: toRef(props, 'multiple'),
+  placeholder: toRef(props, 'placeholder'),
+  loadOption: toRef(props, 'loadOption'),
+  value,
+  async parseOptions({ hasMore, page, signal }) {
+    return await toSelectLabelValues<T>(props.options)({
+      page,
+      hasMore,
+      signal,
     });
-
-    (async () => {
-      isLoading.value = true;
-      try {
-        const data = await toSelectLabelValues<T>(props.options)({
-          page: currentpage.value,
-          hasMore,
-          signal,
-        });
-
-        data.forEach((item) => {
-          labelCache.set(item.value, item);
-        });
-
-        // @ts-ignore
-        selectOptions.value = selectOptions.value.concat(data);
-        isLoading.value = false;
-        resolve();
-      } catch (error) {
-        isLoading.value = false;
-        console.error(error);
-        reject(error);
-      }
-    })();
-  });
-}
-
-function reset() {
-  selectOptions.value = [];
-  currentpage.value = 1;
-  isMore.value = false;
-  try {
-    getData();
-  } catch (error) {
-    if (error instanceof GetDataAbortedError) return;
-    console.error(error);
-  }
-}
-
-onMounted(() => {
-  reset();
+  },
 });
+
+function resetOptions() {
+  reset();
+}
 </script>
 
 <template>
