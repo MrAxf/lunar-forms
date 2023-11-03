@@ -50,20 +50,20 @@ const defaultConfig: PluginOptions = {
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
             ([key, val]) => [
               key,
-              val.replace('lunar-', 'lunar-group-input-text'),
+              val.replace('lunar-', 'lunar-group-input-text-'),
             ]
           )
         ),
         inputCheckable: Object.fromEntries(
           [...commonClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-group-input-checkable'),
+            val.replace('lunar-', 'lunar-group-input-checkable-'),
           ])
         ),
         inputFieldset: Object.fromEntries(
           [...commonClasses, ...fieldsetClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-group-input-checkable'),
+            val.replace('lunar-', 'lunar-group-input-checkable-'),
           ])
         ),
       },
@@ -71,96 +71,102 @@ const defaultConfig: PluginOptions = {
         checkboxes: Object.fromEntries(
           [...commonClasses, ...fieldsetClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-input-checkboxes'),
+            val.replace('lunar-', 'lunar-input-checkboxes-'),
           ])
         ),
         checkbox: Object.fromEntries(
           [...commonClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-input-checkbox'),
+            val.replace('lunar-', 'lunar-input-checkbox-'),
           ])
         ),
         color: Object.fromEntries(
           [...commonClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-input-color'),
+            val.replace('lunar-', 'lunar-input-color-'),
           ])
         ),
         date: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-date')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-date-')]
           )
         ),
         datetimeLocal: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-date')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-date-')]
           )
         ),
         email: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-email')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-email-')]
           )
         ),
         file: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-file')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-file-')]
           )
         ),
         number: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-number')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-number-')]
           )
         ),
         password: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-password')]
+            ([key, val]) => [
+              key,
+              val.replace('lunar-', 'lunar-input-password-'),
+            ]
           )
         ),
         radio: Object.fromEntries(
           [...commonClasses, ...fieldsetClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-input-radio'),
+            val.replace('lunar-', 'lunar-input-radio-'),
           ])
         ),
         range: Object.fromEntries(
           [...commonClasses].map(([key, val]) => [
             key,
-            val.replace('lunar-', 'lunar-input-range'),
+            val.replace('lunar-', 'lunar-input-range-'),
           ])
         ),
         search: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-search')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-search-')]
           )
         ),
         select: Object.fromEntries(
           [...commonClasses, ['input-icon', 'lunar-input-icon']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-select')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-select-')]
           )
         ),
         tel: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-tel')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-tel-')]
           )
         ),
         textarea: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-textarea')]
+            ([key, val]) => [
+              key,
+              val.replace('lunar-', 'lunar-input-textarea-'),
+            ]
           )
         ),
         text: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-text')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-text-')]
           )
         ),
         time: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-time')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-time-')]
           )
         ),
         url: Object.fromEntries(
           [...commonClasses, ['input-btn', 'lunar-input-btn']].map(
-            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-url')]
+            ([key, val]) => [key, val.replace('lunar-', 'lunar-input-url-')]
           )
         ),
       },
@@ -222,10 +228,11 @@ const defaultConfig: PluginOptions = {
 export const defineLunarFormsFieldsConfig = <T extends PluginOptions>(
   config: defineLunarFormsFieldsConfigParams
 ) => {
-  let pluginConf = deepAssign<PluginOptions>(defaultConfig, config);
+  let pluginConf = deepAssign(config, defaultConfig);
+  delete pluginConf['plugins'];
 
   config.plugins?.forEach((plugin) => {
-    pluginConf = plugin(pluginConf);
+    pluginConf = plugin(pluginConf as PluginOptions);
   });
 
   return pluginConf as T;
