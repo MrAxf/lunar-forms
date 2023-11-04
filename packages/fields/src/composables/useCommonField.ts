@@ -2,6 +2,8 @@ import type { FieldOptions } from '@lunar-forms/core';
 import { useField, useVModel } from '@lunar-forms/core';
 import { getCurrentInstance } from 'vue';
 
+import { generateId } from '@/utils';
+
 export function useCommonField(fieldOptions: Partial<FieldOptions>) {
   const vm = getCurrentInstance();
 
@@ -10,7 +12,7 @@ export function useCommonField(fieldOptions: Partial<FieldOptions>) {
       'You must use this composable inside a Vue component with a "name" prop.'
     );
 
-  const id = `${vm.props.name}-${crypto.randomUUID()}`;
+  const id = `${vm.props.name}-${generateId()}`;
 
   const fieldData = useField(vm.props.name as string, {
     ...vm.props,

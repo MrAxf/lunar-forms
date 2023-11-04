@@ -10,6 +10,8 @@ import type {
 } from '@lunar-forms/core';
 import { useField } from '@lunar-forms/core';
 
+import { generateId } from '@/utils';
+
 defineOptions({
   name: 'TextField',
   inheritAttrs: false,
@@ -23,7 +25,7 @@ const props = defineProps<{
   refine?: MaybeArray<FieldTransformer>;
 }>();
 
-const id = `${props.name}-${crypto.randomUUID()}`;
+const id = `${props.name}-${generateId()}`;
 
 const { value } = useField(props.name, {
   initialValue: props.value || props.modelValue,

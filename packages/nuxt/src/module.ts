@@ -1,6 +1,8 @@
 import {
   addComponent,
   addImports,
+  addPluginTemplate,
+  createResolver,
   defineNuxtModule,
   logger,
 } from '@nuxt/kit';
@@ -10,6 +12,7 @@ import { isPackageExists } from 'local-pkg';
 // Module options TypeScript interface definition
 export interface ModuleOptions {
   autoImports?: boolean;
+  fieldsConfigFile: string;
 }
 
 const components = ['LunarField', 'LunarForm', 'LunarFieldArray'];
@@ -82,6 +85,7 @@ export default defineNuxtModule<ModuleOptions>({
   // Default configuration options of the Nuxt module
   defaults: {
     autoImports: true,
+    fieldsConfigFile: 'lunarFormsFields.config.js'
   },
   setup(options) {
     if (options.autoImports) {
@@ -102,11 +106,14 @@ export default defineNuxtModule<ModuleOptions>({
       });
     }
 
+    logger.info('@lunar-forms/core');
+
     checkLunarFormFields(options);
   },
 });
 
 function checkLunarFormFields(options: ModuleOptions) {
+  const resolver = createResolver(import.meta.url)
   if (isPackageExists('@lunar-forms/fields')) {
     logger.info('@lunar-forms/fields');
     if (options.autoImports) {
@@ -114,10 +121,17 @@ function checkLunarFormFields(options: ModuleOptions) {
         addComponent({
           name: component,
           export: component,
-          filePath: '@lunar-forms/core',
+          filePath: '@lunar-forms/fields',
         });
       });
     }
+
+    addPluginTemplate({
+      src: resolver.resolve('runtime/plugin.js'),
+      options: {
+        config: options.fieldsConfigFile
+      },
+    })
 
     return true;
   }

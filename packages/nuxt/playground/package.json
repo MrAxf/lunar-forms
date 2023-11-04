@@ -8,6 +8,13 @@
     "generate": "nuxi generate"
   },
   "devDependencies": {
-    "nuxt": "latest"
+    "@formkit/auto-animate": "^0.8.0",
+    "@lunar-forms/dropdown-fields": "workspace:^",
+    "@lunar-forms/fields": "workspace:^",
+    "@lunar-forms/theming": "workspace:^",
+    "@nuxtjs/tailwindcss": "^6.9.4",
+    "daisyui": "^3.9.4",
+    "nuxt": "latest",
+    "nuxt-icon": "^0.6.1"
   }
 }
