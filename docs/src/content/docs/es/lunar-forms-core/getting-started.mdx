@@ -1,0 +1,70 @@
+---
+title: Empezando con Lunar Forms
+description: Guía de inicio de Luanr Forms.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+import ExampleEditor from '../../../../components/ExampleEditor.vue';
+
+## ¿Que es Lunar Forms?
+
+Lunar Forms es una librería para <a href="https://vuejs.org/" target="_blank">Vue 3</a> modular para gestionar la validación de formularios.
+
+## Instalación
+
+Para instalar la librería principal puede hacer uso de los principales gestores de paquetes para ```javascript```.
+
+<Tabs>
+	<TabItem label="npm">
+    ```bash
+      npm i @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="pnpm">
+    ```bash
+      pnpm add @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="yarn">
+    ```bash
+      yarn add @lunar-forms/core
+    ```
+  </TabItem>
+</Tabs>
+
+### Integración con Nuxt
+
+Para realizar la integración con <a href="https://nuxt.com/" target="_blank">Nuxt</a> de forma automática debe instalar el módulo junto con la librería.
+
+<Tabs>
+	<TabItem label="npm">
+    ```bash
+      npm i @lunar-forms/nuxt @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="pnpm">
+    ```bash
+      pnpm add @lunar-forms/nuxt @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="yarn">
+    ```bash
+      yarn add @lunar-forms/nuxt @lunar-forms/core
+    ```
+  </TabItem>
+</Tabs>
+
+Y añadirlo en la configuración.
+
+```javascript
+//nuxt.config.js
+export default defineNuxtConfig({
+  // ...
+  modules: [
+    // ...
+    '@lunar-forms/nuxt',
+    // ...
+  ],
+  // ...
+});
+```

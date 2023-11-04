@@ -1,0 +1,65 @@
+---
+title: Instalación
+description: Cómo instalar Lunar Forms.
+---
+
+import { TabItem, Tabs } from '@astrojs/starlight/components';
+import ExampleEditor from '../../../../components/ExampleEditor.vue';
+
+## Instalación de librerías.
+
+Lunar Forms se compone de varias librerías para la gestión de sus formularios.
+
+### Instalación de la librería principal.
+
+Esta librería proporciona la base para la creación y validación de formularios.
+
+Para instalar la librería principal puede hacer uso de los principales gestores de paquetes para ```javascript```.
+
+<Tabs>
+	<TabItem label="npm">
+    ```bash
+      npm i @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="pnpm">
+    ```bash
+      pnpm add @lunar-forms/core
+    ```
+  </TabItem>
+	<TabItem label="yarn">
+    ```bash
+      yarn add @lunar-forms/core
+    ```
+  </TabItem>
+</Tabs>
+
+### Instalación de ```fields```.
+
+Esta librería proporciona una serie de componentes basados en los ```inputs``` nativos de ```html```.
+
+Para instalar la librería principal puede hacer uso de los principales gestores de paquetes para ```javascript```.
+
+<Tabs>
+	<TabItem label="npm">
+    ```bash
+      npm i @lunar-forms/fields
+    ```
+  </TabItem>
+	<TabItem label="pnpm">
+    ```bash
+      pnpm add @lunar-forms/fields
+    ```
+  </TabItem>
+	<TabItem label="yarn">
+    ```bash
+      yarn add @lunar-forms/fields
+    ```
+  </TabItem>
+</Tabs>
+
+:::caution[Atención]
+Se requiere ```@lunar-forms/core``` para el usso de esta librería.
+:::
+
+<ExampleEditor example="single" client:only="vue" />
