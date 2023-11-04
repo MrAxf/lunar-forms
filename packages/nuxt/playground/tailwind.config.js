@@ -2,6 +2,7 @@
 export default {
   content: [
     './node_modules/@lunar-forms/theming/dist/themesDaisyui.js',
+    './lunarFormsFields.config.js',
   ],
   theme: {
     extend: {},

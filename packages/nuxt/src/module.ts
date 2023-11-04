@@ -75,6 +75,12 @@ const fieldsComponents = [
   'TextField',
   'TimeField',
   'UrlField',
+  'FieldsetInput',
+];
+
+const dropDownFieldsComponents = [
+  'AutocompleteField',
+  'SelectMenuField',
 ];
 
 export default defineNuxtModule<ModuleOptions>({
@@ -106,8 +112,6 @@ export default defineNuxtModule<ModuleOptions>({
       });
     }
 
-    logger.info('@lunar-forms/core');
-
     checkLunarFormFields(options);
   },
 });
@@ -115,7 +119,6 @@ export default defineNuxtModule<ModuleOptions>({
 function checkLunarFormFields(options: ModuleOptions) {
   const resolver = createResolver(import.meta.url)
   if (isPackageExists('@lunar-forms/fields')) {
-    logger.info('@lunar-forms/fields');
     if (options.autoImports) {
       fieldsComponents.forEach((component) => {
         addComponent({
@@ -126,6 +129,8 @@ function checkLunarFormFields(options: ModuleOptions) {
       });
     }
 
+    checkLunarFormDropdownFields(options);
+
     addPluginTemplate({
       src: resolver.resolve('runtime/plugin.js'),
       options: {
@@ -133,6 +138,23 @@ function checkLunarFormFields(options: ModuleOptions) {
       },
     })
 
+    return true;
+  }
+
+  return false;
+}
+
+function checkLunarFormDropdownFields(options: ModuleOptions) {
+  if (isPackageExists('@lunar-forms/dropdown-fields')) {
+    if (options.autoImports) {
+      dropDownFieldsComponents.forEach((component) => {
+        addComponent({
+          name: component,
+          export: component,
+          filePath: '@lunar-forms/dropdown-fields',
+        });
+      });
+    }
     return true;
   }
 
