@@ -179,6 +179,7 @@ function resetOptions() {
         >{{ props.label }}</ListboxLabel
       >
       <div
+        ref="reference"
         :class="[
           global.inner,
           groupClasses.inner,
@@ -198,7 +199,6 @@ function resetOptions() {
           <slot name="prefix" v-bind="fieldData"></slot>
         </div>
         <ListboxButton
-          ref="reference"
           @blur="fieldProps.onblur"
           @focus="fieldProps.onfocus"
           :class="[
@@ -309,195 +309,195 @@ function resetOptions() {
         >
           <slot name="suffix" v-bind="fieldData"></slot>
         </div>
-        <Transition
-          :enter-active-class="
-            normalizeClass([
-              global['dropdown-enter-active'],
-              groupClasses['dropdown-enter-active'],
-              fieldClasses['dropdown-enter-active'],
-              props.classDropdownEnterActive,
-            ])
-          "
-          :enter-from-class="
-            normalizeClass([
-              global['dropdown-enter-from'],
-              groupClasses['dropdown-enter-from'],
-              fieldClasses['dropdown-enter-from'],
-              props.classDropdownEnterFrom,
-            ])
-          "
-          :enter-to-class="
-            normalizeClass([
-              global['dropdown-enter-to'],
-              groupClasses['dropdown-enter-to'],
-              fieldClasses['dropdown-enter-to'],
-              props.classDropdownEnterTo,
-            ])
-          "
-          :leave-active-class="
-            normalizeClass([
-              global['dropdown-leave-active'],
-              groupClasses['dropdown-leave-active'],
-              fieldClasses['dropdown-leave-active'],
-              props.classDropdownLeaveActive,
-            ])
-          "
-          :leave-from-class="
-            normalizeClass([
-              global['dropdown-leave-from'],
-              groupClasses['dropdown-leave-from'],
-              fieldClasses['dropdown-leave-from'],
-              props.classDropdownLeaveFrom,
-            ])
-          "
-          :leave-to-class="
-            normalizeClass([
-              global['dropdown-leave-to'],
-              groupClasses['dropdown-leave-to'],
-              fieldClasses['dropdown-leave-to'],
-              props.classDropdownLeaveTo,
-            ])
-          "
+      </div>
+      <Transition
+        :enter-active-class="
+          normalizeClass([
+            global['dropdown-enter-active'],
+            groupClasses['dropdown-enter-active'],
+            fieldClasses['dropdown-enter-active'],
+            props.classDropdownEnterActive,
+          ])
+        "
+        :enter-from-class="
+          normalizeClass([
+            global['dropdown-enter-from'],
+            groupClasses['dropdown-enter-from'],
+            fieldClasses['dropdown-enter-from'],
+            props.classDropdownEnterFrom,
+          ])
+        "
+        :enter-to-class="
+          normalizeClass([
+            global['dropdown-enter-to'],
+            groupClasses['dropdown-enter-to'],
+            fieldClasses['dropdown-enter-to'],
+            props.classDropdownEnterTo,
+          ])
+        "
+        :leave-active-class="
+          normalizeClass([
+            global['dropdown-leave-active'],
+            groupClasses['dropdown-leave-active'],
+            fieldClasses['dropdown-leave-active'],
+            props.classDropdownLeaveActive,
+          ])
+        "
+        :leave-from-class="
+          normalizeClass([
+            global['dropdown-leave-from'],
+            groupClasses['dropdown-leave-from'],
+            fieldClasses['dropdown-leave-from'],
+            props.classDropdownLeaveFrom,
+          ])
+        "
+        :leave-to-class="
+          normalizeClass([
+            global['dropdown-leave-to'],
+            groupClasses['dropdown-leave-to'],
+            fieldClasses['dropdown-leave-to'],
+            props.classDropdownLeaveTo,
+          ])
+        "
+      >
+        <div
+          v-if="open"
+          ref="floating"
+          :style="floatingStyles"
+          :class="[
+            global['dropdown-wrapper'],
+            groupClasses['dropdown-wrapper'],
+            fieldClasses['dropdown-wrapper'],
+            props.classDropdownWrapper,
+          ]"
         >
           <div
-            v-if="open"
-            ref="floating"
-            :style="floatingStyles"
+            ref="ioRoot"
             :class="[
-              global['dropdown-wrapper'],
-              groupClasses['dropdown-wrapper'],
-              fieldClasses['dropdown-wrapper'],
-              props.classDropdownWrapper,
+              global['dropdown-content'],
+              groupClasses['dropdown-content'],
+              fieldClasses['dropdown-content'],
+              props.classDropdownContent,
             ]"
           >
-            <div
-              ref="ioRoot"
+            <ListboxOptions
+              as="ul"
               :class="[
-                global['dropdown-content'],
-                groupClasses['dropdown-content'],
-                fieldClasses['dropdown-content'],
-                props.classDropdownContent,
+                global.options,
+                groupClasses.options,
+                fieldClasses.options,
+                props.classOptions,
               ]"
             >
-              <ListboxOptions
-                as="ul"
-                :class="[
-                  global.options,
-                  groupClasses.options,
-                  fieldClasses.options,
-                  props.classOptions,
-                ]"
+              <ListboxOption
+                v-for="option in selectOptions"
+                v-slot="{ active, selected }"
+                :key="option.label"
+                :value="option.value"
+                as="template"
+                :disabled="option.attrs?.disabled ? true : false"
               >
-                <ListboxOption
-                  v-for="option in selectOptions"
-                  v-slot="{ active, selected }"
-                  :key="option.label"
-                  :value="option.value"
-                  as="template"
-                  :disabled="option.attrs?.disabled ? true : false"
+                <!-- @vue-ignore -->
+                <li
+                  :class="[
+                    global.option,
+                    groupClasses.option,
+                    fieldClasses.option,
+                    props.classOption,
+                    {
+                      active,
+                      selected,
+                    },
+                  ]"
                 >
-                  <!-- @vue-ignore -->
-                  <li
+                  <div
                     :class="[
-                      global.option,
-                      groupClasses.option,
-                      fieldClasses.option,
-                      props.classOption,
-                      {
-                        active,
-                        selected,
-                      },
+                      global['option-selected-icon'],
+                      groupClasses['option-selected-icon'],
+                      fieldClasses['option-selected-icon'],
+                      props.classOptionSelectedicon,
                     ]"
                   >
-                    <div
-                      :class="[
-                        global['option-selected-icon'],
-                        groupClasses['option-selected-icon'],
-                        fieldClasses['option-selected-icon'],
-                        props.classOptionSelectedicon,
-                      ]"
-                    >
-                      <div v-if="selected" v-html="icons.optionSelected"></div>
-                    </div>
-                    <!-- @vue-ignore -->
-                    <slot
-                      name="option"
-                      :option="option"
-                      :active="active"
-                      :selected="selected"
+                    <div v-if="selected" v-html="icons.optionSelected"></div>
+                  </div>
+                  <!-- @vue-ignore -->
+                  <slot
+                    name="option"
+                    :option="option"
+                    :active="active"
+                    :selected="selected"
+                    :class="[
+                      global['option-content'],
+                      groupClasses['option-content'],
+                      fieldClasses['option-content'],
+                      props.classOptionContent,
+                    ]"
+                  >
+                    <span
                       :class="[
                         global['option-content'],
                         groupClasses['option-content'],
                         fieldClasses['option-content'],
                         props.classOptionContent,
                       ]"
+                      :title="option.label"
+                      >{{ option.label }}</span
                     >
-                      <span
-                        :class="[
-                          global['option-content'],
-                          groupClasses['option-content'],
-                          fieldClasses['option-content'],
-                          props.classOptionContent,
-                        ]"
-                        :title="option.label"
-                        >{{ option.label }}</span
-                      >
-                    </slot>
-                  </li>
-                </ListboxOption>
-              </ListboxOptions>
-              <div
-                v-if="isLoading"
+                  </slot>
+                </li>
+              </ListboxOption>
+            </ListboxOptions>
+            <div
+              v-if="isLoading"
+              :class="[
+                global['option-loading'],
+                groupClasses['option-loading'],
+                fieldClasses['option-loading'],
+                props.classOptionLoading,
+              ]"
+            >
+              <span
                 :class="[
-                  global['option-loading'],
-                  groupClasses['option-loading'],
-                  fieldClasses['option-loading'],
-                  props.classOptionLoading,
+                  global['option-loading-loader'],
+                  groupClasses['option-loading-loader'],
+                  fieldClasses['option-loading-loader'],
+                  props.classOptionLoadingLoader,
                 ]"
-              >
-                <span
-                  :class="[
-                    global['option-loading-loader'],
-                    groupClasses['option-loading-loader'],
-                    fieldClasses['option-loading-loader'],
-                    props.classOptionLoadingLoader,
-                  ]"
-                ></span>
-              </div>
-              <div
-                v-if="!isLoading && isMore"
-                ref="ioTarget"
+              ></span>
+            </div>
+            <div
+              v-if="!isLoading && isMore"
+              ref="ioTarget"
+              :class="[
+                global['option-loading'],
+                groupClasses['option-loading'],
+                fieldClasses['option-loading'],
+                props.classOptionLoading,
+              ]"
+            >
+              <span
                 :class="[
-                  global['option-loading'],
-                  groupClasses['option-loading'],
-                  fieldClasses['option-loading'],
-                  props.classOptionLoading,
+                  global['option-loading-loader'],
+                  groupClasses['option-loading-loader'],
+                  fieldClasses['option-loading-loader'],
+                  props.classOptionLoadingLoader,
                 ]"
-              >
-                <span
-                  :class="[
-                    global['option-loading-loader'],
-                    groupClasses['option-loading-loader'],
-                    fieldClasses['option-loading-loader'],
-                    props.classOptionLoadingLoader,
-                  ]"
-                ></span>
-              </div>
-              <div
-                v-if="!isLoading && selectOptions.length === 0"
-                :class="[
-                  global['dropdown-message'],
-                  groupClasses['dropdown-message'],
-                  fieldClasses['dropdown-message'],
-                  props.classDropdownMessage,
-                ]"
-              >
-                <span>{{ messages.notFoundResults }}</span>
-              </div>
+              ></span>
+            </div>
+            <div
+              v-if="!isLoading && selectOptions.length === 0"
+              :class="[
+                global['dropdown-message'],
+                groupClasses['dropdown-message'],
+                fieldClasses['dropdown-message'],
+                props.classDropdownMessage,
+              ]"
+            >
+              <span>{{ messages.notFoundResults }}</span>
             </div>
           </div>
-        </Transition>
-      </div>
+        </div>
+      </Transition>
     </Listbox>
     <span
       v-if="props.help"
