@@ -9,11 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.0.2",
     "@formkit/auto-animate": "^0.8.0",
+    "@headlessui/vue": "^1.7.16",
     "@lunar-forms/core": "workspace:*",
-    "@lunar-forms/fields": "workspace:*",
     "@lunar-forms/dropdown-fields": "workspace:*",
+    "@lunar-forms/fields": "workspace:*",
     "@lunar-forms/theming": "workspace:*",
+    "@vueuse/core": "^10.5.0",
     "vue": "^3.3.4",
     "vue-router": "4.2.5"
   },

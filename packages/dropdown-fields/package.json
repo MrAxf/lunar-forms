@@ -22,11 +22,16 @@
     "prepublishOnly": "pnpm build"
   },
   "peerDependencies": {
+    "@floating-ui/vue": "^1.0.2",
+    "@headlessui/vue": "^1.7.16",
     "@lunar-forms/core": "0.3.0",
     "@lunar-forms/fields": "0.3.0",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "@vueuse/core": "^10.5.0"
   },
   "devDependencies": {
+    "@floating-ui/vue": "^1.0.2",
+    "@headlessui/vue": "^1.7.16",
     "@lunar-forms/core": "workspace:*",
     "@lunar-forms/fields": "workspace:*",
     "@types/node": "^20.8.7",
@@ -34,6 +39,7 @@
     "@typescript-eslint/parser": "^6.8.0",
     "@vitejs/plugin-vue": "^4.4.0",
     "@vue/eslint-config-typescript": "^12.0.0",
+    "@vueuse/core": "^10.5.0",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.1",
@@ -46,10 +52,5 @@
     "vue": "^3.3.4",
     "vue-eslint-parser": "^9.3.2",
     "vue-tsc": "^1.8.19"
-  },
-  "dependencies": {
-    "@floating-ui/vue": "^1.0.2",
-    "@headlessui/vue": "^1.7.16",
-    "@vueuse/core": "^10.5.0"
   }
 }

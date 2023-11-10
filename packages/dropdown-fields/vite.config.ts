@@ -19,12 +19,22 @@ export default defineConfig(({ mode }) => ({
     },
     sourcemap: mode === 'development',
     rollupOptions: {
-      external: ['vue', '@lunar-forms/core', '@lunar-forms/fields'],
+      external: [
+        '@floating-ui/vue',
+        '@headlessui/vue',
+        '@lunar-forms/core',
+        '@lunar-forms/fields',
+        '@vueuse/core',
+        'vue',
+      ],
       output: {
         globals: {
-          vue: 'Vue',
+          '@floating-ui/vue': 'FloatingUiVue',
+          '@headlessui/vue': 'HeadlessuiVue',
           '@lunar-forms/core': 'LunarFormsCore',
           '@lunar-forms/fields': 'LunarFormsFields',
+          '@vueuse/core': 'vueuseCore',
+          vue: 'Vue',
         },
       },
     },
