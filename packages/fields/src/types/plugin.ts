@@ -8,6 +8,7 @@ export interface CommonClasses {
   input?: string;
   help?: string;
   message?: string;
+  'input-btn'?: string;
 }
 
 export interface FieldsetClasses {
@@ -21,13 +22,10 @@ export interface PluginOptions {
     classes: {
       global: CommonClasses &
         FieldsetClasses & {
-          'input-btn'?: string;
           'input-icon'?: string;
         };
       groups: {
-        inputText: CommonClasses & {
-          'input-btn'?: string;
-        };
+        inputText: CommonClasses;
         inputCheckable: CommonClasses;
         inputFieldset: CommonClasses & FieldsetClasses;
       };
@@ -35,47 +33,23 @@ export interface PluginOptions {
         checkboxes: CommonClasses & FieldsetClasses;
         checkbox: CommonClasses;
         color: CommonClasses;
-        date: CommonClasses & {
-          'input-btn'?: string;
-        };
-        datetimeLocal: CommonClasses & {
-          'input-btn'?: string;
-        };
-        email: CommonClasses & {
-          'input-btn'?: string;
-        };
-        file: CommonClasses & {
-          'input-btn'?: string;
-        };
-        number: CommonClasses & {
-          'input-btn'?: string;
-        };
-        password: CommonClasses & {
-          'input-btn'?: string;
-        };
+        date: CommonClasses;
+        datetimeLocal: CommonClasses;
+        email: CommonClasses;
+        file: CommonClasses;
+        number: CommonClasses;
+        password: CommonClasses;
         radio: CommonClasses & FieldsetClasses;
         range: CommonClasses;
-        search: CommonClasses & {
-          'input-btn'?: string;
-        };
+        search: CommonClasses;
         select: CommonClasses & {
           'input-icon'?: string;
         };
-        tel: CommonClasses & {
-          'input-btn'?: string;
-        };
-        textarea: CommonClasses & {
-          'input-btn'?: string;
-        };
-        text: CommonClasses & {
-          'input-btn'?: string;
-        };
-        time: CommonClasses & {
-          'input-btn'?: string;
-        };
-        url: CommonClasses & {
-          'input-btn'?: string;
-        };
+        tel: CommonClasses;
+        textarea: CommonClasses;
+        text: CommonClasses;
+        time: CommonClasses;
+        url: CommonClasses;
       };
     };
     icons: {

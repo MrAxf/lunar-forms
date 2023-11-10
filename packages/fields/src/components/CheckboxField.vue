@@ -57,16 +57,17 @@ defineSlots<FieldCommonSlots>();
 
 const {
   theme: {
+    icons,
     classes: {
       global,
-      groups: { inputCheckable: groupClasess },
+      groups: { inputCheckable: groupClasses },
       fields: { checkbox: fieldClasses },
     },
   },
   messages,
 } = usePluginOptions();
 
-const { id, fieldData } = useCommonField({
+const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -84,7 +85,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
   <div
     :class="[
       global.outer,
-      groupClasess.outer,
+      groupClasses.outer,
       fieldClasses.outer,
       props.classOuter,
     ]"
@@ -98,11 +99,12 @@ const inputRef = ref<HTMLInputElement | null>(null);
     :data-checked="inputRef?.checked ? true : null"
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
+    :data-input-btn="props.clearButton ? true : null"
   >
     <label
       :class="[
         global.wrapper,
-        groupClasess.wrapper,
+        groupClasses.wrapper,
         fieldClasses.wrapper,
         props.classWrapper,
       ]"
@@ -110,7 +112,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
       <div
         :class="[
           global.inner,
-          groupClasess.inner,
+          groupClasses.inner,
           fieldClasses.inner,
           props.classInner,
         ]"
@@ -119,7 +121,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
           v-if="$slots.prefix"
           :class="[
             global.prefix,
-            groupClasess.prefix,
+            groupClasses.prefix,
             fieldClasses.prefix,
             props.classPrefix,
           ]"
@@ -136,7 +138,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
           :required="props.required"
           :class="[
             global.input,
-            groupClasess.input,
+            groupClasses.input,
             fieldClasses.input,
             props.classInput,
           ]"
@@ -149,7 +151,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
           v-if="$slots.suffix"
           :class="[
             global.suffix,
-            groupClasess.suffix,
+            groupClasses.suffix,
             fieldClasses.suffix,
             props.classSuffix,
           ]"
@@ -161,18 +163,31 @@ const inputRef = ref<HTMLInputElement | null>(null);
         v-if="props.label"
         :class="[
           global.label,
-          groupClasess.label,
+          groupClasses.label,
           fieldClasses.label,
           props.classLabel,
         ]"
         >{{ props.label }}</span
       >
+      <button
+        v-if="props.clearButton"
+        type="button"
+        v-html="icons.clear"
+        :class="[
+          global['input-btn'],
+          groupClasses['input-btn'],
+          fieldClasses['input-btn'],
+          props.classInputBtn,
+        ]"
+        :title="messages.actions.clear"
+        @click="onClear"
+      ></button>
     </label>
     <span
       v-if="props.help"
       :class="[
         global.help,
-        groupClasess.help,
+        groupClasses.help,
         fieldClasses.help,
         props.classHelp,
       ]"
@@ -182,7 +197,7 @@ const inputRef = ref<HTMLInputElement | null>(null);
       v-if="error"
       :class="[
         global.message,
-        groupClasess.message,
+        groupClasses.message,
         fieldClasses.message,
         props.classMessage,
       ]"

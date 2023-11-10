@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { Repl, ReplStore } from '@vue/repl';
 
-
 const props = defineProps<{
   store: ReplStore;
   example: string;
@@ -9,8 +8,9 @@ const props = defineProps<{
 
 const { default: Monaco } = await import('@vue/repl/monaco-editor');
 
-const { default: exampleCode } = await import(`../examples/${props.example}.vue?raw`);
-
+const { default: exampleCode } = await import(
+  `../examples/${props.example}.vue?raw`
+);
 
 props.store.setFiles({
   ...props.store.getFiles(),

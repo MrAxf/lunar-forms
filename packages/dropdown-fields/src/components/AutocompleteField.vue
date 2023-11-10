@@ -82,12 +82,12 @@ const {
     classes: {
       global,
       fields: { autocomplete: fieldClasses },
-      groups: { inputSelect: groupClasess },
+      groups: { inputSelect: groupClasses },
     },
   },
 } = usePluginOptions<LunarDropdownFieldsOptions & PluginOptions>();
 
-const { fieldData } = useCommonField({
+const { fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -154,7 +154,7 @@ watch(debouncedSearchText, () => {
   <div
     :class="[
       global.outer,
-      groupClasess.outer,
+      groupClasses.outer,
       fieldClasses.outer,
       props.classOuter,
     ]"
@@ -163,6 +163,7 @@ watch(debouncedSearchText, () => {
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
+    :data-input-btn="props.clearButton ? true : null"
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
@@ -181,7 +182,7 @@ watch(debouncedSearchText, () => {
       as="div"
       :class="[
         global.wrapper,
-        groupClasess.wrapper,
+        groupClasses.wrapper,
         fieldClasses.wrapper,
         props.classWrapper,
       ]"
@@ -192,7 +193,7 @@ watch(debouncedSearchText, () => {
         v-if="props.label"
         :class="[
           global.label,
-          groupClasess.label,
+          groupClasses.label,
           fieldClasses.label,
           props.classLabel,
         ]"
@@ -201,7 +202,7 @@ watch(debouncedSearchText, () => {
       <div
         :class="[
           global.inner,
-          groupClasess.inner,
+          groupClasses.inner,
           fieldClasses.inner,
           props.classInner,
         ]"
@@ -210,7 +211,7 @@ watch(debouncedSearchText, () => {
           v-if="$slots.prefix"
           :class="[
             global.prefix,
-            groupClasess.prefix,
+            groupClasses.prefix,
             fieldClasses.prefix,
             props.classPrefix,
           ]"
@@ -223,7 +224,7 @@ watch(debouncedSearchText, () => {
           @focus="fieldProps.onfocus"
           :class="[
             global.input,
-            groupClasess.input,
+            groupClasses.input,
             fieldClasses.input,
             props.classInput,
           ]"
@@ -231,7 +232,7 @@ watch(debouncedSearchText, () => {
           <div
             :class="[
               global['input-content'],
-              groupClasess['input-content'],
+              groupClasses['input-content'],
               fieldClasses['input-content'],
               props.classInputContent,
             ]"
@@ -247,7 +248,7 @@ watch(debouncedSearchText, () => {
               :option="selectedOption"
               :class="[
                 global['option-content'],
-                groupClasess['option-content'],
+                groupClasses['option-content'],
                 fieldClasses['option-content'],
                 props.classOptionContent,
               ]"
@@ -280,7 +281,7 @@ watch(debouncedSearchText, () => {
             v-if="isLoading"
             :class="[
               global['input-loading'],
-              groupClasess['input-loading'],
+              groupClasses['input-loading'],
               fieldClasses['input-loading'],
               props.classInputLoading,
             ]"
@@ -289,7 +290,7 @@ watch(debouncedSearchText, () => {
             v-if="props.multiple && Array.isArray(value) && value.length > 1"
             :class="[
               global['input-count'],
-              groupClasess['input-count'],
+              groupClasses['input-count'],
               fieldClasses['input-count'],
               props.classInputCount,
             ]"
@@ -299,18 +300,30 @@ watch(debouncedSearchText, () => {
             v-html="icons.select"
             :class="[
               global['input-icon'],
-              groupClasess['input-icon'],
+              groupClasses['input-icon'],
               fieldClasses['input-icon'],
               props.classInputIcon,
             ]"
           ></div>
         </ComboboxButton>
-
+        <button
+          v-if="props.clearButton"
+          type="button"
+          v-html="icons.clear"
+          :class="[
+            global['input-btn'],
+            groupClasses['input-btn'],
+            fieldClasses['input-btn'],
+            props.classInputBtn,
+          ]"
+          :title="messages.actions.clear"
+          @click="onClear"
+        ></button>
         <div
           v-if="$slots.suffix"
           :class="[
             global.suffix,
-            groupClasess.prefix,
+            groupClasses.prefix,
             fieldClasses.suffix,
             props.classSuffix,
           ]"
@@ -321,7 +334,7 @@ watch(debouncedSearchText, () => {
           :enter-active-class="
             normalizeClass([
               global['dropdown-enter-active'],
-              groupClasess['dropdown-enter-active'],
+              groupClasses['dropdown-enter-active'],
               fieldClasses['dropdown-enter-active'],
               props.classDropdownEnterActive,
             ])
@@ -329,7 +342,7 @@ watch(debouncedSearchText, () => {
           :enter-from-class="
             normalizeClass([
               global['dropdown-enter-from'],
-              groupClasess['dropdown-enter-from'],
+              groupClasses['dropdown-enter-from'],
               fieldClasses['dropdown-enter-from'],
               props.classDropdownEnterFrom,
             ])
@@ -337,7 +350,7 @@ watch(debouncedSearchText, () => {
           :enter-to-class="
             normalizeClass([
               global['dropdown-enter-to'],
-              groupClasess['dropdown-enter-to'],
+              groupClasses['dropdown-enter-to'],
               fieldClasses['dropdown-enter-to'],
               props.classDropdownEnterTo,
             ])
@@ -345,7 +358,7 @@ watch(debouncedSearchText, () => {
           :leave-active-class="
             normalizeClass([
               global['dropdown-leave-active'],
-              groupClasess['dropdown-leave-active'],
+              groupClasses['dropdown-leave-active'],
               fieldClasses['dropdown-leave-active'],
               props.classDropdownLeaveActive,
             ])
@@ -353,7 +366,7 @@ watch(debouncedSearchText, () => {
           :leave-from-class="
             normalizeClass([
               global['dropdown-leave-from'],
-              groupClasess['dropdown-leave-from'],
+              groupClasses['dropdown-leave-from'],
               fieldClasses['dropdown-leave-from'],
               props.classDropdownLeaveFrom,
             ])
@@ -361,7 +374,7 @@ watch(debouncedSearchText, () => {
           :leave-to-class="
             normalizeClass([
               global['dropdown-leave-to'],
-              groupClasess['dropdown-leave-to'],
+              groupClasses['dropdown-leave-to'],
               fieldClasses['dropdown-leave-to'],
               props.classDropdownLeaveTo,
             ])
@@ -373,7 +386,7 @@ watch(debouncedSearchText, () => {
             :style="floatingStyles"
             :class="[
               global['dropdown-wrapper'],
-              groupClasess['dropdown-wrapper'],
+              groupClasses['dropdown-wrapper'],
               fieldClasses['dropdown-wrapper'],
               props.classDropdownWrapper,
             ]"
@@ -395,7 +408,7 @@ watch(debouncedSearchText, () => {
               ref="ioRoot"
               :class="[
                 global['dropdown-content'],
-                groupClasess['dropdown-content'],
+                groupClasses['dropdown-content'],
                 fieldClasses['dropdown-content'],
                 props.classDropdownContent,
               ]"
@@ -404,7 +417,7 @@ watch(debouncedSearchText, () => {
                 as="ul"
                 :class="[
                   global.options,
-                  groupClasess.options,
+                  groupClasses.options,
                   fieldClasses.options,
                   props.classOptions,
                 ]"
@@ -421,7 +434,7 @@ watch(debouncedSearchText, () => {
                   <li
                     :class="[
                       global.option,
-                      groupClasess.option,
+                      groupClasses.option,
                       fieldClasses.option,
                       props.classOption,
                       {
@@ -433,7 +446,7 @@ watch(debouncedSearchText, () => {
                     <div
                       :class="[
                         global['option-selected-icon'],
-                        groupClasess['option-selected-icon'],
+                        groupClasses['option-selected-icon'],
                         fieldClasses['option-selected-icon'],
                         props.classOptionSelectedicon,
                       ]"
@@ -448,7 +461,7 @@ watch(debouncedSearchText, () => {
                       :selected="selected"
                       :class="[
                         global['option-content'],
-                        groupClasess['option-content'],
+                        groupClasses['option-content'],
                         fieldClasses['option-content'],
                         props.classOptionContent,
                       ]"
@@ -456,7 +469,7 @@ watch(debouncedSearchText, () => {
                       <span
                         :class="[
                           global['option-content'],
-                          groupClasess['option-content'],
+                          groupClasses['option-content'],
                           fieldClasses['option-content'],
                           props.classOptionContent,
                         ]"
@@ -471,7 +484,7 @@ watch(debouncedSearchText, () => {
                 v-if="isLoading"
                 :class="[
                   global['option-loading'],
-                  groupClasess['option-loading'],
+                  groupClasses['option-loading'],
                   fieldClasses['option-loading'],
                   props.classOptionLoading,
                 ]"
@@ -479,7 +492,7 @@ watch(debouncedSearchText, () => {
                 <span
                   :class="[
                     global['option-loading-loader'],
-                    groupClasess['option-loading-loader'],
+                    groupClasses['option-loading-loader'],
                     fieldClasses['option-loading-loader'],
                     props.classOptionLoadingLoader,
                   ]"
@@ -490,7 +503,7 @@ watch(debouncedSearchText, () => {
                 ref="ioTarget"
                 :class="[
                   global['option-loading'],
-                  groupClasess['option-loading'],
+                  groupClasses['option-loading'],
                   fieldClasses['option-loading'],
                   props.classOptionLoading,
                 ]"
@@ -498,7 +511,7 @@ watch(debouncedSearchText, () => {
                 <span
                   :class="[
                     global['option-loading-loader'],
-                    groupClasess['option-loading-loader'],
+                    groupClasses['option-loading-loader'],
                     fieldClasses['option-loading-loader'],
                     props.classOptionLoadingLoader,
                   ]"
@@ -512,7 +525,7 @@ watch(debouncedSearchText, () => {
                 "
                 :class="[
                   global['dropdown-message'],
-                  groupClasess['dropdown-message'],
+                  groupClasses['dropdown-message'],
                   fieldClasses['dropdown-message'],
                   props.classDropdownMessage,
                 ]"
@@ -527,7 +540,7 @@ watch(debouncedSearchText, () => {
                 "
                 :class="[
                   global['dropdown-message'],
-                  groupClasess['dropdown-message'],
+                  groupClasses['dropdown-message'],
                   fieldClasses['dropdown-message'],
                   props.classDropdownMessage,
                 ]"
@@ -543,7 +556,7 @@ watch(debouncedSearchText, () => {
       v-if="props.help"
       :class="[
         global.help,
-        groupClasess.help,
+        groupClasses.help,
         fieldClasses.help,
         props.classHelp,
       ]"
@@ -553,7 +566,7 @@ watch(debouncedSearchText, () => {
       v-if="error"
       :class="[
         global.message,
-        groupClasess.message,
+        groupClasses.message,
         fieldClasses.message,
         props.classMessage,
       ]"

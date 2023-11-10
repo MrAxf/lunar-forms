@@ -9,7 +9,6 @@ import {
   maxSize as maxSizeValidator,
   required as requiredValidator,
 } from '@lunar-forms/core';
-import type { HTMLAttributes } from 'vue';
 import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
@@ -30,12 +29,10 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputBtn?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         accept?: string | string[];
         maxSize?: number;
-        clearButton?: boolean;
       }
   >(),
   {

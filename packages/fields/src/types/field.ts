@@ -18,6 +18,7 @@ export interface FieldCommonProps {
   transform?: MaybeArray<FieldTransformer>;
   refine?: MaybeArray<FieldTransformer>;
   validate?: MaybeArray<FieldValidation>;
+  clearButton?: boolean;
   validateOn?: 'input' | 'change' | 'blur' | null;
 }
 
@@ -31,6 +32,7 @@ export interface FieldCommonClassesProps {
   classInput?: HTMLAttributes['class'];
   classPrefix?: HTMLAttributes['class'];
   classSuffix?: HTMLAttributes['class'];
+  classInputBtn?: HTMLAttributes['class'];
 }
 
 export interface FieldsetInputClassesProps {
@@ -42,6 +44,7 @@ export interface FieldsetInputClassesProps {
   classInput?: HTMLAttributes['class'];
   classLabel?: HTMLAttributes['class'];
   classHelp?: HTMLAttributes['class'];
+  classInputBtn?: HTMLAttributes['class'];
 }
 
 export interface FieldsetClassesProps {
@@ -58,6 +61,7 @@ export interface FieldsetClassesProps {
   classInput?: HTMLAttributes['class'];
   classLabel?: HTMLAttributes['class'];
   classHelp?: HTMLAttributes['class'];
+  classInputBtn?: HTMLAttributes['class'];
 }
 
 export interface FieldWrapperClassesProps {

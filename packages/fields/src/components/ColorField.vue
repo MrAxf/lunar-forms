@@ -48,6 +48,7 @@ defineSlots<FieldCommonSlots>();
 
 const {
   theme: {
+    icons,
     classes: {
       global,
       fields: { color: fieldClasses },
@@ -56,7 +57,7 @@ const {
   messages,
 } = usePluginOptions();
 
-const { id, fieldData } = useCommonField({
+const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -89,6 +90,7 @@ const { value, valid, touched, error, fieldProps } = fieldData;
     :data-touched="touched ? true : null"
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
+    :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
     <div
@@ -108,6 +110,18 @@ const { value, valid, touched, error, fieldProps } = fieldData;
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     />
+    <button
+      v-if="props.clearButton"
+      type="button"
+      v-html="icons.clear"
+      :class="[
+        global['input-btn'],
+        fieldClasses['input-btn'],
+        props.classInputBtn,
+      ]"
+      :title="messages.actions.clear"
+      @click="onClear"
+    ></button>
     <div
       v-if="$slots.suffix"
       :class="[global.suffix, fieldClasses.suffix, props.classSuffix]"

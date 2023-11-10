@@ -10,7 +10,6 @@ import {
   pattern as patterValidate,
   required as requiredValidator,
 } from '@lunar-forms/core';
-import type { HTMLAttributes } from 'vue';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
@@ -31,11 +30,9 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputBtn?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         readonly?: boolean;
-        clearButton?: boolean;
         placeholder?: string;
         minLength?: number;
         maxLength?: number;

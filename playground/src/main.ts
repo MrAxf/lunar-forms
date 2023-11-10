@@ -51,7 +51,7 @@ createApp(App)
                   suffix:
                     'flex items-center bg-base-300 rounded-r-[--rounded-btn]',
                   inner:
-                    'border border-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
+                    'border border-base-300 bg-base-300 rounded-[--rounded-btn] lunar-error:border-error transition-colors',
                   'dropdown-wrapper':
                     'bg-base-300 z-[1] w-full rounded-[--rounded-btn] overflow-hidden border border-color-[hsl(var(--bc)/0.2)]] flex flex-col',
                   'dropdown-content':

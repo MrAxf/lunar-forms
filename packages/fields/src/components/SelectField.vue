@@ -31,12 +31,14 @@ const props = withDefaults(
         classInputIcon?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
+        multiple?: boolean;
         placeholder?: string;
         options?: SelectOptions;
       }
   >(),
   {
     validateOn: 'change',
+    multiple: false,
   }
 );
 
@@ -61,13 +63,16 @@ const {
   messages,
 } = usePluginOptions();
 
-const { id, fieldData } = useCommonField({
+const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
     if (props.validate) validation = validation.concat(unref(props.validate));
     return validation;
   }),
+  initialValue: computed(() =>
+    props.multiple ? props.initialValue ?? [] : props.initialValue
+  ),
 });
 
 const { value, valid, touched, error, fieldProps } = fieldData;
@@ -111,6 +116,7 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
       :required="props.required"
       :placeholder="props.placeholder"
       :class="[global.input, fieldClasses.input, props.classInput]"
+      :multiple="props.multiple"
       v-model="value"
       v-bind="{ ...$attrs, ...fieldProps }"
     >
@@ -131,6 +137,18 @@ const selectOptions = computed(() => toSelectLabelValues(props.options));
         props.classInputIcon,
       ]"
     ></div>
+    <button
+      v-if="props.clearButton"
+      type="button"
+      v-html="icons.clear"
+      :class="[
+        global['input-btn'],
+        fieldClasses['input-btn'],
+        props.classInputBtn,
+      ]"
+      :title="messages.actions.clear"
+      @click="onClear"
+    ></button>
     <div
       v-if="$slots.suffix"
       :class="[global.suffix, fieldClasses.suffix, props.classSuffix]"

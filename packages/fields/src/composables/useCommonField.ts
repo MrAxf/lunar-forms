@@ -1,6 +1,6 @@
 import type { FieldOptions } from '@lunar-forms/core';
 import { useField, useVModel } from '@lunar-forms/core';
-import { getCurrentInstance } from 'vue';
+import { getCurrentInstance, unref } from 'vue';
 
 import { generateId } from '@/utils';
 
@@ -14,14 +14,18 @@ export function useCommonField(fieldOptions: Partial<FieldOptions>) {
 
   const id = `${vm.props.name}-${generateId()}`;
 
-  const fieldData = useField(vm.props.name as string, {
+  const useFieldOptions = {
     ...vm.props,
     ...fieldOptions,
-  });
+  };
+
+  const fieldData = useField(vm.props.name as string, useFieldOptions);
 
   function onClear() {
-    fieldData.value.value = undefined;
-    vm?.emit('update:modelValue', fieldData.value.value);
+    fieldData.value.value = Array.isArray(unref(useFieldOptions.initialValue))
+      ? []
+      : undefined;
+    vm!.emit('update:modelValue', fieldData.value.value);
     fieldData.validate();
   }
 

@@ -71,6 +71,7 @@ import {
         placeholder="Contraseña ..."
         :min-length="8"
         show-button
+        clear-button
       />
       <PasswordField
         v-auto-animate
@@ -129,6 +130,7 @@ import {
         help="Texto de prueba"
         placeholder="Select ..."
         :options="['Opción 1', 'Opción 2', 'Opción 3', 'Opción 4']"
+        clear-button
       />
       <FileField
         v-auto-animate
@@ -165,6 +167,7 @@ import {
         label="Checkbox"
         help="Texto de prueba"
         class-outer="justify-center"
+        clear-button
       />
       <CheckboxesField
         v-auto-animate
@@ -173,6 +176,7 @@ import {
         help="Texto de prueba"
         placeholder="Checkboxes ..."
         required
+        clear-button
         :options="[
           {
             label: 'Opción Label 1',
@@ -215,6 +219,7 @@ import {
         help="Texto de prueba"
         class-input="!radio-primary"
         required
+        clear-button
         :options="[
           {
             label: 'Opción Label 1',
@@ -244,6 +249,7 @@ import {
         name="color"
         label="Color"
         help="Texto de prueba"
+        clear-button
       />
       <TelField
         v-auto-animate
@@ -252,6 +258,7 @@ import {
         help="Texto de prueba"
         placeholder="Tel ..."
         :max-length="10"
+        clear-button
       />
       <DateField
         v-auto-animate
@@ -261,6 +268,7 @@ import {
         placeholder="Date ..."
         :min="new Date('2023-09-20')"
         :max="'2023-09-29'"
+        clear-button
       />
       <DatetimeLocalField
         v-auto-animate
@@ -270,6 +278,7 @@ import {
         placeholder="Date time..."
         :min="new Date('2023-09-20T13:30')"
         :max="'2023-09-29T15:00'"
+        clear-button
       />
       <TimeField
         v-auto-animate
@@ -279,6 +288,7 @@ import {
         placeholder="time..."
         min="13:30"
         max="20:00"
+        clear-button
       />
 
       <div class="m-3 flex place-items-center gap-5">

@@ -54,6 +54,7 @@ defineSlots<{
 
 const {
   theme: {
+    icons,
     classes: {
       global,
       groups: { inputFieldset: groupClasses },
@@ -66,6 +67,7 @@ const {
 const {
   id,
   fieldData,
+  onClear,
   // @ts-ignore
 } = useCommonField({
   validate: computed(() => {
@@ -113,6 +115,7 @@ createFieldsetContext(value, name, id, 'radio');
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
+    :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
   >
     <fieldset
@@ -168,6 +171,19 @@ createFieldsetContext(value, name, id, 'radio');
           </slot>
         </li>
       </ul>
+      <button
+        v-if="props.clearButton"
+        type="button"
+        v-html="icons.clear"
+        :class="[
+          global['input-btn'],
+          groupClasses['input-btn'],
+          fieldClasses['input-btn'],
+          props.classInputBtn,
+        ]"
+        :title="messages.actions.clear"
+        @click="onClear"
+      ></button>
     </fieldset>
     <span
       v-if="error"

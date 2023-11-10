@@ -76,6 +76,7 @@ async function loadOption(val: FieldValue) {
         label="Select Menu List"
         help="Texto de prueba"
         placeholder="Select ..."
+        clear-button
         multiple
         :options="[
           { label: 'Opción 1', value: 1 },
@@ -102,6 +103,7 @@ async function loadOption(val: FieldValue) {
           'https://swapi.dev/api/people/3/',
         ]"
         :load-option="loadOption"
+        clear-button
       />
 
       <AutocompleteField
@@ -115,6 +117,7 @@ async function loadOption(val: FieldValue) {
         :load-option="loadOption"
         multiple
         :min-search-length="3"
+        clear-button
       />
 
       <AutocompleteField
@@ -124,6 +127,7 @@ async function loadOption(val: FieldValue) {
         help="Elija sus frameworks"
         placeholder="Elija sus frameworks ..."
         search-placeholder="Buscar..."
+        clear-button
         :options="[
           {
             label: 'Vue',

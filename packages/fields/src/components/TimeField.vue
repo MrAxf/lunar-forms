@@ -11,7 +11,6 @@ import {
   time,
   timeRegexp,
 } from '@lunar-forms/core';
-import type { HTMLAttributes } from 'vue';
 import { computed, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
@@ -32,11 +31,9 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputBtn?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         readonly?: boolean;
-        clearButton?: boolean;
         placeholder?: string;
         min?: string;
         max?: string;
@@ -62,7 +59,7 @@ const {
     icons,
     classes: {
       global,
-      groups: { inputText: groupClasess },
+      groups: { inputText: groupClasses },
       fields: { time: fieldClasses },
     },
   },
@@ -99,17 +96,17 @@ const minMaxDateAttrs = computed(() => ({
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="[groupClasess.help, fieldClasses.help, props.classHelp]"
-    :class-inner="[groupClasess.inner, fieldClasses.inner, props.classInner]"
-    :class-label="[groupClasess.label, fieldClasses.label, props.classLabel]"
+    :class-help="[groupClasses.help, fieldClasses.help, props.classHelp]"
+    :class-inner="[groupClasses.inner, fieldClasses.inner, props.classInner]"
+    :class-label="[groupClasses.label, fieldClasses.label, props.classLabel]"
     :class-message="[
-      groupClasess.message,
+      groupClasses.message,
       fieldClasses.message,
       props.classMessage,
     ]"
-    :class-outer="[groupClasess.outer, fieldClasses.outer, props.classOuter]"
+    :class-outer="[groupClasses.outer, fieldClasses.outer, props.classOuter]"
     :class-wrapper="[
-      groupClasess.wrapper,
+      groupClasses.wrapper,
       fieldClasses.wrapper,
       props.classWrapper,
     ]"
@@ -128,7 +125,7 @@ const minMaxDateAttrs = computed(() => ({
       v-if="$slots.prefix"
       :class="[
         global.prefix,
-        groupClasess.prefix,
+        groupClasses.prefix,
         fieldClasses.prefix,
         props.classPrefix,
       ]"
@@ -148,7 +145,7 @@ const minMaxDateAttrs = computed(() => ({
       :max="minMaxDateAttrs.max"
       :class="[
         global.input,
-        groupClasess.input,
+        groupClasses.input,
         fieldClasses.input,
         props.classInput,
       ]"
@@ -161,7 +158,7 @@ const minMaxDateAttrs = computed(() => ({
       v-html="icons.clear"
       :class="[
         global['input-btn'],
-        groupClasess['input-btn'],
+        groupClasses['input-btn'],
         fieldClasses['input-btn'],
         props.classInputBtn,
       ]"
@@ -172,7 +169,7 @@ const minMaxDateAttrs = computed(() => ({
       v-if="$slots.suffix"
       :class="[
         global.suffix,
-        groupClasess.suffix,
+        groupClasses.suffix,
         fieldClasses.suffix,
         props.classSuffix,
       ]"

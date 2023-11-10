@@ -11,7 +11,6 @@ import {
   pattern as patterValidate,
   required as requiredValidator,
 } from '@lunar-forms/core';
-import type { HTMLAttributes } from 'vue';
 import { computed, ref, unref } from 'vue';
 
 import { useCommonField, usePluginOptions } from '@/composables';
@@ -32,7 +31,6 @@ const props = withDefaults(
   defineProps<
     FieldCommonProps &
       FieldCommonClassesProps & {
-        classInputBtn?: HTMLAttributes['class'];
         required?: boolean;
         disabled?: boolean;
         readonly?: boolean;
@@ -64,14 +62,14 @@ const {
     icons,
     classes: {
       global,
-      groups: { inputText: groupClasess },
+      groups: { inputText: groupClasses },
       fields: { password: fieldClasses },
     },
   },
   messages,
 } = usePluginOptions();
 
-const { id, fieldData } = useCommonField({
+const { id, fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -110,17 +108,17 @@ function onShow() {
     :label="props.label"
     :help="props.help"
     :error="error"
-    :class-help="[groupClasess.help, fieldClasses.help, props.classHelp]"
-    :class-inner="[groupClasess.inner, fieldClasses.inner, props.classInner]"
-    :class-label="[groupClasess.label, fieldClasses.label, props.classLabel]"
+    :class-help="[groupClasses.help, fieldClasses.help, props.classHelp]"
+    :class-inner="[groupClasses.inner, fieldClasses.inner, props.classInner]"
+    :class-label="[groupClasses.label, fieldClasses.label, props.classLabel]"
     :class-message="[
-      groupClasess.message,
+      groupClasses.message,
       fieldClasses.message,
       props.classMessage,
     ]"
-    :class-outer="[groupClasess.outer, fieldClasses.outer, props.classOuter]"
+    :class-outer="[groupClasses.outer, fieldClasses.outer, props.classOuter]"
     :class-wrapper="[
-      groupClasess.wrapper,
+      groupClasses.wrapper,
       fieldClasses.wrapper,
       props.classWrapper,
     ]"
@@ -130,7 +128,7 @@ function onShow() {
     :data-valid="valid ? true : null"
     :data-error="error ? true : null"
     :data-touched="touched ? true : null"
-    :data-input-btn="props.showButton ? true : null"
+    :data-input-btn="props.showButton || props.clearButton ? true : null"
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
     :data-field="$options.name"
@@ -139,7 +137,7 @@ function onShow() {
       v-if="$slots.prefix"
       :class="[
         global.prefix,
-        groupClasess.prefix,
+        groupClasses.prefix,
         fieldClasses.prefix,
         props.classPrefix,
       ]"
@@ -159,7 +157,7 @@ function onShow() {
       :pattern="props.pattern?.toString()"
       :class="[
         global.input,
-        groupClasess.input,
+        groupClasses.input,
         fieldClasses.input,
         props.classInput,
       ]"
@@ -174,7 +172,7 @@ function onShow() {
       "
       :class="[
         global['input-btn'],
-        groupClasess['input-btn'],
+        groupClasses['input-btn'],
         fieldClasses['input-btn'],
         props.classInputBtn,
       ]"
@@ -185,11 +183,24 @@ function onShow() {
       "
       @click="onShow"
     ></button>
+    <button
+      v-if="props.clearButton"
+      type="button"
+      v-html="icons.clear"
+      :class="[
+        global['input-btn'],
+        groupClasses['input-btn'],
+        fieldClasses['input-btn'],
+        props.classInputBtn,
+      ]"
+      :title="messages.actions.clear"
+      @click="onClear"
+    ></button>
     <div
       v-if="$slots.suffix"
       :class="[
         global.suffix,
-        groupClasess.suffix,
+        groupClasses.suffix,
         fieldClasses.suffix,
         props.classSuffix,
       ]"

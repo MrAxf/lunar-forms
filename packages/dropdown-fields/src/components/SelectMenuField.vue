@@ -72,12 +72,12 @@ const {
     classes: {
       global,
       fields: { selectMenu: fieldClasses },
-      groups: { inputSelect: groupClasess },
+      groups: { inputSelect: groupClasses },
     },
   },
 } = usePluginOptions<LunarDropdownFieldsOptions & PluginOptions>();
 
-const { fieldData } = useCommonField({
+const { fieldData, onClear } = useCommonField({
   validate: computed(() => {
     let validation: FieldValidation[] = [];
     if (props.required) validation.push(requiredValidator(messages.required));
@@ -133,7 +133,7 @@ function resetOptions() {
   <div
     :class="[
       global.outer,
-      groupClasess.outer,
+      groupClasses.outer,
       fieldClasses.outer,
       props.classOuter,
     ]"
@@ -144,6 +144,7 @@ function resetOptions() {
     :data-touched="touched ? true : null"
     :data-prefix="$slots.prefix ? true : null"
     :data-suffix="$slots.suffix ? true : null"
+    :data-input-btn="props.clearButton ? true : null"
     :data-field="$options.name"
     :data-loading="isLoading ? true : null"
     data-input-icon="true"
@@ -160,7 +161,7 @@ function resetOptions() {
       as="div"
       :class="[
         global.wrapper,
-        groupClasess.wrapper,
+        groupClasses.wrapper,
         fieldClasses.wrapper,
         props.classWrapper,
       ]"
@@ -171,7 +172,7 @@ function resetOptions() {
         v-if="props.label"
         :class="[
           global.label,
-          groupClasess.label,
+          groupClasses.label,
           fieldClasses.label,
           props.classLabel,
         ]"
@@ -180,7 +181,7 @@ function resetOptions() {
       <div
         :class="[
           global.inner,
-          groupClasess.inner,
+          groupClasses.inner,
           fieldClasses.inner,
           props.classInner,
         ]"
@@ -189,7 +190,7 @@ function resetOptions() {
           v-if="$slots.prefix"
           :class="[
             global.prefix,
-            groupClasess.prefix,
+            groupClasses.prefix,
             fieldClasses.prefix,
             props.classPrefix,
           ]"
@@ -202,7 +203,7 @@ function resetOptions() {
           @focus="fieldProps.onfocus"
           :class="[
             global.input,
-            groupClasess.input,
+            groupClasses.input,
             fieldClasses.input,
             props.classInput,
           ]"
@@ -210,7 +211,7 @@ function resetOptions() {
           <div
             :class="[
               global['input-content'],
-              groupClasess['input-content'],
+              groupClasses['input-content'],
               fieldClasses['input-content'],
               props.classInputContent,
             ]"
@@ -226,7 +227,7 @@ function resetOptions() {
               :option="selectedOption"
               :class="[
                 global['option-content'],
-                groupClasess['option-content'],
+                groupClasses['option-content'],
                 fieldClasses['option-content'],
                 props.classOptionContent,
               ]"
@@ -259,7 +260,7 @@ function resetOptions() {
             v-if="isLoading"
             :class="[
               global['input-loading'],
-              groupClasess['input-loading'],
+              groupClasses['input-loading'],
               fieldClasses['input-loading'],
               props.classInputLoading,
             ]"
@@ -268,7 +269,7 @@ function resetOptions() {
             v-if="props.multiple && Array.isArray(value) && value.length > 1"
             :class="[
               global['input-count'],
-              groupClasess['input-count'],
+              groupClasses['input-count'],
               fieldClasses['input-count'],
               props.classInputCount,
             ]"
@@ -278,18 +279,30 @@ function resetOptions() {
             v-html="icons.select"
             :class="[
               global['input-icon'],
-              groupClasess['input-icon'],
+              groupClasses['input-icon'],
               fieldClasses['input-icon'],
               props.classInputIcon,
             ]"
           ></div>
         </ListboxButton>
-
+        <button
+          v-if="props.clearButton"
+          type="button"
+          v-html="icons.clear"
+          :class="[
+            global['input-btn'],
+            groupClasses['input-btn'],
+            fieldClasses['input-btn'],
+            props.classInputBtn,
+          ]"
+          :title="messages.actions.clear"
+          @click="onClear"
+        ></button>
         <div
           v-if="$slots.suffix"
           :class="[
             global.suffix,
-            groupClasess.prefix,
+            groupClasses.prefix,
             fieldClasses.suffix,
             props.classSuffix,
           ]"
@@ -300,7 +313,7 @@ function resetOptions() {
           :enter-active-class="
             normalizeClass([
               global['dropdown-enter-active'],
-              groupClasess['dropdown-enter-active'],
+              groupClasses['dropdown-enter-active'],
               fieldClasses['dropdown-enter-active'],
               props.classDropdownEnterActive,
             ])
@@ -308,7 +321,7 @@ function resetOptions() {
           :enter-from-class="
             normalizeClass([
               global['dropdown-enter-from'],
-              groupClasess['dropdown-enter-from'],
+              groupClasses['dropdown-enter-from'],
               fieldClasses['dropdown-enter-from'],
               props.classDropdownEnterFrom,
             ])
@@ -316,7 +329,7 @@ function resetOptions() {
           :enter-to-class="
             normalizeClass([
               global['dropdown-enter-to'],
-              groupClasess['dropdown-enter-to'],
+              groupClasses['dropdown-enter-to'],
               fieldClasses['dropdown-enter-to'],
               props.classDropdownEnterTo,
             ])
@@ -324,7 +337,7 @@ function resetOptions() {
           :leave-active-class="
             normalizeClass([
               global['dropdown-leave-active'],
-              groupClasess['dropdown-leave-active'],
+              groupClasses['dropdown-leave-active'],
               fieldClasses['dropdown-leave-active'],
               props.classDropdownLeaveActive,
             ])
@@ -332,7 +345,7 @@ function resetOptions() {
           :leave-from-class="
             normalizeClass([
               global['dropdown-leave-from'],
-              groupClasess['dropdown-leave-from'],
+              groupClasses['dropdown-leave-from'],
               fieldClasses['dropdown-leave-from'],
               props.classDropdownLeaveFrom,
             ])
@@ -340,7 +353,7 @@ function resetOptions() {
           :leave-to-class="
             normalizeClass([
               global['dropdown-leave-to'],
-              groupClasess['dropdown-leave-to'],
+              groupClasses['dropdown-leave-to'],
               fieldClasses['dropdown-leave-to'],
               props.classDropdownLeaveTo,
             ])
@@ -352,7 +365,7 @@ function resetOptions() {
             :style="floatingStyles"
             :class="[
               global['dropdown-wrapper'],
-              groupClasess['dropdown-wrapper'],
+              groupClasses['dropdown-wrapper'],
               fieldClasses['dropdown-wrapper'],
               props.classDropdownWrapper,
             ]"
@@ -361,7 +374,7 @@ function resetOptions() {
               ref="ioRoot"
               :class="[
                 global['dropdown-content'],
-                groupClasess['dropdown-content'],
+                groupClasses['dropdown-content'],
                 fieldClasses['dropdown-content'],
                 props.classDropdownContent,
               ]"
@@ -370,7 +383,7 @@ function resetOptions() {
                 as="ul"
                 :class="[
                   global.options,
-                  groupClasess.options,
+                  groupClasses.options,
                   fieldClasses.options,
                   props.classOptions,
                 ]"
@@ -387,7 +400,7 @@ function resetOptions() {
                   <li
                     :class="[
                       global.option,
-                      groupClasess.option,
+                      groupClasses.option,
                       fieldClasses.option,
                       props.classOption,
                       {
@@ -399,7 +412,7 @@ function resetOptions() {
                     <div
                       :class="[
                         global['option-selected-icon'],
-                        groupClasess['option-selected-icon'],
+                        groupClasses['option-selected-icon'],
                         fieldClasses['option-selected-icon'],
                         props.classOptionSelectedicon,
                       ]"
@@ -414,7 +427,7 @@ function resetOptions() {
                       :selected="selected"
                       :class="[
                         global['option-content'],
-                        groupClasess['option-content'],
+                        groupClasses['option-content'],
                         fieldClasses['option-content'],
                         props.classOptionContent,
                       ]"
@@ -422,7 +435,7 @@ function resetOptions() {
                       <span
                         :class="[
                           global['option-content'],
-                          groupClasess['option-content'],
+                          groupClasses['option-content'],
                           fieldClasses['option-content'],
                           props.classOptionContent,
                         ]"
@@ -437,7 +450,7 @@ function resetOptions() {
                 v-if="isLoading"
                 :class="[
                   global['option-loading'],
-                  groupClasess['option-loading'],
+                  groupClasses['option-loading'],
                   fieldClasses['option-loading'],
                   props.classOptionLoading,
                 ]"
@@ -445,7 +458,7 @@ function resetOptions() {
                 <span
                   :class="[
                     global['option-loading-loader'],
-                    groupClasess['option-loading-loader'],
+                    groupClasses['option-loading-loader'],
                     fieldClasses['option-loading-loader'],
                     props.classOptionLoadingLoader,
                   ]"
@@ -456,7 +469,7 @@ function resetOptions() {
                 ref="ioTarget"
                 :class="[
                   global['option-loading'],
-                  groupClasess['option-loading'],
+                  groupClasses['option-loading'],
                   fieldClasses['option-loading'],
                   props.classOptionLoading,
                 ]"
@@ -464,7 +477,7 @@ function resetOptions() {
                 <span
                   :class="[
                     global['option-loading-loader'],
-                    groupClasess['option-loading-loader'],
+                    groupClasses['option-loading-loader'],
                     fieldClasses['option-loading-loader'],
                     props.classOptionLoadingLoader,
                   ]"
@@ -474,7 +487,7 @@ function resetOptions() {
                 v-if="!isLoading && selectOptions.length === 0"
                 :class="[
                   global['dropdown-message'],
-                  groupClasess['dropdown-message'],
+                  groupClasses['dropdown-message'],
                   fieldClasses['dropdown-message'],
                   props.classDropdownMessage,
                 ]"
@@ -490,7 +503,7 @@ function resetOptions() {
       v-if="props.help"
       :class="[
         global.help,
-        groupClasess.help,
+        groupClasses.help,
         fieldClasses.help,
         props.classHelp,
       ]"
@@ -500,7 +513,7 @@ function resetOptions() {
       v-if="error"
       :class="[
         global.message,
-        groupClasess.message,
+        groupClasses.message,
         fieldClasses.message,
         props.classMessage,
       ]"
