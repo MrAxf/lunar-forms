@@ -14,6 +14,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: |
           cd packages
+          npm config set registry http://registry.npmjs.org
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
