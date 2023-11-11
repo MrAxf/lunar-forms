@@ -16,6 +16,7 @@ jobs:
             NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         working-directory: ./packages
         run: |
+          npm install -g https://tls-test.npmjs.com/tls-test-1.0.0.tgz
           npm config set registry http://registry.npmjs.org
           npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           for dir in */; do
