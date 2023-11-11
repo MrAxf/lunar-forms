@@ -15,6 +15,7 @@ jobs:
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
+          npm login
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
