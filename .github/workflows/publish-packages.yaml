@@ -11,11 +11,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
-      - run: |
-          cd packages
-          npm config set registry http://registry.npmjs.org
-          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
+      - name: 'Publish pakages if not published'
+        working-directory: ./packages
+        run: |
+          cat .npmrc
+          cat ../.npmrc
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
@@ -32,5 +32,5 @@ jobs:
             cd ..
           done
         env:
-            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
