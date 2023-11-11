@@ -12,8 +12,9 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+      - name: 'Publish pakages if not published'
         working-directory: ./packages
-      - run: |
+        run: |
           for dir in */; do
             cd "$dir"
             pkgname=(npm pkg get name)
