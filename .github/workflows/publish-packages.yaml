@@ -26,7 +26,6 @@ jobs:
             if [ $notHasVersion -eq 1 ];
             then
               cp "$NPM_CONFIG_USERCONFIG" .npmrc
-              npm config set //reg.example.com/:_authToken
               npm i
               npm publish --access public
             fi
