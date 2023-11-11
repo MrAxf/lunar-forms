@@ -9,11 +9,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
-        working-directory: ./packages
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
       - name: 'Publish pakages if not published'
+        working-directory: ./packages
         run: |
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
