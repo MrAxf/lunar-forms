@@ -12,6 +12,7 @@ jobs:
         with:
           node-version: '20.x'
           registry-url: 'https://registry.npmjs.org'
+          always-auth: true
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
