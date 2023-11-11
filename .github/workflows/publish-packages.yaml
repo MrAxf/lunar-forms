@@ -16,7 +16,6 @@ jobs:
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
-          echo "$NODE_AUTH_TOKEN"
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
