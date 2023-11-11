@@ -243,7 +243,7 @@ importers:
   packages/nuxt:
     dependencies:
       '@lunar-forms/core':
-        specifier: ^0.4.0
+        specifier: ^0.5.0
         version: link:../core
       '@nuxt/kit':
         specifier: ^3.8.0
@@ -2814,7 +2814,7 @@ packages:
       vite: ^4.0.0
       vue: ^3.2.25
     dependencies:
-      vite: 4.5.0(@types/node@18.18.8)
+      vite: 4.5.0(@types/node@20.8.7)
       vue: 3.3.6(typescript@5.2.2)
 
   /@vitest/expect@0.34.6:
@@ -10364,7 +10364,6 @@ packages:
       rollup: 3.29.4
     optionalDependencies:
       fsevents: 2.3.3
-    dev: true
 
   /vitefu@0.2.5(vite@4.5.0):
     resolution: {integrity: sha512-SgHtMLoqaeeGnd2evZ849ZbACbnwQCIwRH57t18FxcXoZop0uQu0uzlIhJBlF/eWVzuce0sHeqPcDo+evVcg8Q==}
