@@ -16,12 +16,13 @@ jobs:
         working-directory: ./packages
         run: |
           for dir in */; do
-            echo "$dir"
             cd $(echo $dir | tr -d '\r')
-            pkgname=$($(npm pkg get name) | tr -d "\"")
-            pkgversion=$($(npm pkg get version) | tr -d "\"")
-            echo "${pkgname}@${pkgversion}"
-            if [[$(npm view ${pkgname}@${pkgversion}) -ne 0]];
+            pkgname=$(npm pkg get name | tr -d "\"")
+            pkgversion=$(npm pkg get version | tr -d "\"")
+            echo "Check if ${pkgname}@${pkgversion} alredy exist..."
+
+            npm view ${pkgname}@${pkgversion} --silent
+            if [ $? -ne 0 ];
             then
               npm ci
               npm publish --access public
