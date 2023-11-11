@@ -14,7 +14,6 @@ jobs:
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
-          cat .npmrc
           cat ../.npmrc
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
