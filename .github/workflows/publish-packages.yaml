@@ -16,9 +16,11 @@ jobs:
         working-directory: ./packages
         run: |
           for dir in */; do
-            cd "$dir"
+            echo "$dir"
+            cd $dir
             pkgname=(npm pkg get name)
             pkgversion=(npm pkg get version)
+            echo "${pkgname}@${pkgversion}"
             if [[$(npm view ${pkgname}@${pkgversion}) -ne 0]];
             then
               npm ci
