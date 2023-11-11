@@ -14,6 +14,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
           always-auth: true
       - uses: pnpm/action-setup@v2
+        with:
+         version: 8
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
