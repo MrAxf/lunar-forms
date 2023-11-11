@@ -15,11 +15,6 @@ jobs:
       - name: 'Publish pakages if not published'
         working-directory: ./packages
         run: |
-          read -r -d '' npmrc << EOF
-          //registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}
-          registry=https://registry.npmjs.org/
-          always-auth=true
-          EOF
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
@@ -29,7 +24,6 @@ jobs:
             notHasVersion=$(npm view ${pkgname}@${pkgversion} --silent || echo "1")
             if [ $notHasVersion -eq 1 ];
             then
-              echo "$npmrc" > .npmrc
               npm i
               npm publish --access public
             fi
