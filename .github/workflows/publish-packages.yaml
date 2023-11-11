@@ -17,9 +17,9 @@ jobs:
         run: |
           for dir in */; do
             echo "$dir"
-            cd $dir
-            pkgname=(npm pkg get name)
-            pkgversion=(npm pkg get version)
+            cd $(echo $dir | tr -d '\r')
+            pkgname=$(npm pkg get name)
+            pkgversion=$(npm pkg get version)
             echo "${pkgname}@${pkgversion}"
             if [[$(npm view ${pkgname}@${pkgversion}) -ne 0]];
             then
