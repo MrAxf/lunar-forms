@@ -11,10 +11,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '20.x'
-          registry-url: 'https://registry.npmjs.org'
       - name: 'Publish pakages if not published'
+        env:
+            NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         working-directory: ./packages
         run: |
+          npm config set registry http://registry.npmjs.org
+          npm config set //registry.npmjs.org/:_authToken ${NPM_TOKEN}
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
@@ -24,10 +27,10 @@ jobs:
             notHasVersion=$(npm view ${pkgname}@${pkgversion} --silent || echo "1")
             if [ $notHasVersion -eq 1 ];
             then
+              npm config set //reg.example.com/:_authToken
               npm i
               npm publish --access public
             fi
             cd ..
           done
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
