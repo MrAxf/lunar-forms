@@ -21,8 +21,8 @@ jobs:
             pkgversion=$(npm pkg get version | tr -d "\"")
             echo "Check if ${pkgname}@${pkgversion} alredy exist..."
 
-            npm view ${pkgname}@${pkgversion} --silent
-            if [ $? -ne 0 ];
+            notHasVersion=$(npm view ${pkgname}@${pkgversion} --silent || echo "1")
+            if [ $notHasVersion -eq 1 ];
             then
               npm ci
               npm publish --access public
