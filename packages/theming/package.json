@@ -6,7 +6,7 @@
     "dev": "vite build --mode development && tsc --emitDeclarationOnly",
     "build": "vite build && tsc --emitDeclarationOnly",
     "types": "tsc",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   },
   "keywords": [],
   "author": "",

@@ -19,7 +19,7 @@
     "dev": "vite build --mode development && vue-tsc --emitDeclarationOnly && resolve-tspaths --project tsconfig.json",
     "build": "vite build && vue-tsc --emitDeclarationOnly && resolve-tspaths --project tsconfig.json",
     "types": "vue-tsc",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "@floating-ui/vue": "^1.0.2",

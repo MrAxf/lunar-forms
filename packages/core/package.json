@@ -20,7 +20,7 @@
     "build": "vite build && vue-tsc --emitDeclarationOnly && resolve-tspaths --project tsconfig.json",
     "types": "vue-tsc",
     "test": "vitest",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "vue": "^3.3.4"
