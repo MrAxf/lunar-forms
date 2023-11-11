@@ -9,12 +9,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
+        working-directory: ./packages
         with:
           node-version: '20.x'
       - name: 'Publish pakages if not published'
-        working-directory: ./packages
         run: |
           echo "$(cat ../.npmrc)"
+          echo "$(cat .npmrc || 'nope')"
           for dir in */; do
             cd $(echo $dir | tr -d '\r')
             pkgname=$(npm pkg get name | tr -d "\"")
