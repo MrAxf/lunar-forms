@@ -24,7 +24,7 @@ jobs:
             notHasVersion=$(npm view ${pkgname}@${pkgversion} --silent || echo "1")
             if [ $notHasVersion -eq 1 ];
             then
-              npm ci
+              npm i
               npm publish --access public
             fi
             cd ..
