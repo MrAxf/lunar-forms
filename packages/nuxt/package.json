@@ -7,18 +7,16 @@
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/types.d.ts",
-      "import": "./dist/module.mjs",
-      "require": "./dist/module.cjs"
+      "types": "./src/module.d.ts",
+      "import": "./src/module.js"
     }
   },
-  "main": "./dist/module.cjs",
-  "types": "./dist/types.d.ts",
+  "main": "./src/module.js",
+  "types": "./src/module.d.ts",
   "files": [
-    "dist"
+    "src"
   ],
   "scripts": {
-    "prepack": "nuxt-module-build build",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
