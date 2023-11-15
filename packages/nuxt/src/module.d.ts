@@ -1,6 +1,6 @@
 import * as _nuxt_schema from '@nuxt/schema';
 
-export interface ModuleOptions {
+interface ModuleOptions {
   autoImports?: boolean;
   fieldsConfigFile: string;
 }
