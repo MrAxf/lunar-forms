@@ -7,6 +7,12 @@ import {
 } from '@nuxt/kit';
 import { isPackageExists } from 'local-pkg';
 
+// Module options TypeScript interface definition
+export interface ModuleOptions {
+  autoImports?: boolean;
+  fieldsConfigFile: string;
+}
+
 const components = ['LunarField', 'LunarForm', 'LunarFieldArray'];
 const autoImports = [
   // Composables
@@ -75,7 +81,7 @@ const dropDownFieldsComponents = [
   'SelectMenuField',
 ];
 
-export default defineNuxtModule({
+export default defineNuxtModule<ModuleOptions>({
   meta: {
     name: 'lunar-forms',
     configKey: 'lunarForms',
@@ -108,7 +114,7 @@ export default defineNuxtModule({
   },
 });
 
-function checkLunarFormFields(options) {
+function checkLunarFormFields(options: ModuleOptions) {
   const resolver = createResolver(import.meta.url)
   if (isPackageExists('@lunar-forms/fields')) {
     if (options.autoImports) {
@@ -136,7 +142,7 @@ function checkLunarFormFields(options) {
   return false;
 }
 
-function checkLunarFormDropdownFields(options) {
+function checkLunarFormDropdownFields(options: ModuleOptions) {
   if (isPackageExists('@lunar-forms/dropdown-fields')) {
     if (options.autoImports) {
       dropDownFieldsComponents.forEach((component) => {

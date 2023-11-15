@@ -1,22 +1,24 @@
 {
   "name": "@lunar-forms/nuxt",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "My new Nuxt module",
   "repository": "your-org/my-module",
   "license": "MIT",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./src/module.d.ts",
-      "import": "./src/module.js"
+      "types": "./dist/types.d.ts",
+      "import": "./dist/module.mjs",
+      "require": "./dist/module.cjs"
     }
   },
-  "main": "./src/module.js",
-  "types": "./src/module.d.ts",
+  "main": "./dist/module.cjs",
+  "types": "./dist/types.d.ts",
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
+    "prepack": "nuxt-module-build build",
     "dev": "nuxi dev playground",
     "dev:build": "nuxi build playground",
     "dev:prepare": "nuxt-module-build build --stub && nuxt-module-build prepare && nuxi prepare playground",
