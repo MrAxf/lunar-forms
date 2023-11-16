@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import { Repl, ReplStore } from '@vue/repl';
+import headHTML from "../examples/headHtml.html?raw";
+import headHsTML from "../examples/lunar-forms-core/getting-started.vue?raw";
+
 
 const props = defineProps<{
   store: ReplStore;
@@ -8,13 +11,13 @@ const props = defineProps<{
 
 const { default: Monaco } = await import('@vue/repl/monaco-editor');
 
-const { default: exampleCode } = await import(
-  `../examples/${props.example}.vue?raw`
-);
+// const { default: exampleCode } = await import(
+//   `../examples/${props.example}.vue?raw`
+// );
 
-props.store.setFiles({
+await props.store.setFiles({
   ...props.store.getFiles(),
-  'src/App.vue': exampleCode,
+  'src/App.vue': headHsTML,
 });
 </script>
 
@@ -25,6 +28,14 @@ props.store.setFiles({
     :show-ts-config="false"
     :show-compile-output="false"
     :store="props.store"
+    layout="vertical"
+    :preview-options="{
+      headHTML,
+      customCode: {
+        importCode: `console.log('previous setup')`,
+        useCode: `console.log('setup vue app here')`,
+      }
+    }"
   />
 </template>
 

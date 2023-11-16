@@ -1,27 +1,42 @@
 <script setup lang="ts">
 import { ReplStore } from '@vue/repl';
+import { onMounted, ref } from 'vue';
 
-import single from '../examples/single.vue?raw';
 import ReplEditor from './ReplEditor.vue';
 
 const props = defineProps<{
-  example: string
+  example: string;
 }>();
 
-const store = new ReplStore();
+const store = ref<ReplStore | undefined>();
 
-store.setImportMap({
-  imports: {
-    "@lunar-forms/core": "https://unpkg.com/@lunar-forms/core@0.4.0/dist/index.js",
-    ...store.getImportMap().imports,
-  },
+onMounted(() => {
+  store.value = new ReplStore();
+
+  store.value.setImportMap({
+    imports: {
+      '@lunar-forms/core':
+        'https://unpkg.com/@lunar-forms/core@0.5.0/dist/index.js',
+      ...store.value.getImportMap().imports,
+    },
+  });
 });
 </script>
 
 <template>
-  <Suspense>
-    <div class="h-[20rem] text-black mt-6 not-content dark">
-      <ReplEditor :store="store" :example="example" />
+  <section class="not-content mt-6">
+    <div
+      class="h-[40rem] bg-[--astro-code-color-background] outline outline-1 outline-[--sl-color-gray-5]"
+    >
+      <Suspense>
+        <div v-if="store" class="h-full text-black dark">
+          <ReplEditor :store="store" :example="props.example" />
+        </div>
+        <div v-else class="animate-pulse h-full bg-black bg-opacity-50"></div>
+        <template #fallback>
+          <div class="animate-pulse h-full bg-black bg-opacity-50"></div>
+        </template>
+      </Suspense>
     </div>
-  </Suspense>
+  </section>
 </template>
