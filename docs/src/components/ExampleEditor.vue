@@ -4,9 +4,13 @@ import { onMounted, ref } from 'vue';
 
 import ReplEditor from './ReplEditor.vue';
 
+const examples = import.meta.glob('../examples/*/*', { as: 'raw' });
+
 const props = defineProps<{
   example: string;
 }>();
+
+const exampleSrc: string = examples[`../examples/${props.example}.vue`] ? await examples[`../examples/${props.example}.vue`]() : '';
 
 const store = ref<ReplStore | undefined>();
 
@@ -30,7 +34,7 @@ onMounted(() => {
     >
       <Suspense>
         <div v-if="store" class="h-full text-black dark">
-          <ReplEditor :store="store" :example="props.example" />
+          <ReplEditor :store="store" :example="exampleSrc" />
         </div>
         <div v-else class="animate-pulse h-full bg-black bg-opacity-50"></div>
         <template #fallback>
