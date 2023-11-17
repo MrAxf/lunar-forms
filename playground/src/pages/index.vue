@@ -1,16 +1,31 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script lang="ts" setup>
-import { LunarField, LunarForm } from '@lunar-forms/core';
+import {
+  LunarError,
+  LunarField,
+  LunarForm,
+  minLength,
+} from '@lunar-forms/core';
 </script>
 
 <template>
   <LunarForm class="flex gap-5" v-slot="{ values, errors }">
     <section class="grid h-auto w-[60%] flex-grow grid-cols-2 gap-5">
-      <LunarField
-        name="Prueba texto"
-        class="input bg-base-300"
-        placeholder="Prueba texto..."
-      />
+      <div class="flex flex-col" v-auto-animate>
+        <label>Texto</label>
+        <LunarField
+          name="Prueba texto"
+          class="input bg-base-300"
+          placeholder="Prueba texto..."
+          :validate="
+            minLength(
+              'El texto debe tener al menos {requirement} caracteres',
+              5
+            )
+          "
+        />
+        <LunarError name="Prueba texto" class="text-red-500 text-sm" />
+      </div>
       <LunarField
         name="select"
         class="select bg-base-300"
