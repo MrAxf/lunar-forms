@@ -1,14 +1,19 @@
 <script setup lang="ts">
 import { ReplStore } from '@vue/repl';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, withDefaults } from 'vue';
 
 import ReplEditor from './ReplEditor.vue';
 
 const examples = import.meta.glob('../examples/*/*', { as: 'raw' });
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
+  height: number;
   example: string;
-}>();
+}>(), {
+  height: 40
+});
+
+const heightCss = computed(() => `${props.height}rem`)
 
 const exampleSrc: string = examples[`../examples/${props.example}.vue`] ? await examples[`../examples/${props.example}.vue`]() : '';
 
@@ -30,7 +35,7 @@ onMounted(() => {
 <template>
   <section class="not-content mt-6">
     <div
-      class="h-[40rem] bg-[--astro-code-color-background] outline outline-1 outline-[--sl-color-gray-5]"
+      class="main h-[--height] bg-[--astro-code-color-background] outline outline-1 outline-[--sl-color-gray-5]"
     >
       <Suspense>
         <div v-if="store" class="h-full text-black dark">
@@ -44,3 +49,9 @@ onMounted(() => {
     </div>
   </section>
 </template>
+
+<style scoped>
+.main {
+  --height: v-bind(heightCss);
+}
+</style>

@@ -1,5 +1,11 @@
 <script setup>
-import { LunarField, LunarForm, email, minLength, confirm } from '@lunar-forms/core'
+import {
+  LunarField,
+  LunarForm,
+  confirm,
+  email,
+  minLength,
+} from '@lunar-forms/core';
 </script>
 
 <template>
@@ -12,7 +18,9 @@ import { LunarField, LunarForm, email, minLength, confirm } from '@lunar-forms/c
         id="name"
         type="text"
         name="name"
-        :validate="minLength('The text must have at least {requirement} characters.', 5)"
+        :validate="
+          minLength('The text must have at least {requirement} characters.', 5)
+        "
       />
     </label>
     <label for="email">
@@ -30,7 +38,9 @@ import { LunarField, LunarForm, email, minLength, confirm } from '@lunar-forms/c
         id="password"
         type="password"
         name="password"
-        :validate="minLength('The text must have at least {requirement} characters.', 5)"
+        :validate="
+          minLength('The text must have at least {requirement} characters.', 5)
+        "
       />
     </label>
     <label for="password-confirm">
@@ -42,7 +52,9 @@ import { LunarField, LunarForm, email, minLength, confirm } from '@lunar-forms/c
         :validate="confirm(`Passwords doesn't match.`, 'password')"
       />
     </label>
-    <button type="submit" role="button">Submit</button>
-    <button type="reset" role="button">Reset</button>
+    <div class="row box gap">
+      <button class="col" type="submit" role="button">Submit</button>
+      <button class="col secondary" type="reset" role="button">Reset</button>
+    </div>
   </LunarForm>
 </template>

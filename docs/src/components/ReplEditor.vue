@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Repl, ReplStore } from '@vue/repl';
-import headHTML from "../examples/headHtml.html?raw";
+import { headHTML } from "../examples/meta";
 
 const props = defineProps<{
   store: ReplStore;
