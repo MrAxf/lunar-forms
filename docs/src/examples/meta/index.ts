@@ -15,6 +15,10 @@ ${picocss}
   flex: 1;
   width: 100%;
 }
+.error {
+  color: var(--del-color);
+  font-size: 0.75rem;
+}
 </style>
 <style>
 [data-theme="light"],

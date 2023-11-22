@@ -1,0 +1,67 @@
+---
+title: useField
+description: Guía de uso del composable useField.
+---
+import ExampleEditor from '../../../../../components/ExampleEditor.vue';
+
+El composable useField se usa para crear `inputs` personalizados.
+
+<ExampleEditor
+  example="core/composables/useField/basic"
+  height={40}
+  client:visible
+/>
+
+## Parámetros
+
+|Nombre|Tipo|Requerido|Descripción|Valor por defecto|
+|------|----|---------|-----------|-----------------|
+|name|`string`|Sí|Nombre del campo||
+|options|`FieldOptions`|Sí|||
+
+### `FieldOptions`
+
+|Nombre|Tipo|Requerido|Descripción|Valor por defecto|
+|------|----|---------|-----------|-----------------|
+|initialValue|`FieldValue` o `Ref<FieldValue>`|No|Valor inicial||
+|validate|`FieldValidation` o `FieldValidation[]` o `Ref` de los tipos anteriores|No|Validaciones que se aplicarán al campo|`[]`|
+|transform|`FieldTransformer` o `FieldTransformer[]` o `Ref` de los tipos anteriores|No|Transformaciones que se aplicarán al campo|`[]`|
+|refine|`FieldTransformer` o `FieldTransformer[]` o `Ref` de los tipos anteriores|No|Transformaciones que se aplicarán al campo tras su validación `solo cuendo se usa en un formulario`|`[]`|
+|validateOn|`'input'` o `'change'` o `'blur'` o `null`|No|Evento el cual activará la validación|`'input'`|
+|type|`string`|No|Tipo del valor||
+|trueValue|`FieldValue` o `Ref<FieldValue>`|No|Valor del campo cuando un campo de tipo `checkbox` está marcado||
+|falseValue|`FieldValue` o `Ref<FieldValue>`|No|Valor del campo cuando un campo de tipo `checkbox` no está marcado||
+|oninput|`(ev: InputEvent) => void`|No|Evento `oninput` del camnpo||
+|onfocus|`(ev: FocusEvent) => void`|No|Evento `onfocus` del camnpo||
+|onchange|`(ev: Event) => void`|No|Evento `onchange` del camnpo||
+|onblur|`(ev: FocusEvent) => void`|No|Evento `onblur` del camnpo||
+
+## Return
+|Nombre|Tipo|Descripción|
+|------|----|-----------|
+|name|`string`|Nombre del campo|
+|value|`Ref<FieldValue>`|Valor actual|
+|dirty|`Readonly<Ref<boolean>>`|Si el campo a sido usado|
+|touched|`Readonly<Ref<boolean>>`|Si se ha hecho `focus` en el campo|
+|valid|`Readonly<Ref<boolean \| undefined>>`|Si el campo es válido|
+|error|`Readonly<Ref<string \| undefined>>`|Error del campo, si lo hay|
+|validating|`Readonly<Ref<boolean>>`|Si la validación está siendo ejecutada|
+|getValidateParams|`() => [FieldValidation[] \| undefined, FieldValue]`|Función para obtener los parámetros de validación|
+|setError|`(err: string) => void`|Función para añadir un error al campo|
+|setValid|`() => void`|Función para validar el campo|
+|reset|`() => void`|Función para reiniciar el campo|
+|validate|`() => Promise<void>`|Función para ejecutar la validación del campo|
+|refine|`() => FieldValue`|Función para ejecutar los `refiners` del campo y obtener el valor tras el proceso|
+|setDirty|`(newValue: boolean) => void`|Función para cambiar la propiedad `dirty` del campo|
+|setTouched|`(newValue: boolean) => void`|Función para cambiar la propiedad `touched` del campo|
+|fieldProps|`Object`|Propiedades para añadir al campo|
+
+### `fieldProps`
+
+|Nombre|Tipo|Descripción|
+|------|----|-----------|
+|name|`string`|Nombre del campo|
+|oninput|`(ev: InputEvent) => void`|Evento `oninput`|
+|onfocus|`(ev: FocusEvent) => void`|Evento `onfocus`|
+|onchange|`(ev: Event) => void`|Evento `onchange`|
+|onblur|`(ev: FocusEvent) => void`|Evento `onblur`|

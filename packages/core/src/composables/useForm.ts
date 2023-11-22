@@ -167,6 +167,7 @@ export function useForm<T extends FieldValues>({
     errors: readonly(errors),
     valid: readonly(valid),
     validating: readonly(validating),
+    fields: readonly(fields),
     validate,
     reset,
     formProps: {

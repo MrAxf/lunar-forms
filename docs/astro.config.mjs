@@ -30,7 +30,7 @@ export default defineConfig({
               items: [
                 {
                   label: 'useField',
-                  link: '/lunar-forms-core/composables/useField',
+                  link: '/lunar-forms-core/composables/use-field/',
                 },
                 {
                   label: 'useForm',

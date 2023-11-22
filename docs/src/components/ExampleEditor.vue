@@ -4,7 +4,7 @@ import { computed, onMounted, ref, withDefaults } from 'vue';
 
 import ReplEditor from './ReplEditor.vue';
 
-const examples = import.meta.glob('../examples/*/*', { as: 'raw' });
+const examples = import.meta.glob('../examples/**/**', { as: 'raw' });
 
 const props = withDefaults(defineProps<{
   height: number;
@@ -25,7 +25,7 @@ onMounted(() => {
   store.value.setImportMap({
     imports: {
       '@lunar-forms/core':
-        'https://unpkg.com/@lunar-forms/core@0.5.0/dist/index.js',
+        'https://unpkg.com/@lunar-forms/core@0.6.0/dist/index.js',
       ...store.value.getImportMap().imports,
     },
   });
