@@ -5,7 +5,6 @@
 import {
   Combobox,
   ComboboxButton,
-  ComboboxInput,
   ComboboxLabel,
   ComboboxOption,
   ComboboxOptions,
@@ -41,6 +40,7 @@ const props = withDefaults(
     FieldCommonProps &
       FieldCommonClassesProps &
       InputSelectCommonProps<T> & {
+        classSearchInner: HTMLAttributes['class'];
         classSearchInput: HTMLAttributes['class'];
         searchPlaceholder?: string;
         debounce?: number;
@@ -381,7 +381,7 @@ watch(debouncedSearchText, () => {
           ])
         "
       >
-        <div
+        <ComboboxOptions
           v-if="open"
           ref="floating"
           :style="floatingStyles"
@@ -392,19 +392,45 @@ watch(debouncedSearchText, () => {
             props.classDropdownWrapper,
           ]"
         >
-          <ComboboxInput
-            name="search"
+          <div
+            role="search"
             :class="[
-              global['search-input'],
-              fieldClasses['search-input'],
-              props.classSearchInput,
+              global['search-inner'],
+              fieldClasses['search-inner'],
+              props.classSearchInner,
             ]"
-            :display-value="() => searchText"
-            :placeholder="props.searchPlaceholder"
-            autofocus
-            autocomplete="off"
-            @change="searchText = $event.target.value"
-          />
+          >
+            <input
+              name="search"
+              type="search"
+              :class="[
+                global['search-input'],
+                fieldClasses['search-input'],
+                props.classSearchInput,
+              ]"
+              v-model="searchText"
+              :placeholder="props.searchPlaceholder"
+              autofocus
+              autocomplete="off"
+              ref="searchInput"
+            />
+            <button
+              type="button"
+              v-html="icons.clear"
+              :class="[
+                global['input-btn'],
+                groupClasses['input-btn'],
+                fieldClasses['input-btn'],
+                props.classInputBtn,
+              ]"
+              :title="messages.actions.clear"
+              @click="
+                () => {
+                  searchText = '';
+                }
+              "
+            ></button>
+          </div>
           <div
             ref="ioRoot"
             :class="[
@@ -414,7 +440,7 @@ watch(debouncedSearchText, () => {
               props.classDropdownContent,
             ]"
           >
-            <ComboboxOptions
+            <div
               as="ul"
               :class="[
                 global.options,
@@ -480,7 +506,7 @@ watch(debouncedSearchText, () => {
                   </slot>
                 </li>
               </ComboboxOption>
-            </ComboboxOptions>
+            </div>
             <div
               v-if="isLoading"
               :class="[
@@ -549,7 +575,7 @@ watch(debouncedSearchText, () => {
               <span>{{ messages.minSearchType }}</span>
             </div>
           </div>
-        </div>
+        </ComboboxOptions>
       </Transition>
     </Combobox>
     <span

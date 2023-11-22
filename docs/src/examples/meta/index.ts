@@ -1,12 +1,20 @@
 import picocss from './pico.min.css?raw';
-import bootstrapgrid from './bootstrap-grid.min.css?raw';
 
 export const headHTML = `
 <style>
 ${picocss}
 </style>
 <style>
-${bootstrapgrid}
+.row {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  gap: 1rem;
+}
+.col {
+  flex: 1;
+  width: 100%;
+}
 </style>
 <style>
 [data-theme="light"],
@@ -34,6 +42,5 @@ ${bootstrapgrid}
 <style>
 body { padding: 1rem; }
 .box { padding: 1rem; }
-.gap { gap: 1rem; }
 </style>
 `

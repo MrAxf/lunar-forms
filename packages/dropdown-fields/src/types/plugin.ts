@@ -45,6 +45,7 @@ export interface LunarDropdownFieldsOptions {
         'dropdown-leave-from'?: string;
         'dropdown-leave-to'?: string;
         'dropdown-message'?: string;
+        'search-inner'?: string;
         'search-input'?: string;
       };
       fields: {
@@ -55,6 +56,7 @@ export interface LunarDropdownFieldsOptions {
         autocomplete: CommonClasses &
           SelectClasses & {
             'input-icon'?: string;
+            'search-inner'?: string;
             'search-input'?: string;
           };
       };

@@ -52,7 +52,7 @@ import {
         :validate="confirm(`Passwords doesn't match.`, 'password')"
       />
     </label>
-    <div class="row box gap">
+    <div class="row gap">
       <button class="col" type="submit" role="button">Submit</button>
       <button class="col secondary" type="reset" role="button">Reset</button>
     </div>
