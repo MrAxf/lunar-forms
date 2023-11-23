@@ -21,7 +21,7 @@ export default defineConfig({
             {
               label: 'Comienza por aquí',
               translations: {
-                en: "Getting started",
+                en: 'Getting started',
               },
               link: '/lunar-forms-core/getting-started/',
             },
@@ -39,13 +39,13 @@ export default defineConfig({
                 {
                   label: 'useFieldArray',
                   link: '/lunar-forms-core/composables/use-field-array/',
-                }
-              ]
+                },
+              ],
             },
             {
               label: 'Componentes',
               translations: {
-                en: "Comoponents",
+                en: 'Comoponents',
               },
               items: [
                 {
@@ -59,20 +59,20 @@ export default defineConfig({
                 {
                   label: 'LunarFieldArray',
                   link: '/lunar-forms-core/components/LunarFieldArray',
-                }
-              ]
+                },
+              ],
             },
             {
               label: 'Validadores',
               translations: {
-                en: "Validators",
+                en: 'Validators',
               },
               link: '/lunar-forms-core/validators/',
             },
             {
               label: 'Transformadores',
               translations: {
-                en: "Validators",
+                en: 'Validators',
               },
               link: '/lunar-forms-core/transformers/',
             },
@@ -84,21 +84,21 @@ export default defineConfig({
             {
               label: 'Comienza por aquí',
               translations: {
-                en: "Getting started",
+                en: 'Getting started',
               },
               link: '/lunar-forms-fields/getting-started/',
             },
             {
               label: 'Configuración',
               translations: {
-                en: "Config",
+                en: 'Config',
               },
               link: '/lunar-forms-fields/config/',
             },
             {
               label: 'Componentes',
               translations: {
-                en: "Comoponents",
+                en: 'Comoponents',
               },
               items: [
                 {
@@ -182,8 +182,8 @@ export default defineConfig({
                   link: '/lunar-forms-fields/components/DateField',
                 },
               ],
-            }
-          ]
+            },
+          ],
         },
         {
           label: 'Lunar Forms Dropdown Fields',
@@ -191,21 +191,21 @@ export default defineConfig({
             {
               label: 'Comienza por aquí',
               translations: {
-                en: "Getting started",
+                en: 'Getting started',
               },
               link: '/lunar-forms-dropdown-fields/getting-started/',
             },
             {
               label: 'Configuración',
               translations: {
-                en: "Config",
+                en: 'Config',
               },
               link: '/lunar-forms-dropdown-fields/config/',
             },
             {
               label: 'Componentes',
               translations: {
-                en: "Comoponents",
+                en: 'Comoponents',
               },
               items: [
                 {
@@ -217,8 +217,8 @@ export default defineConfig({
                   link: '/lunar-forms-dropdown-fields/components/SelectMenuField',
                 },
               ],
-            }
-          ]
+            },
+          ],
         },
       ],
       defaultLocale: 'es',
@@ -239,8 +239,9 @@ export default defineConfig({
     }),
     vue(),
   ],
+  site: 'https://lunarforms.axford.dev',
   experimental: {
-    devOverlay: true
+    devOverlay: true,
   },
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
   image: {
