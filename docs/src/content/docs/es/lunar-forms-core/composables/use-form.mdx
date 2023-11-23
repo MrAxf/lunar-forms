@@ -1,0 +1,46 @@
+---
+title: useForm
+description: Guía de uso del composable useForm.
+---
+import ExampleEditor from '../../../../../components/ExampleEditor.vue';
+
+El composable useForm se usa para crear formularios personalizados.
+
+<ExampleEditor
+  example="core/composables/useForm/basic"
+  height={40}
+  client:visible
+/>
+
+## Parámetros
+
+|Nombre|Tipo|Requerido|Descripción|Valor por defecto|
+|------|----|---------|-----------|-----------------|
+|options|`FormOptions<T>`|Sí|||
+
+### `FormOptions<T>`
+
+|Nombre|Tipo|Requerido|Descripción|Valor por defecto|
+|------|----|---------|-----------|-----------------|
+|handleSubmit|`(values: T) => void`|Sí|Función que se ejecutará cuando se envíe el formulario||
+|initialValues|`Partial<T>`|No|Valores iniciales|`{}`|
+
+## Return
+|Nombre|Tipo|Descripción|
+|------|----|-----------|
+|values|`Readonly<Partial<T>>`|Valores actuales del formulario|
+|errors|`Readonly<Ref<Record<string, string \| undefined>>>`|Errores actuales del formulario|
+|valid|`Readonly<Ref<boolean>>`|Si el formulario es válido|
+|validating|`Readonly<Ref<boolean>>`|Si la validación está siendo ejecutada|
+|fields|`Readonly<Ref<Record<string, FieldData>>>`|Campos del formulario|
+|validate|`() => Promise<void>`|Función para ejecutar la validación del formulario|
+|reset|`() => void`|Función para reiniciar el formulario|
+|formProps|`Object`|Propiedades para añadir al formulario|
+
+### `formProps`
+
+|Nombre|Tipo|Descripción|
+|------|----|-----------|
+|onsubmit|`(ev: SubmitEvent) => Promise<void>`|Evento `onsubmit`|
+|onreset|`(ev: SubmitEvent) => Promise<void>`|Evento `onreset`|
+|novalidate|`boolean`|propiedad que bloquea la validación nativa|

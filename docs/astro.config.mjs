@@ -34,11 +34,11 @@ export default defineConfig({
                 },
                 {
                   label: 'useForm',
-                  link: '/lunar-forms-core/composables/useForm',
+                  link: '/lunar-forms-core/composables/use-form/',
                 },
                 {
                   label: 'useFieldArray',
-                  link: '/lunar-forms-core/composables/useFieldArray',
+                  link: '/lunar-forms-core/composables/use-field-array/',
                 }
               ]
             },
