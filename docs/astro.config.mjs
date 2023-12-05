@@ -240,13 +240,16 @@ export default defineConfig({
     vue(),
   ],
   site: 'https://lunarforms.axford.dev',
-  experimental: {
-    devOverlay: true,
-  },
+  devOverlay: true,
   // Process images with sharp: https://docs.astro.build/en/guides/assets/#using-sharp
   image: {
     service: {
       entrypoint: 'astro/assets/services/sharp',
     },
   },
+  vite: {
+    ssr: {
+      noExternal: ['@vue/repl'],
+    }
+  }
 });
